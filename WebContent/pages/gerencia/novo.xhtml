@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Gerência </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{grupoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{gerenciaBean.salvar}"  update="@form" 
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+		
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+
+		<p:dialog header="Filtro de Usuários" id="usuarioDialog" widgetVar="dlg1" modal="true">
+			<div class="box-body">
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar" process="usuarioDialog" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Nome</label>
+					<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="nomeBusca" value="#{gerenciaBean.pesquisaUsuario}" />
+				</div>
+
+			
+			</div>
+
+
+			<p:dataTable id="tbUsuario" rows="5" var="usuario" paginator="true"
+					value="#{usuarioBean.usuarioList}" paginatorPosition="bottom"
+					paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}"
+					style="max-width: 550px; min-width: 550px">
+
+			
+						<p:column width="80%" headerText="Nome" style="background-color: #00a65a" rendered = "#{gerenciaBean.verificarExistenciaUsuarioByList(usuario.id)}">
+	                        <b>#{usuario.nome}</b>
+	                    </p:column>
+					
+						<p:column width="80%" headerText="Nome" rendered = "#{gerenciaBean.verificarExistenciaUsuarioByList(usuario.id) eq false}">
+	                       #{usuario.nome}
+	                    </p:column>
+						
+
+					
+
+
+					<p:column width="20%" styleClass="align-center"
+						headerText="#{msg['acao']}" rendered = "#{gerenciaBean.verificarExistenciaUsuarioByList(usuario.id)}" style="background-color: #00a65a">
+						<p:commandButton title="Remover" class="btn btn-danger btn-xs"
+							value="Remover">
+							<p:ajax event="click"
+								listener="#{gerenciaBean.removerUsuario(usuario)}"
+								update="tbUsuario"  immediate="true" />
+
+						</p:commandButton>
+					</p:column>
+					
+					<p:column width="20%" styleClass="align-center"
+						headerText="#{msg['acao']}" rendered = "#{gerenciaBean.verificarExistenciaUsuarioByList(usuario.id) eq false}">
+						<p:commandButton title="Remover" class="btn btn-success btn-xs"
+							value="Selecionar">
+							<p:ajax event="click"
+								listener="#{gerenciaBean.adicionarUsuario(usuario)}"
+								update="tbUsuario"  immediate="true" />
+
+						</p:commandButton>
+					</p:column>
+
+
+
+
+				</p:dataTable>
+
+
+
+			<div class="box-footer">
+			<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg1').hide();" />
+						
+						<p:commandButton class="btn btn-success btn-md" value="Salvar"
+						oncomplete="PF('dlg1').hide();" action="#{gerenciaBean.salvarUsuarios}" update="@form"/>
+				</div>
+			</div>
+
+		</p:dialog>
+
+
+
+
+		<!-- DIV PRINCIPAL -->
+		<div class="box-body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>#{msg['nome']}</label>
+						<p:inputText maxlength="100" styleClass="form-control"
+							label="#{msg['nome']}" value="#{gerenciaBean.gerencia.nome}"
+							required="true" />
+					</div>
+				</div>
+
+				<div class="col-md-6">
+
+					<div class="form-group">
+											<label>Usuários Responsáveis Pelas Modificações</label>
+					
+						<div class="input-group input-group-sm">
+							<h:inputHidden label="#{msg['municipio.destino']}"
+								id="campoUsuarioHidden" required="false"
+								converter="genericCvt" />
+							<p:inputText maxlength="45" styleClass="form-control"
+								label="#{msg['municipio.destino']}" id="campoUsuario"
+								readonly="true" value="#{gerenciaBean.nomesUsuariosSelecionados}" />
+
+							<span class="input-group-btn"> <p:commandButton
+									id="botaoSelecaoCategoria" icon="ui-icon-search"
+									class="btn-primary btn-xs" data-toggle="modal"
+									data-target="#modal-default" onclick="PF('dlg1').show();" />
+							</span>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>
+
+</html>

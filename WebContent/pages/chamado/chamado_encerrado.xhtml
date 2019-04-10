@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+	<style type="text/css">
+.old {
+	background-color: #000 !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+
+#tabela.nav-tabs-custom>.nav-tabs>li.active {
+	border-top-color: #000;
+}
+</style>
+
+
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Solução Chamado Nº 520/22019</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+
+	</ui:define>
+	<ui:define name="corpo">
+
+
+		<!-- Main content -->
+		<section class="content">
+
+			<div class="row">
+				<div class="col-md-3">
+
+					<!-- Profile Image -->
+					<div class="box box-primary">
+						<div class="box-body box-profile">
+							<div class="col-lg-12 text-center">
+								<h:graphicImage library="img" name="carimboSolucionado.png"
+									alt="User Image" style="width:150px; height:auto;"
+									class="img-fluid" />
+							</div>
+							<h3 class="profile-username text-center">
+								<strong>Chamado Solucionado</strong>
+							</h3>
+
+
+							<ul class="list-group list-group-unbordered">
+								<li class="list-group-item"><b>Data da Solução</b> <a
+									class="pull-right">18/02/2019</a></li>
+
+								<li class="list-group-item"><b>Tempo de Atendimento</b> <a
+									class="pull-right">1,322</a></li>
+								<li class="list-group-item"><b>Tipo de Solução</b> <a
+									class="pull-right">543</a></li>
+								<li class="list-group-item"><b>Quantidade de
+										reaberturas</b> <span class="pull-right">13,287</span></li>
+
+								<li class="list-group-item"><b>Técnico da Solução</b> <span
+									class="pull-right">13,287</span></li>
+							</ul>
+
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+
+					<!-- About Me Box -->
+					<div class="box box-primary">
+
+						<div class="box-header with-border">
+							<h3 class="box-title">
+								<strong>Informações Gerais</strong>
+							</h3>
+							<div class="box-tools">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus" />
+								</button>
+							</div>
+						</div>
+						<div class="box-body no-padding" id="informacoes">
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="mailbox.html"> <i class="fa fa-desktop"></i>
+										<Strong>Categoria</Strong> <span
+										class="label label-danger pull-right">#{chamadoBean.chamado.categoria.nome}</span>
+								</a></li>
+
+
+
+								<li><a href="#"><i class="fa fa-child"></i> <strong>Técnico</strong>
+										<ui:repeat var="tec"
+											value="#{chamadoBean.tecnicoByChamadoList}">
+											<span class="label bg-purple pull-right" id="nomeUsuario">#{tec.usuario.nome}</span>
+
+										</ui:repeat> </a></li>
+
+								<li><a href="#"><i class="fa fa-sort-numeric-asc"></i>
+										<strong>Posição na Fila</strong><span
+										class="label bg-yellow pull-right">10</span></a></li>
+								<li><a href="#"> <i class="fa fa-user-circle-o"></i> <strong>Solicitante</strong>
+										<span class="label bg-purple pull-right">#{chamadoBean.chamado.solicitante.nome}</span>
+								</a></li>
+								<li><a href="#"> <i class="fa fa-cubes"></i> <strong>Prioridade</strong>
+										<ui:fragment rendered="#{chamadoBean.chamado.prioridade == 1}">
+											<span class="label label-danger pull-right">Alta</span>
+										</ui:fragment> <ui:fragment
+											rendered="#{chamadoBean.chamado.prioridade == 2}">
+											<span class="label label-warning pull-right">Média</span>
+										</ui:fragment> <ui:fragment
+											rendered="#{chamadoBean.chamado.prioridade == 3}">
+											<span class="label label-success pull-right">Baixa</span>
+										</ui:fragment>
+								</a></li>
+								<li><a href="#"> <i class="fa fa-retweet"></i> <strong>Recorrente?</strong>
+										<ui:fragment
+											rendered="#{chamadoBean.chamado.recorrente eq false}">
+											<span class="label label-success pull-right">Não</span>
+										</ui:fragment> <ui:fragment
+											rendered="#{chamadoBean.chamado.recorrente eq true}">
+											<span class="label label-danger pull-right">Sim</span>
+										</ui:fragment>
+								</a></li>
+								<li><a href="#"> <i class="fa fa-times-circle"></i> <strong>Trabalhos
+											Parados?</strong> <ui:fragment
+											rendered="#{chamadoBean.chamado.trabalhosParados eq true}">
+											<span class="label label-danger pull-right">Sim</span>
+										</ui:fragment> <ui:fragment
+											rendered="#{chamadoBean.chamado.trabalhosParados eq false}">
+											<span class="label label-success pull-right">Não</span>
+										</ui:fragment>
+								</a></li>
+
+
+
+
+							</ul>
+
+							<!-- /.box-body -->
+						</div>
+
+					</div>
+					<!-- /.box -->
+				</div>
+				<!-- /.col -->
+				<div class="col-md-9">
+
+					<div class="nav-tabs-custom" id="tabela">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#activity" data-toggle="tab">Informações
+									da Solução</a></li>
+							<li><a href="#timeline" data-toggle="tab">Informações do
+									Chamado</a></li>
+							<li><a href="#settings" data-toggle="tab">Acompanhamentos</a></li>
+							<li><a href="#settings" data-toggle="tab">Anexos</a></li>
+
+							<li><a href="#settings" data-toggle="tab">Linha do Tempo</a></li>
+
+						</ul>
+						<div class="tab-content">
+							<div class="container">
+
+								<div class="active tab-pane" id="activity">
+									<div class="row">
+										<div class="col-md-12">
+											<H1 style="color: green" class="text-center">
+												<strong>SOLUÇÃO DO CHAMADO</strong>
+											</H1>
+										</div>
+									</div>
+
+
+									<div class="row align-items-center">
+										<div class="col-md-12">
+
+											<div class="direct-chat direct-chat-success">
+
+												<div class="direct-chat-msg right">
+													<div class="direct-chat-info clearfix">
+														<span class="direct-chat-name pull-right">Alysson
+															Nascimento</span> <span class="direct-chat-timestamp pull-left">19/02/2019</span>
+													</div>
+													<!-- /.direct-chat-info -->
+													<h:graphicImage library="img" name="user2-160x160.png"
+														class="direct-chat-img" alt="User Image" />
+													<!-- /.direct-chat-img -->
+													<div class="direct-chat-text">Solicitação Atendida</div>
+													<!-- /.direct-chat-text -->
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+
+										<h5 class="text-center">
+											<p:link value="Ver histórico de soluções deste chamado"></p:link>
+										</h5>
+
+									</div>
+									
+									<div class="row">
+
+										<p:dataTable id="tbCategoria" rows="7" var="aviso"
+				paginator="true" value="#{avisoBean.avisoList}"
+				paginatorPosition="bottom" paginatorAlwaysVisible="false"
+				emptyMessage="#{msg['lista.vazia']}">
+
+				<p:column headerText="Título"
+					styleClass="align-center">
+	                        #{aviso.titulo}
+	                    </p:column>
+
+			
+
+				<p:column width="15%" styleClass="align-center"
+					headerText="#{msg['acao']}">
+					<p:commandButton icon="ui-icon-pencil" title="#{msg['editar']}"
+						class="btn btn-primary btn-xs"
+						action="#{permissaoBean.showFormEditar(permissao.id)}"
+						 />
+
+					<p:spacer width="10" />
+
+					<p:commandButton icon="ui-icon-trash" title="#{msg['excluir']}"
+						class="btn btn-danger btn-xs"
+						actionListener="#{permissaoBean.remover(permissao)}"
+						>
+						<p:confirm header="Excluir Permissão"
+							message="Deseja excluir o registro em definitivo?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{categoriaBean.categoriaList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="timeline"></div>
+						<!-- /.tab-pane -->
+
+						<div class="tab-pane" id="settings"></div>
+						<!-- /.tab-pane -->
+					</div>
+					<!-- /.tab-content -->
+				</div>
+				<!-- /.nav-tabs-custom -->
+			</div>
+			<!-- /.col -->
+			<!-- /.row -->
+
+		</section>
+		<!-- /.content -->
+
+	</ui:define>
+</ui:composition>
+
+</html>

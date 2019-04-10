@@ -1,0 +1,135 @@
+<div bgcolor="f2f2f2" style="background-color: #fff">
+
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#f2f2f2" width="100%">
+    <tbody><tr>
+        <td align="center" height="20" bgcolor="f2f2f2"></td>
+    </tr>
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0" width="690" align="center" bgcolor="ffffff">
+                <tbody><tr>
+                    <td height="120">
+                        <table border="0" cellpadding="0" cellspacing="0" width="50%" align="center">
+                            <tbody><tr>
+                                <td align="center" valign="middle" width="200">
+                                    <a>
+                                        <img alt="Logo" src="https://uploaddeimagens.com.br/images/001/855/891/original/logo.png.png?1548422115" style="display:block" border="0" class="CToWUd" /></a>
+                                </td>
+                                
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="690" bgcolor="#376087">
+                            <tbody><tr>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0" width="95%" align="center" style="padding:20px 0">
+                                        <tbody><tr>
+                                           
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="padding:13px 0 0 0; background-color: #376087; height: 100px" >
+                                                <font style="font-family:Arial,sans-serif;font-size:35px;color:#FFF;font-weight:350;text-transform:uppercase">
+                                                 <b> Acompanhamento de Chamado </b>
+                                                </font>                                            
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="14"></td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                    
+                    
+                </tr>
+
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="96%" bgcolor="#ffffff">
+                            <tbody><tr>
+                                <td align="center" height="80" style="padding:13px 0 0" valign="top">
+                                    <font style="font-family:Arial,sans-serif;font-size:16px;color:#525252;font-weight:300">
+                                            <br  /><b><span style="font-size:24px">Olá, <span style="color:#376087">%NOME_USUARIO%</span>! :)</span></b>
+                                            <br  /><br /><br /> 
+                                            <b><span style="font-size:18px">Segue um novo acompanhamento ao <span style="color:#D73925">CHAMADO  Nº %NUMERO_CHAMADO%</span> transmitido por <span style="color:#D73925">%NOME_USUARIO_SOLICITANTE% </span> em <span style="color:#D73925">%DATA_SOLICITAÇÃO%<span></span></b>
+                                            
+                                            <br  /><br />
+                                    </font>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                
+                 
+                
+                
+
+                <tr>
+                
+                </tr>
+
+              
+
+          
+               <tr>
+                               
+                            </tr>
+				
+				<tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#ffffff" style="border:2px solid #376087;border-radius:15px;padding:20px 10px">
+                            <tbody><tr>
+                                <td align="center" valign="middle" width="100%">
+                                    <span style="font-family:Arial,sans-serif;font-size:15px;color:#000;font-weight:350">
+										<b>%DESCRICAO_ACOMPANHAMENTO% </b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+				
+				
+
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="90%" bgcolor="#ffffff" style="padding:20px">
+                            <tbody><tr>
+                                <td align="right" valign="middle">
+                                        <img alt="Suporte" src="https://ci3.googleusercontent.com/proxy/6EpN-U_O1vxIOZzps21YA9tKFRMvddW8Ct1SC6nKlviN0XEcUN7Gjv2I_XdThbplr7v8vjpEkzbCkmZ6OvmDHKDVHNd7FLV7C-jNouhk6HPxEmNIHtveRt_9oB25lrYLOgsSWSUjdg=s0-d-e1-ft#http://image.emailpontosmultiplus.com.br/lib/fe9013727561027477/m/32/ico-support.png" style="display:block" border="0" class="CToWUd" />
+                                </td> 
+                                <td align="left" style="padding-left:18px" valign="middle">
+                                    <font style="font-family:Arial,sans-serif;font-size:14px;color:#525252;font-weight:300">
+                                        Em caso de dúvidas, entre em contato com a <b>Gerência de Técnologia da Informação - GETIN: 3195-0807 (Suporte) </b> ou <b>3195-0804 (Sistemas).</b>
+                                    </font>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+
+               
+                <tr>
+                    <td align="center" style="padding:14px">
+                       <font style="font-family:Arial,sans-serif;font-size:14px;color:#444444">
+                            <b>Este é um e-mail automático, por favor, não responda ;)</b>
+                        </font>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+
+    <tr>
+        <td align="center" height="20" bgcolor="f2f2f2"></td>
+    </tr>
+
+</tbody></table><div class="yj6qo"></div>
+</div>

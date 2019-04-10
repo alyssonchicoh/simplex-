@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+	<h:head>
+		<link rel="icon" type="image/x-icon"
+			href="resources/img/logo-menor.png" />
+
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<h:outputStylesheet library="css" name="prism.css" />
+
+
+		<style type="text/css">
+@media ( max-width : 800px) {
+	div.ui-growl {
+		display: none !important;
+	}
+	div.ui-messages-error {
+		display: block !important;
+	}
+}
+
+@media ( min-width : 769px) {
+	div.ui-growl {
+		display: block !important;
+	}
+	div.ui-messages-error {
+		display: none !important;
+	}
+}
+</style>
+	</h:head>
+
+
+	<h:body>
+		<f:metadata>
+			<f:viewAction action="#{solucaoChamadoBean.initFormAprovacaoSolucao(param.hashURL)}" />
+		</f:metadata>
+
+		<p:dialog header="Recusar Solução do Chamado" id="categoriaChamadoDialog" widgetVar="dlg1" modal="true">
+			<div class="box-body">
+				<div class="box-body">
+					<div class = "row">
+						<div class="col-md-12" >
+							<div class="form-group">
+								<p:outputLabel value="Motivo(s):"></p:outputLabel>					
+							</div>
+					
+							<div class="form-group">
+								<p:inputTextarea style="width: 450px"></p:inputTextarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+					<p:commandButton class="btn btn-warning btn-md" value="Cancelar" onclick="PF('dlg1').hide();" />
+					<p:commandButton class="btn btn-danger btn-md" value="Recusar" onclick="PF('dlg1').hide();" />
+				</div>
+			</div>
+		</p:dialog>
+
+
+		<p:messages id="messages" closable="true" />
+
+		<div id="loader" class="load-bar" style="display: none">
+			<div class="bar"></div>
+			<div class="bar"></div>
+			<div class="bar"></div>
+		</div>
+		
+		<div class="login-box" style="width: 800px">
+			<BR />
+			<BR />
+			<BR />
+			
+			<span class="login100-form-title p-b-41">
+				<h:graphicImage library="img" name="logo.png" class="user-image" alt="User Image" style="width: 100%; height: 120%;" />
+			</span> 
+			
+			<br />
+
+			<div class="row text-center">
+				<h1>
+					<strong>Aprovação da Solução do Chamado Nº 001/2019-3</strong>
+				</h1>
+				
+				<br/>
+				<br/>
+				<br/>
+				
+				<div style="border: 10px; border-color: #376087; border-style: dotted;">
+					<H2>
+						<strong style="color: #008D4C;">Solução Implementada conforme solicitação do usuário</strong>
+					</H2>
+				</div>
+				
+				<br />
+				<br />
+				<br />
+				
+				<div class="col-xs-6">
+					<p:commandButton styleClass="btn btn-success btn-block" action="#{solucaoChamadoBean.aprovar}" value="Aprovar"
+						update="messages" oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+				</div>
+
+				<div class="col-xs-6">
+					<p:commandButton styleClass="btn btn-danger btn-block" value="Recusar" onclick="PF('dlg1').show();"/>
+				</div>
+
+				
+			</div>
+		</div>
+
+		<style type="text/css">
+			body .load-bar {
+				margin-top: -20px;
+			}
+		</style>
+	</h:body>
+	
+</f:view>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Fila de Chamados dos Técnicos</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton styleClass="btn-block btn-primary"
+				value="#{msg['novo']}" action="#{observadorBean.showFormNovo}" />
+		</div>
+	</ui:define>
+
+	<ui:define name="corpo">
+		<p:dialog header="Chamados por Técnicos" id="categoriaChamadoDialog"
+			widgetVar="dlg1" modal="true">
+			<div class="box-body">
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar"
+							process="categoriaChamadoDialog" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Nome</label>
+					<p:inputText maxlength="45" styleClass="form-control"
+						label="#{msg['grupo.nome']}" id="nomeBusca" />
+				</div>
+
+				<p:dataTable id="tbChamados" rows="5" var="chamado" paginator="true"
+					value="#{filaChamadoBean.chamadoList}" paginatorPosition="bottom"
+					paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}"
+					style="max-width: 550px; min-width: 550px">
+
+					<p:column width="80%" headerText="Nome">
+	                        #{chamado.numero}
+	                </p:column>
+
+				</p:dataTable>
+
+
+
+
+
+			</div>
+			<!-- /.box-body -->
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg2').hide();" />
+				</div>
+			</div>
+
+		</p:dialog>
+
+
+		<ui:fragment>
+			<div class="box box-widget collapsed-box">
+				<div class="box-header with-border">
+					<div class="user-block">
+						<ul class="sidebar-menu">
+							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+						</ul>
+					</div>
+
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+				</div>
+
+				<div class="box-body">
+					<div class="pull-right">
+						<p:commandButton update="@form" value="#{msg['limpar']}"
+							class="btn btn-danger btn-xs" action="#{permissaoBean.listar}">
+							<f:setPropertyActionListener target="#{permissaoBean.pesquisa}"
+								value="" />
+						</p:commandButton>
+
+						<p:commandButton class="btn btn-primary btn-xs"
+							value="#{msg['filtrar']}" action="#{permissaoBean.listar}" />
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label><b>#{msg['pesquisa']}</b></label>
+								<p:inputText id="pesquisa" maxlength="100"
+									styleClass="form-control" label="#{msg['descricao']}"
+									value="#{permissaoBean.pesquisa}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p:dataTable id="tbobservador" rows="7" var="tecnico"
+				paginator="true" value="#{filaChamadoBean.tecnicos}"
+				paginatorPosition="bottom" paginatorAlwaysVisible="false"
+				emptyMessage="#{msg['lista.vazia']}">
+				<p:column style="width:40px">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column headerText="#{msg['permissao.nome']}"
+					styleClass="align-center">
+	                        #{tecnico.tecnico.usuario.nome}
+	            </p:column>
+
+				<p:column headerText="Qtd Chamados em Aberto"
+					styleClass="align-center">
+				</p:column>
+
+				<p:column headerText="% Meta do mês " styleClass="align-center">
+				</p:column>
+
+				<p:rowExpansion>
+					<p:dataTable id="tbChamadosTecnciso" var="chamado"
+						value="#{tecnico.chamados}" emptyMessage="#{msg['lista.vazia']}">
+						<p:column headerText="Posição" styleClass="align-center"
+							width="5%">
+	                        #{chamado.posicaoFila}
+	            </p:column>
+
+						<p:column headerText="Número" styleClass="align-center"
+							width="10%">
+	                        #{chamado.numero}
+	            </p:column>
+
+						<p:column headerText="Status" styleClass="align-center"
+							width="15%">
+							<ui:fragment rendered="#{chamado.status == 1}">
+								<h4>
+									<span class="label"
+										style="background-color: #BCD2EE; color: #000">Aguardando
+										Alocação de Técnico</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 2}">
+								<h4>
+									<span class="label"
+										style="background-color: #FFD700; color: #000">Na Fila
+										de Atendimento</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 3}">
+								<h4>
+									<span class="label"
+										style="background-color: #4682B4; color: #fff">Em
+										Atendimento</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 4}">
+								<h4>
+									<span class="label"
+										style="background-color: #20B2AA; color: #fff">Solucionado</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 5}">
+								<h4>
+									<span class="label"
+										style="background-color: #228B22; color: #fff">Finalizado</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#chamado.status == 6}">
+								<h4>
+									<span class="label"
+										style="background-color: #A52A2A; color: #fff">Impedido</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 7}">
+								<h4>
+									<span class="label"
+										style="background-color: #CD8162; color: #fff">Aguardando
+										Viabilidade</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 8}">
+								<h4>
+									<span class="label" style="background-color: #000; color: #fff">Rejeitado</span>
+								</h4>
+							</ui:fragment>
+
+							<ui:fragment rendered="#{chamado.status == 9}">
+								<h4>
+									<span class="label"
+										style="background-color: #CFCFCF; color: #000">Aguardando
+										Feedback Usuário</span>
+								</h4>
+							</ui:fragment>
+						</p:column>
+						<p:column headerText="Titulo" styleClass="align-center">
+	                        #{chamado.titulo}
+	            </p:column>
+					</p:dataTable>
+				</p:rowExpansion>
+
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{categoriaBean.categoriaList.size()}" />
+				</f:facet>
+			</p:dataTable>
+		</ui:fragment>
+	</ui:define>
+</ui:composition>
+</html>

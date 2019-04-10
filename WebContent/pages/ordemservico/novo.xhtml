@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Ordem de Serviço </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}"
+				action="#{funcaoFuncionarioBean.showFormListar}" immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md" value="Salvar"
+				action="#{ordemServicoBean.salvar}" update=":messages"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+				
+		</div>
+	</ui:define>
+
+	<ui:define name="corpo">
+	
+	<p:dialog header="Filtro de Usuários" id="usuarioDialog" widgetVar="usuarioDialog" modal="true">
+		<div class="box-body">
+			
+			<div class="form-group">
+				<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar" process="usuarioDialog" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="exampleInputEmail1">Nome</label>
+					
+				<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="nomeBusca" />
+			</div>
+
+			<p:dataTable id="tbUsuarios" rows="5" var="usuario" paginator="true" value="#{ordemServicoBean.usuarioList}" paginatorPosition="bottom" paginatorAlwaysVisible="false"
+						 emptyMessage="#{msg['lista.vazia']}" style="max-width: 550px; min-width: 550px">
+				
+				<p:column width="80%" headerText="Nome">
+	            	#{usuario.nome}
+	            </p:column>
+				
+				<p:column width="20%" styleClass="align-center" headerText="#{msg['acao']}">
+						<p:commandButton title="Selecionar" class="btn btn-success btn-xs" value="Selecionar">
+							<p:ajax event="click" listener="#{ordemServicoBean.atribuirUsuario(usuario)}" update="campoUsuarioHidden,campoUsuario" onsuccess="PF('usuarioDialog').hide();" immediate="true"  />
+						</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+		
+		<div class="box-footer">
+			<div class="pull-right box-tools">
+				<p:commandButton class="btn btn-danger btn-md" value="Fechar" onclick="PF('usuarioDialog').hide();" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	<p:dialog header="Filtro de Chamados" id="chamadosDialog" widgetVar="chamadosDialog" modal="true">
+		<div class="box-body">
+			
+			<div class="form-group">
+				<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar" process="chamadosDialog" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="exampleInputEmail1">Número ou Título</label>
+					
+				<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="nomeChamadoBusca" />
+			</div>
+
+			<p:dataTable id="tbChamados" rows="5" var="chamado" paginator="true" value="#{ordemServicoBean.chamadoList}" paginatorPosition="bottom" paginatorAlwaysVisible="false"
+						 emptyMessage="#{msg['lista.vazia']}" style="max-width: 550px; min-width: 550px">
+				
+				<p:column width="20%" headerText="Número">
+	            	#{chamado.numero}
+	            </p:column>
+	            
+	            
+				<p:column width="50%" headerText="Título">
+	            	#{chamado.titulo}
+	            </p:column>
+				
+				<p:column width="30%" styleClass="align-center" headerText="#{msg['acao']}">
+						<p:commandButton title="Selecionar" class="btn btn-success btn-xs" value="Selecionar">
+							<p:ajax event="click" listener="#{ordemServicoBean.atribuirChamado(chamado)}" update="campoChamadoHidden,campoChamado" onsuccess="PF('chamadosDialog').hide();" immediate="true"  />
+						</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+		
+		<div class="box-footer">
+			<div class="pull-right box-tools">
+				<p:commandButton class="btn btn-danger btn-md" value="Fechar" onclick="PF('chamadosDialog').hide();" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	
+	
+		<p:panel>
+
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><strong>Título</strong></label>
+
+							<p:inputText maxlength="100" styleClass="form-control"
+								label="#{msg['descricao']}" value="#{ordemServicoBean.os.titulo}" required="true" />
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><strong>Chamado</strong></label>
+
+									<div class="input-group input-group-sm">
+										<h:inputHidden label="#{msg['municipio.destino']}"
+											id="campoChamadoHidden" required="false"
+											converter="genericCvt" />
+										<p:inputText maxlength="45" styleClass="form-control"
+											label="#{msg['municipio.destino']}" id="campoChamado"
+											readonly="true" value="#{ordemServicoBean.os.chamado.titulo}" />
+
+										<span class="input-group-btn"> <p:commandButton
+												id="botaoSelecaoCategoria" icon="ui-icon-search"
+												class="btn-primary btn-xs" onclick="PF('chamadosDialog').show();"
+												immediate="true">
+
+
+											</p:commandButton>
+										</span>
+									</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><strong>Descrição</strong></label>
+							<p:textEditor id="editor" value="#{ordemServicoBean.os.descricao}" height="250" />
+						</div>
+					</div>
+
+
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><strong>Usuário Responsável</strong></label>
+								<div class="input-group input-group-sm">
+										<h:inputHidden label="#{msg['municipio.destino']}"  required="false" converter="genericCvt" id="campoUsuarioHidden"/>
+										
+										<p:inputText maxlength="45" styleClass="form-control" label="#{msg['municipio.destino']}" readonly="true" value="#{ordemServicoBean.os.usuarioResponsavel.nome}" id="campoUsuario"/>
+
+										<span class="input-group-btn"> 
+											<p:commandButton icon="ui-icon-search" class="btn-primary btn-xs" onclick="PF('usuarioDialog').show();" immediate="true" />
+										</span>
+								</div>
+						</div>
+
+						<div class="form-group">
+							<label><strong>Tempo Necessário(Horas)</strong></label>
+							<p:inputText maxlength="100" styleClass="form-control"
+								label="#{msg['descricao']}" value="#{ordemServicoBean.os.tempoNecessario}"
+								required="true" style="width: 100px" />
+
+
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

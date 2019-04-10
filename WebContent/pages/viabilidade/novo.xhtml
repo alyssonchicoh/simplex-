@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Solicitação de Viabilidade </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{grupoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{viabilidadeBean.salvar}" update="@form"
+				
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{viabilidadeBean.initFormNovo(param.chamadoId)}" />
+		</f:metadata>
+		
+		<p:dialog header="Filtro de Gerências" id="gerenciaDialog" widgetVar="gerenciaDlg" modal="true">
+			<div class="box-body">
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar" process="gerenciaDialog" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Nome</label>
+					<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="nomeBusca" />
+				</div>
+
+				<p:dataTable 
+					id="tbGerencia"
+					rows="5"
+					var="gerencia"
+					paginator="true" 
+					value="#{viabilidadeBean.gerenciaList}"
+					paginatorPosition="bottom"
+					paginatorAlwaysVisible="false"
+					emptyMessage="#{msg['lista.vazia']}"
+					style="max-width: 550px; min-width: 550px">
+
+					<p:column width="80%" headerText="Nome">
+	                	#{gerencia.nome}
+	            	</p:column>
+					
+					<p:column width="20%" styleClass="align-center" headerText="#{msg['acao']}">
+						<p:commandButton title="Selecionar" class="btn btn-success btn-xs" value="Selecionar">
+							<p:ajax event="click" listener="#{viabilidadeBean.selecionarGerencia(gerencia)}" update="campoCategoriaHidden,campoCategoria" onsuccess="PF('gerenciaDlg').hide();" immediate="true" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+
+
+
+
+
+			</div>
+			<!-- /.box-body -->
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg2').hide();" />
+				</div>
+			</div>
+
+		</p:dialog>
+		
+		
+			<p:panel>
+
+
+			<div class="box-body">
+
+				<div class="col-md-6">
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+
+								<label><b>Título</b></label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:inputText maxlength="45" styleClass="form-control" value="#{viabilidadeBean.viabilidade.titulo}" />
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label><b>Descrição</b></label>
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:textEditor id="editor" value="#{viabilidadeBean.viabilidade.descricao}" height="250" />
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-6">
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label><b>Gerência</b></label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+
+
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<div class="input-group input-group-sm">
+									<h:inputHidden label="#{msg['municipio.destino']}"
+										id="campoCategoriaHidden" required="false"
+										converter="genericCvt" />
+										
+														
+									<p:inputText maxlength="45" styleClass="form-control"
+										label="#{msg['municipio.destino']}" id="campoCategoria"
+										readonly="true" value="#{viabilidadeBean.viabilidade.gerencia.nome}" />
+
+
+									<span class="input-group-btn"> <p:commandButton
+											id="botaoSelecaoCategoria" icon="ui-icon-search"
+											class="btn-primary btn-xs" data-toggle="modal"
+											data-target="#modal-default" onclick="PF('gerenciaDlg').show();" />
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					
+
+			
+
+				
+
+
+				
+
+
+			
+
+
+				</div>
+
+
+			</div>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

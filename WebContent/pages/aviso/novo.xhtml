@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Aviso </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{permissaoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{avisoBean.salvar}"
+				update="@form" 
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+	
+	<p:panel>
+		<!-- DIV PRINCIPAL -->
+		<div class="box-body">
+			<div class="row">
+
+				<!-- DIV DA Coluna -->
+				<div class="col-md-12">
+					<!-- -->
+					<div class="form-group">
+						<label>Título</label>
+						<p:inputText maxlength="50" styleClass="form-control"
+							label="#{msg['nome']}" value="#{avisoBean.aviso.titulo}"
+							required="true" />
+					</div>
+				</div>
+				</div>
+			<div class="row">
+
+				<div class="col-md-12">
+					<!-- DIV DO ELEMTNO -->
+					<div class="form-group">
+						<label>#{msg['descricao']}</label>
+							<p:textEditor id="editor"
+									value="#{avisoBean.aviso.conteudo}" height="250" />
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

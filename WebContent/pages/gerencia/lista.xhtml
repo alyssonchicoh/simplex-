@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>
+				Consulta de Gerências
+			</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['novo']}" action="#{gerenciaBean.showFormNovo}"
+				immediate="true"
+				/>
+		</div>
+	</ui:define>
+	
+	<ui:define name="acessoNaoPermitido">
+		<ui:fragment rendered="#{!usuarioWeb.temPermissao('LISTAR_GRUPO')}">
+			<div>
+				<h1 class="login-box-msg">
+					<h:graphicImage library="img" name="aviso.png" alt="User Image"
+						class="img-circle" />
+					<STRONG>#{msg['acesso.nao.permitido']}</STRONG>
+				</h1>
+			</div>
+		</ui:fragment>
+	</ui:define>
+
+	<ui:define name="corpo">
+
+		
+			<p:dataTable id="tbGrupo" rows="10" var="grupo" paginator="true"
+				value="#{gerenciaBean.gerenciaList}" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}" widgetVar="gerencia" >
+
+			
+				<p:column headerText="#{msg['nome']}" styleClass="align-center">
+			              #{gerencia.nome}
+			          </p:column>
+
+
+				<p:column width="15%" headerText="#{msg['acao']}"
+					styleClass="align-center">
+					
+
+				</p:column>
+
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{gerenciaBean.gerenciaList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

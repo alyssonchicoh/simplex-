@@ -1,0 +1,21 @@
+<div>
+	<div id="1" lang="Portugues" style="background:#eee;border:1px solid #ccc;padding:5px 10px;" title="Teste">
+	
+		<p style="text-align:center"><img alt="Logo" height="100" src="https://uploaddeimagens.com.br/images/001/402/354/full/logo.png.png?1525441954" width="293" /></p>
+		
+		<h1 style="text-align:center"><strong>Resposta à Solicitação de Diária Nº  -<span style="color:#FF0000"> N&ordm; %NUMERO%</span></strong></h1>
+		
+		<p><strong>Solicitante:</strong> %SOLICITANTE%</p>
+		
+		<p><strong>Origem:</strong> %ORIGEM%</p>
+		
+		<p><strong>Destino:</strong> %DESTINO%</p>
+		
+		<p><strong>Período</strong>: %PERIODO%</p>
+		
+		<p><strong>Justificativa </strong>: %JUSTIFICATIVA%</p>
+		
+		<p style="text-align:center"><span style="background-color:#FFFF00"><strong> A Diária foi %RESULTADO% pelo seu Aprovador nível %NIVEL%</strong></span></p>
+	
+	</div>
+</div>

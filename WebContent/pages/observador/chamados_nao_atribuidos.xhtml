@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Consulta de Chamados Não Atribuidos</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		
+	</ui:define>
+
+	<ui:define name="corpo">
+	<f:metadata>
+			<f:viewAction
+				action="#{chamadoBean.initMenuByObservador}" />
+		</f:metadata>
+
+		<ui:fragment>
+			<div class="box box-widget collapsed-box">
+
+				<div class="box-header with-border">
+					<div class="user-block">
+						<ul class="sidebar-menu">
+							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+						</ul>
+					</div>
+
+					<!-- /.user-block -->
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+
+					</div>
+
+					<!-- /.box-tools -->
+				</div>
+
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="pull-right">
+
+						<p:commandButton update="@form" value="#{msg['limpar']}"
+							class="btn btn-danger btn-xs" action="#{permissaoBean.listar}">
+
+						</p:commandButton>
+
+
+						<p:commandButton class="btn btn-primary btn-xs"
+							value="#{msg['filtrar']}" action="#{permissaoBean.listar}" />
+						<br />
+					</div>
+
+					<div class="row">
+
+						<!-- DIV DA Coluna -->
+						<div class="col-md-6">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+								<label><b>#{msg['pesquisa']}</b></label>
+								<p:inputText id="pesquisa" maxlength="100"
+									styleClass="form-control" label="#{msg['descricao']}" />
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<p:dataTable id="tbCategoria" rows="7" var="chamado" paginator="true"
+				value="#{chamadoBean.chamadoList}" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}">
+
+
+
+				<p:column width="10%" headerText="Número" styleClass="align-center">
+	                        #{chamado.numero}
+	                    </p:column>
+
+				<p:column width="10%" headerText="Data Abertura" styleClass="align-center">
+				<h:outputText value="#{chamado.dataAbertura}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				
+				</p:column>
+
+				<p:column width="10%" headerText="Solicitante" styleClass="align-center">
+									                        #{chamado.solicitante.nome}
+				
+				
+				</p:column>
+
+				<p:column width="10%" headerText="Categoria" styleClass="align-center">
+									                        #{chamado.categoria.nome}
+				
+				</p:column>
+
+				<p:column width="40%" styleClass="align-center"
+					headerText="Chamado">
+	                        #{chamado.titulo}
+	                    </p:column>
+
+
+				<p:column width="10%" styleClass="align-center" headerText="#{msg['acao']}">
+					<p:commandButton icon="ui-icon-search" title="#{msg['editar']}"
+						class="btn btn-warning btn-xs" action="#{chamadoBean.visualizarDetalhado(chamado.id)}" />
+				</p:column>
+
+				<f:facet name="footer">
+						<h:outputText value="#{msg['lista.totalRegistros']} #{chamadoBean.chamadoList.size()}" />
+					</f:facet>
+
+			</p:dataTable>
+		</ui:fragment>
+
+
+
+	</ui:define>
+
+
+
+</ui:composition>
+
+</html>

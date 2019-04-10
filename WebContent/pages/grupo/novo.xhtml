@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+	<style type="text/css">
+.ui-datalist ul {
+	padding: 0px 10px 0 20px;
+	margin: 5px 0;
+}
+
+.ui-datalist {
+	margin-bottom: 10px
+}
+
+.ui-noborder tr.ui-widget-content {
+	background: none;
+}
+</style>
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Grupo </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{grupoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{grupoBean.salvar}" update="@form"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+
+
+		<!-- DIV PRINCIPAL -->
+		<div class="box-body">
+			<div class="row">
+			
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>#{msg['nome']}</label>
+						<p:inputText maxlength="100" styleClass="form-control"
+							label="#{msg['nome']}" value="#{grupoBean.grupo.nome}"
+							required="true" />
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>#{msg['descricao']}</label>
+						<p:inputText maxlength="20" styleClass="form-control"
+							label="#{msg['descricao']}" value="#{grupoBean.grupo.descricao}"
+							required="true" id="nome" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-12">
+				
+				<div class="form-group">
+						<label><strong>Lista de Permissões</strong></label>
+						</div>
+						</div>
+				</div>
+							<p:panel id="painel">
+				
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-2">
+						<div class="form-group">
+							<label><strong>ÁREA DE USUÁRIOS</strong></label>
+						</div>
+					</div>
+					
+				<div class="col-md-2">
+					<div class="form-group">
+						<label><strong>ÁREA DE OBSERVADOR</strong></label>
+				</div>
+								</div>
+				
+				<div class="col-md-2">
+					<div class="form-group">
+						<label><strong>ÁREA DE TÉCNICOS</strong></label>
+				</div>
+								</div>
+				
+				<div class="col-md-2">
+					<div class="form-group">
+						<label><strong>ÁREA DE GESTOR</strong></label>
+				</div>
+								</div>
+				
+				<div class="col-md-2">
+					<div class="form-group">
+						<label><strong>ÁREA DE ADMINISTRADOR</strong></label>
+				</div>
+								</div>
+								
+				<div class="col-md-2">
+					<div class="form-group">
+						<label><strong>GERAL</strong></label>
+				</div>
+								</div>
+				</div>
+
+
+
+
+
+
+				</div>
+				
+					<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-2">
+						<div class="form-group">
+        					<ui:repeat var="permissao" value="#{grupoBean.listaPermissaoAreaUsuario}">
+        								<p:selectBooleanCheckbox  itemLabel="#{permissao.descricao}" value="#{permissao.check}"/>
+        					</ui:repeat>
+
+						</div>
+					</div>
+					
+				<div class="col-md-2">
+					<div class="form-group">
+						<ui:repeat var="permissao"	value="#{grupoBean.listaPermissaoAreaObservadores}">
+        					<p:selectBooleanCheckbox  itemLabel="#{permissao.descricao}"  value="#{permissao.check}">
+        					
+        					</p:selectBooleanCheckbox>
+        			
+        				</ui:repeat>
+				</div>
+								</div>
+				
+				<div class="col-md-2">
+					<div class="form-group">
+					<ui:repeat var="permissao"	value="#{grupoBean.listaPermissaoAreaTecnicos}">
+        								<p:selectBooleanCheckbox  itemLabel="#{permissao.descricao}"  value="#{permissao.check}"/>
+        			
+        			</ui:repeat>
+				</div>
+								</div>
+				
+				<div class="col-md-2">
+					<div class="form-group">
+					
+				</div>
+								</div>
+				
+				<div class="col-md-2">
+					<ui:repeat var="permissao"	value="#{grupoBean.listaPermissaoAreaAdministradores}">
+        								<p:selectBooleanCheckbox  itemLabel="#{permissao.descricao}"  value="#{permissao.check}"/>
+        			
+        			</ui:repeat>
+				</div>
+								</div>
+								
+				<div class="col-md-2">
+					<div class="form-group">
+				
+				</div>
+								</div>
+				</div>
+
+
+
+
+</p:panel>
+
+			</div>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+<h:head>
+		<script type="text/javascript">
+			var espaco = 0;
+			$('#descricao').focus();
+
+			$('#descricao').keyup(function(e) {
+
+				if (e.keyCode == 8 || e.keyCode == 46) {
+					espaco = 0;
+					$('#descricao').val("");
+				}
+
+				var text = $('#descricao').val();
+
+				if (text[text.length - 1] != ' ') {
+					$('.total').text((text.length - espaco) * 10 + ',00');
+				} else {
+					espaco++;
+				}
+
+			});
+		</script>
+
+</h:head>
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Chamado</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{grupoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{chamadoBean.salvar}"  />
+		</div>
+	</ui:define>
+
+
+
+
+
+
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.ui-widget-header {
+	padding: 0;
+}
+
+.ui-widget-header {
+	border: none;
+}
+
+.ui-widget-content {
+	border: none;
+}
+
+.ui-button-text-icon-left .ui-button-text {
+	padding: .3em 1em .3em 1.1em;
+	background-color: #3c8dbc;
+	color: white;
+}
+
+
+</style>
+
+
+
+		<f:metadata>
+			<f:viewAction action="#{chamadoBean.init}" />
+		</f:metadata>
+
+
+		<p:dialog header="Filtro de Categoria de Chamado"
+			id="categoriaChamadoDialog" widgetVar="dlg1" modal="true">
+			<div class="box-body">
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar"
+							process="categoriaChamadoDialog" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Nome</label>
+					<p:inputText maxlength="45" styleClass="form-control"
+						label="#{msg['grupo.nome']}" id="nomeBusca" />
+				</div>
+
+				<p:dataTable id="tbCategoria" rows="5" var="categoria"
+					paginator="true" value="#{chamadoBean.categoriaList}"
+					paginatorPosition="bottom" paginatorAlwaysVisible="false"
+					emptyMessage="#{msg['lista.vazia']}"
+					style="max-width: 550px; min-width: 550px">
+
+					<p:column width="80%" headerText="Nome">
+	                        #{categoria.nome}
+	                    </p:column>
+
+
+					<p:column width="20%" styleClass="align-center"
+						headerText="#{msg['acao']}">
+						<p:commandButton title="Selecionar" class="btn btn-success btn-xs"
+							value="Selecionar">
+							<p:ajax event="click"
+								listener="#{chamadoBean.atribuirCategoria(categoria)}"
+								update="campoCategoriaHidden,campoCategoria"
+								onsuccess="PF('dlg1').hide();" immediate="true" />
+
+						</p:commandButton>
+					</p:column>
+
+
+
+
+				</p:dataTable>
+
+
+
+
+
+			</div>
+			<!-- /.box-body -->
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg2').hide();" />
+				</div>
+			</div>
+
+		</p:dialog>
+
+		<p:panel>
+
+
+			<div class="box-body">
+
+				<div class="col-md-6">
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+
+								<label><b><span style="color: red">*</span> Título</b></label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+
+						<div class="col-md-12">
+							<div class="form-group">
+
+
+								<p:inputText maxlength="45" styleClass="form-control"
+									value="#{chamadoBean.chamado.titulo}" />
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label><b><span style="color: red">*</span> Descrição <span style="color: red">(Mínimo de 20 Caracteres)</span></b></label>
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+
+
+
+								<p:inputTextarea id="descricao"
+									value="#{chamadoBean.chamado.descricao}"  rows="10" cols="126" title="Para maior agilidade e entedimento de seu chamado, favor detalhar ao máximo.">
+									  <f:validateLength minimum="20" />
+									      <p:tooltip id="toolTipdescricao" for="descricao" showEvent="focus" hideEvent="blur" position="bottom"/>
+									  
+									</p:inputTextarea>
+
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					
+				</div>
+
+
+				<div class="col-md-6">
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label><b><span style="color: red">*</span> Sistema</b></label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<div class="input-group input-group-sm">
+									<h:inputHidden label="#{msg['municipio.destino']}"
+										id="campoCategoriaHidden" required="false"
+										converter="genericCvt" />
+									<p:inputText maxlength="45" styleClass="form-control"
+										label="#{msg['municipio.destino']}" id="campoCategoria"
+										readonly="true" value="#{chamadoBean.chamado.categoria.nome}" />
+
+									<span class="input-group-btn"> <p:commandButton
+											id="botaoSelecaoCategoria" icon="ui-icon-search"
+											class="btn-primary btn-xs" onclick="PF('dlg1').show();"
+											immediate="true">
+
+
+										</p:commandButton>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label><b>Prioridade</b></label>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Já Informado?</b></label>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Retroativo?</b></label>
+							</div>
+						</div>
+
+
+
+					</div>
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+
+								<p:commandButton class="btn btn-success btn-xs"
+									action="#{chamadoBean.definirPrioridade(1)}" value="Baixa"
+									update="baixa,media,alta" id="baixa"
+									binding="#{chamadoBean.gerenciadorCoresButton.prioridadeBaixaButton}">
+
+
+								</p:commandButton>
+
+								<p:commandButton class="btn btn-default btn-xs"
+									action="#{chamadoBean.definirPrioridade(2)}" value="Média"
+									update="baixa,media,alta" id="media"
+									binding="#{chamadoBean.gerenciadorCoresButton.prioridadeMediaButton}">
+								</p:commandButton>
+
+								<p:commandButton class="btn btn-default btn-xs"
+									action="#{chamadoBean.definirPrioridade(3)}" value="Alta"
+									update="baixa,media,alta" id="alta"
+									binding="#{chamadoBean.gerenciadorCoresButton.prioridadeAltaButton}"></p:commandButton>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+
+								<p:commandButton class="btn btn-success btn-xs"
+									action="#{chamadoBean.definirChamadoJaInformado(false)}"
+									value="Não" update="naoInformado,simInformado"
+									id="naoInformado"
+									binding="#{chamadoBean.gerenciadorCoresButton.informadoNaoButton}">
+								</p:commandButton>
+
+
+								<p:commandButton class="btn btn-default btn-xs"
+									action="#{chamadoBean.definirChamadoJaInformado(true)}"
+									value="Sim" update="naoInformado,simInformado"
+									id="simInformado"
+									binding="#{chamadoBean.gerenciadorCoresButton.informadoSimButton}">
+								</p:commandButton>
+
+
+
+							</div>
+						</div>
+
+
+						<div class="col-md-3">
+							<div class="form-group">
+
+								<p:commandButton class="btn btn-success btn-xs"
+									action="#{chamadoBean.definirChamadoRetroativo(false)}"
+									value="Não" update="naoRetroativo,simRetroativo"
+									id="naoRetroativo"
+									binding="#{chamadoBean.gerenciadorCoresButton.retroativoNaoButton}">
+								</p:commandButton>
+
+
+								<p:commandButton class="btn btn-default btn-xs"
+									action="#{chamadoBean.definirChamadoRetroativo(true)}"
+									value="Sim" update="naoRetroativo,simRetroativo"
+									id="simRetroativo"
+									binding="#{chamadoBean.gerenciadorCoresButton.retroativoSimButton}">
+								</p:commandButton>
+
+
+
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label><b>Trabalhos Parados?</b></label>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Recorrente?</b></label>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Arquivos</b></label>
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<p:commandButton class="btn btn-success btn-xs"
+									action="#{chamadoBean.definirTrabalhosParados(false)}"
+									value="Não" id="naoParado" update="naoParado,simParado"
+									binding="#{chamadoBean.gerenciadorCoresButton.trabalhosParadosNaoButton}">
+								</p:commandButton>
+
+
+								<p:commandButton class="btn btn-default btn-xs"
+									action="#{chamadoBean.definirTrabalhosParados(true)}"
+									value="Sim" id="simParado" update="naoParado,simParado"
+									binding="#{chamadoBean.gerenciadorCoresButton.trabalhosParadosSimButton}">
+								</p:commandButton>
+
+
+							</div>
+						</div>
+
+
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<p:commandButton class="btn btn-success btn-xs"
+									action="#{chamadoBean.definirChamadoRecorrente(false)}"
+									value="Não" update="naoRecorrente,simRecorrente"
+									id="naoRecorrente"
+									binding="#{chamadoBean.gerenciadorCoresButton.recorrenteNaoButton}">
+								</p:commandButton>
+
+
+								<p:commandButton class="btn btn-default btn-xs"
+									action="#{chamadoBean.definirChamadoRecorrente(true)}"
+									value="Sim" update="naoRecorrente,simRecorrente"
+									id="simRecorrente"
+									binding="#{chamadoBean.gerenciadorCoresButton.recorrenteSimButton}">
+								</p:commandButton>
+
+							</div>
+						</div>
+
+
+
+
+						<div class="col-md-3">
+							<div class="form-group"></div>
+
+						</div>
+
+
+
+
+
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Arquivos Anexados</b></label>
+
+
+
+
+							</div>
+
+							<div class="form-group">
+								<p:fileUpload
+									fileUploadListener="#{chamadoBean.handleFileUpload}"
+									auto="true" multiple="true" update=":arquivos" label="Procurar" />
+
+
+
+
+
+
+							</div>
+						</div>
+
+
+					</div>
+					<div class="box-footer">
+						<p:fragment id="arquivos">
+							<ul class="mailbox-attachments clearfix">
+								<ui:repeat var="arquivo" value="#{chamadoBean.arquivoAnexado}">
+									<li><span class="mailbox-attachment-icon"> <ui:fragment
+												rendered="#{arquivo.formato eq '.PDF'}">
+												<i class="fa fa-file-pdf-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.TXT'}">
+												<i class="fa fa-file-text-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.XLS'}">
+												<i class="fa fa-file-excel-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.PNG'}">
+												<i class="fa fa-file-image-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.JPGE'}">
+												<i class="fa fa-file-image-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.JPG'}">
+												<i class="fa fa-file-image-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.ZIP'}">
+												<i class="fa fa-file-zip-o"></i>
+											</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.PPT'}">
+												<i class="fa fa-file-powerpoint-o"></i>
+											</ui:fragment> <ui:fragment
+												rendered="(arquivo.formato ne '.PDF') and (arquivo.formato ne '.TXT') and (arquivo.formato ne '.XLS') and (arquivo.formato ne '.PNG') and (arquivo.formato ne '.JPGE') and (arquivo.formato ne '.JPG') and (arquivo.formato ne '.ZIP') and (arquivo.formato ne '.PPT') }">
+												<i class="fa fa-file-o"></i>
+											</ui:fragment>
+									</span>
+
+										<div class="mailbox-attachment-info">
+											<a href="#" class="mailbox-attachment-name"><i
+												class="fa fa-paperclip"></i>#{arquivo.nome}</a> <span
+												class="mailbox-attachment-size"> #{arquivo.tamanho}
+												KB <a href="#" class="btn btn-default btn-xs pull-right">
+													<i class="fa fa-cloud-download"></i>
+											</a>
+											</span>
+										</div></li>
+								</ui:repeat>
+							</ul>
+						</p:fragment>
+					</div>
+
+
+
+
+				</div>
+
+
+			</div>
+
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

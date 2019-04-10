@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+	<ui:define name="nome_pagina">
+	</ui:define>
+
+	<ui:define name="corpo">
+
+		<style>
+.color-palette {
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+}
+
+.color-palette-set {
+	margin-bottom: 15px;
+}
+
+.color-palette span {
+	display: none;
+	font-size: 12px;
+}
+
+.color-palette:hover span {
+	display: block;
+}
+
+.color-palette-box h5 {
+	position: absolute;
+	top: 100%;
+	left: 25px;
+	margin-top: -40px;
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 12px;
+	display: block;
+	z-index: 7;
+}
+
+.carousel-caption {
+	width: 60%;
+	position: absolute;
+	right: none;
+	bottom: none;
+	top: 15%;
+	left: 28%;
+	z-index: 10;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	color: #111;
+	text-align: right;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+	font-size: 1.4em;
+}
+
+.carousel-inner .item {
+	background: #BEE3F6;
+	height: 300px
+}
+
+.carousel-inner .item img {
+	width: 30%;
+	height: auto;
+	margin-left: 10px;
+}
+</style>
+
+		<!-- DIALOG COM A INFORMAÇÃO DE SOLICITAÇÃO ABERTA COM SUCESSO -->
+		<div class="modal fade" id="myModal">
+			<div class="vertical-alignment-helper">
+				<div class="modal-dialog vertical-align-center">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" aria-label="Close">
+								<span aria-hidden="true"></span>
+							</button>
+							<h5 class="modal-title" id="myModalLabel">
+								<STRONG>Chamados Aguardando Feedback!</STRONG>
+							</h5>
+						</div>
+
+						<div class="modal-body">
+
+							<div class="row">
+								<div class="col-md-11 col-md-offset-3">
+									<h5 style="color: red">
+										<strong>Realize o Feedback dos Chamados:</strong>
+									</h5>
+								</div>
+							</div>
+
+							<p:dataTable id="tbChamado" rows="9" var="cha" paginator="true"
+								value="#{dashboardBean.chamadosPendentes}"
+								paginatorPosition="bottom" paginatorAlwaysVisible="false"
+								emptyMessage="#{msg['lista.vazia']}">
+
+								<p:column width="15%" styleClass="align-center"
+									headerText="Número">
+										#{cha.numero}
+									</p:column>
+
+
+								<p:column styleClass="align-center" headerText="Título">
+										#{cha.titulo}
+									</p:column>
+
+								<p:column width="15%" styleClass="align-center"
+									headerText="#{msg['acao']}">
+
+									<p:commandButton icon="ui-icon-search"
+										title="Visualizar Detalhamento" class="btn btn-warning btn-xs"
+										action="#{chamadoBean.visualizarDetalhado(cha.id)}" />
+								</p:column>
+
+							</p:dataTable>
+						</div>
+
+						<div class="modal-footer">
+							<p:commandButton class="btn btn-danger" onclick="fecharDialog()"
+								value="Fechar"></p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<ui:fragment rendered="#{dashboardBean.chamadoPendente == true}">
+			<body onload="abrirDialog();"></body>
+		</ui:fragment>
+
+
+	</ui:define>
+
+</ui:composition>
+
+</html>
