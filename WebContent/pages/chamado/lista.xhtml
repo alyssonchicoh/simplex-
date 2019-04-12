@@ -8,8 +8,6 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/index.xhtml">
-
-
 	<h:head>
 		<title>Sistema de Chamados</title>
 		<link rel="icon" type="image/x-icon"
@@ -44,8 +42,6 @@
 	</ui:define>
 
 	<ui:define name="botoes">
-
-
 		<div class="pull-right box-tools">
 			<p:commandButton styleClass="btn-block btn-primary"
 				value="#{msg['novo']}" action="#{categoriaBean.showFormNovo}" />
@@ -53,66 +49,197 @@
 	</ui:define>
 
 	<ui:define name="corpo">
+
 		<f:metadata>
 			<f:viewAction action="#{chamadoBean.initAreaUsuario()}" />
 		</f:metadata>
 
+		<p:dialog 
+			header="Abertura do Chamado"
+			id="filtroDataAberturaDialog" 
+			widgetVar="filtroDataAberturaDialog"
+			modal="true">
+				<div class="box-body">
+					<div class="row">
+						<label><b>Data Final</b></label>
+					</div>
+					<div class="row">
+						<p:calendar 
+							id="passBeginDate" 
+							mode="popup"
+							readonly="true"
+							pattern="dd/MM/yyyy"
+							showOn="button" 
+							value="#{filtroChamadoBean.dataAberturaInicioFiltro}" />
+					</div>
 
+					<div class="row">
+						<label><b>Data Inicial</b></label>
 
-		<p:dialog header="Filtro de Data de Abertura do Chamado" id="filtroDataAberturaDialog" widgetVar="filtroDataAberturaDialog" modal="true">
+					</div>
+					
+					<div class="row">
+						<p:calendar value="#{filtroChamadoBean.dataAberturaFinalFiltro}" id="dataFinal"/>
+					</div>
+
+			</div>
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+					<p:commandButton 
+						class="btn btn-danger btn-md" 
+						value="Fechar"
+						onclick="PF('filtroDataAberturaDialog').hide();" />
+						
+					<p:commandButton 
+						title="Selecionar" 
+						class="btn btn-success btn-md"
+						value="Salvar"
+						immediate="false" 
+						process="filtroDataAberturaDialog"
+						action="#{filtroChamadoBean.adicionaFiltroDataAbertura}" />
+				</div>
+			</div>
+		
+		</p:dialog>
+
+		<p:dialog header="Filtro de Data de Encerramento"
+			id="filtroDataEncerramentoDialog"
+			widgetVar="filtroDataEncerramentoDialog" modal="true">
 			<div class="box-body">
 				<div class="d-flex justify-content-center">
-					<div class="form-group">
-						<div class="col-md-4">
+					<div class="row">
+						<div class="form-group">
 							<label><b>Data Inicial</b></label>
 							<p:calendar />
-						</div>
-						<div class="col-md-2" />
-						
-						<div class="col-md-4">
+
 							<label><b>Data Final</b></label>
 							<p:calendar />
+
+
 						</div>
 					</div>
+
 				</div>
 			</div>
 
 			<div class="box-footer">
 				<div class="pull-right box-tools">
-					<p:commandButton class="btn btn-danger btn-md" value="Fechar" onclick="PF('filtroDataAberturaDialog').hide();" />
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('filtroDataEncerramentoDialog').hide();" />
 				</div>
 			</div>
+
+
 		</p:dialog>
-		
-		<p:dialog header="Filtro de Data de Encerramento" id="filtroDataEncerramentoDialog" widgetVar="filtroDataEncerramentoDialog" modal="true">
+
+		<p:dialog header="Filtro de Prioridade de Chamado"
+			id="filtroPrioridadeDialog" widgetVar="filtroPrioridadeDialog"
+			modal="true">
 			<div class="box-body">
-				<div class="d-flex justify-content-center">
-					<div class="form-group">
-						<div class="col-md-4">
-							<label><b>Data Inicial</b></label>
-							<p:calendar />
-						</div>
-						<div class="col-md-2" />
-						
-						<div class="col-md-4">
-							<label><b>Data Final</b></label>
-							<p:calendar />
-						</div>
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar"
+							process="filtroPrioridadeDialog" />
 					</div>
 				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Nome</label>
+					<p:inputText maxlength="45" styleClass="form-control"
+						label="#{msg['grupo.nome']}" id="nomeBusca" />
+				</div>
+
+				<p:dataTable id="tbPrioridade" rows="5" var="prioridade"
+					paginator="true" value="#{filtroChamadoBean.prioridadeList}"
+					paginatorPosition="bottom" paginatorAlwaysVisible="false"
+					emptyMessage="#{msg['lista.vazia']}"
+					style="max-width: 550px; min-width: 550px">
+
+					<p:column width="80%" headerText="Nome">
+	                        	#{prioridade}
+	                    	</p:column>
+
+					<p:column width="20%" styleClass="align-center"
+						headerText="#{msg['acao']}">
+						<p:commandButton title="Selecionar" class="btn btn-success btn-xs"
+							value="Selecionar">
+							<p:ajax event="click"
+								listener="#{filtroChamadoBean.adicionaFiltroPrioridade(prioridade)}"
+								update="tabView:campoPrioridadeHidden,tabView:campoPrioridade"
+								onsuccess="PF('filtroPrioridadeDialog').hide();"
+								immediate="true" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
 			</div>
 
 			<div class="box-footer">
 				<div class="pull-right box-tools">
-					<p:commandButton class="btn btn-danger btn-md" value="Fechar" onclick="PF('filtroDataEncerramentoDialog').hide();" />
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('filtroPrioridadeDialog').hide();" />
 				</div>
 			</div>
 		</p:dialog>
-		
+
+
+		<p:dialog header="Filtro de Categoria de Chamado"
+			id="categoriaChamadoDialog" widgetVar="categoriaChamadoDialog"
+			modal="true">
+			<div class="box-body">
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Buscar"
+							process="categoriaChamadoDialog" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Nome</label>
+					<p:inputText maxlength="45" styleClass="form-control"
+						label="#{msg['grupo.nome']}" id="nomeBuscaCategoria" />
+				</div>
+
+				<p:dataTable id="tbCategoria" rows="5" var="categoria"
+					paginator="true" value="#{filtroChamadoBean.categoriaList}"
+					paginatorPosition="bottom" paginatorAlwaysVisible="false"
+					emptyMessage="#{msg['lista.vazia']}"
+					style="max-width: 550px; min-width: 550px">
+
+					<p:column width="80%" headerText="Nome">
+	                        #{categoria.nome}
+	                    </p:column>
+
+					<p:column width="20%" styleClass="align-center"
+						headerText="#{msg['acao']}">
+
+						<p:commandButton title="Selecionar" class="btn btn-success btn-xs"
+							value="Selecionar">
+
+							<p:ajax event="click"
+								listener="#{filtroChamadoBean.adicionarFiltroCategoria(categoria)}"
+								update="tabView:campoCategoriaHidden,tabView:campoCategoria"
+								onsuccess="PF('categoriaChamadoDialog').hide();"
+								immediate="true" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('categoriaChamadoDialog').hide();" />
+				</div>
+			</div>
+		</p:dialog>
+
+
 
 
 		<ui:fragment>
 			<div class="box box-widget collapsed-box">
+
 
 				<div class="box-header with-border">
 					<div class="user-block">
@@ -121,59 +248,44 @@
 						</ul>
 					</div>
 
-					<!-- /.user-block -->
 					<div class="box-tools">
 						<button type="button" class="btn btn-box-tool"
 							data-widget="collapse">
 							<i class="fa fa-plus"></i>
 						</button>
-
 					</div>
-
-					<!-- /.box-tools -->
 				</div>
 
-				<!-- /.box-header -->
 				<div class="box-body">
 					<div class="pull-right">
-
 						<p:commandButton update="@form" value="#{msg['limpar']}"
 							class="btn btn-danger btn-xs" action="#{permissaoBean.listar}">
 							<f:setPropertyActionListener target="#{permissaoBean.pesquisa}"
 								value="" />
 						</p:commandButton>
 
-
 						<p:commandButton class="btn btn-primary btn-xs"
-							value="#{msg['filtrar']}" action="#{filtroChamadoBean.consultar}" update="tbChamados"/>
+							value="#{msg['filtrar']}" action="#{filtroChamadoBean.consultar}"
+							update="tbChamados" />
 						<br />
 					</div>
 
 					<div class="row">
-
-						<!-- DIV DA Coluna -->
 						<div class="col-md-6">
-							<!-- DIV DO ELEMTNO -->
 							<div class="form-group">
 								<label><b>Filtros Selecionados</b></label>
-
 							</div>
 						</div>
-
 					</div>
-
 
 					<div class="row">
 						<div class="col-md-12">
-
-							<p:tabView>
-								<p:tab title="Filtros de Características">
+							<p:tabView id="tabView">
+								<p:tab title="Filtros de Características"
+									id="filtroCaracteristica">
 									<div class="row">
-
 										<div class="col-md-6">
 											<div class="form-group">
-
-												<!-- DIV DO ELEMTNO -->
 												<label><b>Título</b></label>
 												<p:inputText maxlength="100" styleClass="form-control"
 													label="#{msg['descricao']}"
@@ -183,8 +295,6 @@
 
 										<div class="col-md-6">
 											<div class="form-group">
-
-												<!-- DIV DO ELEMTNO -->
 												<label><b>Descrição</b></label>
 												<p:inputText maxlength="100" styleClass="form-control"
 													label="#{msg['descricao']}"
@@ -193,27 +303,24 @@
 										</div>
 									</div>
 									<div class="row">
-
 										<div class="col-md-3">
 											<div class="form-group">
 												<label><b>Prioridade</b></label>
-
 												<div class="input-group input-group-sm">
 													<h:inputHidden label="#{msg['municipio.destino']}"
 														id="campoPrioridadeHidden" required="false"
 														converter="genericCvt" />
+
 													<p:inputText maxlength="45" styleClass="form-control"
 														label="#{msg['municipio.destino']}" id="campoPrioridade"
 														readonly="true"
-														value="#{chamadoBean.chamado.categoria.nome}" />
+														value="#{filtroChamadoBean.prioridadeSelecionada}" />
 
 													<span class="input-group-btn"> <p:commandButton
 															id="botaoSelecaoPrioridade" icon="ui-icon-search"
-															class="btn-primary btn-xs" onclick="PF('dlg1').show();"
-															immediate="true">
-
-
-														</p:commandButton>
+															class="btn-primary btn-xs"
+															onclick="PF('filtroPrioridadeDialog').show();"
+															immediate="true" />
 													</span>
 												</div>
 											</div>
@@ -227,43 +334,41 @@
 													<h:inputHidden label="#{msg['municipio.destino']}"
 														id="campoCategoriaHidden" required="false"
 														converter="genericCvt" />
+
 													<p:inputText maxlength="45" styleClass="form-control"
 														label="#{msg['municipio.destino']}" id="campoCategoria"
 														readonly="true"
-														value="#{chamadoBean.chamado.categoria.nome}" />
+														value="#{filtroChamadoBean.categoriaSelecionada.nome}" />
 
 													<span class="input-group-btn"> <p:commandButton
 															id="botaoSelecaoCategoria" icon="ui-icon-search"
-															class="btn-primary btn-xs" onclick="PF('dlg1').show();"
-															immediate="true">
-
-
-														</p:commandButton>
+															class="btn-primary btn-xs"
+															onclick="PF('categoriaChamadoDialog').show();"
+															immediate="true" />
 													</span>
 												</div>
 											</div>
 										</div>
+
+
 										<div class="col-md-2">
 											<div class="form-group">
 												<label><b>Já Informado</b></label>
 
-												<p:selectOneRadio 
-													unselectable="true">
+												<p:selectOneRadio unselectable="true">
 													<f:selectItem itemLabel="Sim" itemValue="Sim" />
 													<f:selectItem itemLabel="Não" itemValue="Não" />
-
 												</p:selectOneRadio>
 											</div>
 										</div>
+
 										<div class="col-md-2">
 											<div class="form-group">
 												<label><b>Recorrente</b></label>
 
-												<p:selectOneRadio
-													unselectable="true">
+												<p:selectOneRadio unselectable="true">
 													<f:selectItem itemLabel="Sim" itemValue="Sim" />
 													<f:selectItem itemLabel="Não" itemValue="Não" />
-
 												</p:selectOneRadio>
 											</div>
 										</div>
@@ -272,15 +377,14 @@
 											<div class="form-group">
 												<label><b>Trabalhos Parados</b></label>
 
-												<p:selectOneRadio 
-													unselectable="true">
+												<p:selectOneRadio unselectable="true">
 													<f:selectItem itemLabel="Sim" itemValue="Sim" />
 													<f:selectItem itemLabel="Não" itemValue="Não" />
-
 												</p:selectOneRadio>
 											</div>
 										</div>
 									</div>
+
 									<div class="row">
 										<div class="col-md-3">
 											<div class="form-group">
@@ -288,18 +392,16 @@
 
 												<div class="input-group input-group-sm">
 													<h:inputHidden label="#{msg['municipio.destino']}"
-														required="false" converter="genericCvt" />
+														required="false" converter="genericCvt" id="campoDataAberturaHidden"/>
+
 													<p:inputText maxlength="45" styleClass="form-control"
 														label="#{msg['municipio.destino']}" readonly="true"
-														value="#{chamadoBean.chamado.categoria.nome}" />
+														value="#{filtroChamadoBean.labelDataAbertura} " id="campoDataAbertura"/>
 
 													<span class="input-group-btn"> <p:commandButton
 															icon="ui-icon-calendar" class="btn-primary btn-xs"
 															onclick="PF('filtroDataAberturaDialog').show();"
-															immediate="true">
-
-
-														</p:commandButton>
+															immediate="true" />
 													</span>
 												</div>
 											</div>
@@ -319,7 +421,8 @@
 
 													<span class="input-group-btn"> <p:commandButton
 															icon="ui-icon-calendar" class="btn-primary btn-xs"
-															onclick="PF('filtroDataEncerramentoDialog').show();" immediate="true">
+															onclick="PF('filtroDataEncerramentoDialog').show();"
+															immediate="true">
 
 
 														</p:commandButton>
@@ -394,17 +497,20 @@
 								<p:tab title="Filtros de Estatisticas">
 
 								</p:tab>
-								
+
 								<p:tab title="Exibição dos Campos">
-								
-								<ui:repeat var="campo" value="#{filtroChamadoBean.exibicaoCampos}" >
-									<f:attribute name="nomeCampo" value="#{campo.nome}" />
-								
-								 <p:selectBooleanCheckbox value="#{filtroChamadoBean.verificaCampoMarcado(campo)}" itemLabel="#{campo.nome}" >
-								             <p:ajax update="tbChamados" listener="#{filtroChamadoBean.atualizaCampo(campo.nome)}" />
-								 
-        						</p:selectBooleanCheckbox>
-								</ui:repeat>
+
+
+									<p:selectManyCheckbox id="grid2"
+										value="#{filtroChamadoBean.camposSelecionados}"
+										layout="responsive" columns="3">
+										<f:selectItems value="#{filtroChamadoBean.camposAll}"
+											var="city" itemLabel="#{city}" itemValue="#{city}">
+										</f:selectItems>
+										<p:ajax update="tbChamados"></p:ajax>
+
+									</p:selectManyCheckbox>
+
 
 								</p:tab>
 							</p:tabView>
@@ -419,11 +525,13 @@
 				value="#{filtroChamadoBean.chamadoList}" paginatorPosition="bottom"
 				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}">
 
-				<p:column headerText="Número" styleClass="align-center" width="10%" rendered="#{filtroChamadoBean.verificaExibicaoCampo(filtroChamadoBean.NUMERO_CHAMADO)}">
+				<p:column headerText="Número" styleClass="align-center" width="10%"
+					rendered="#{filtroChamadoBean.verificaExistenciaExibicaoCampo(filtroChamadoBean.NUMERO_CHAMADO)}">
 				#{cha.numero}
 				</p:column>
 
-				<p:column headerText="Status" styleClass="align-center" width="20%" rendered="#{filtroChamadoBean.verificaExibicaoCampo(filtroChamadoBean.STATUS_CHAMADO)}">
+				<p:column headerText="Status" styleClass="align-center" width="20%"
+					rendered="#{filtroChamadoBean.verificaExistenciaExibicaoCampo(filtroChamadoBean.STATUS_CHAMADO)}">
 					<ui:fragment rendered="#{cha.status == 1}">
 						<h4>
 							<span class="label"
@@ -494,7 +602,8 @@
 
 
 				<p:column headerText="Data Abertura" styleClass="align-center"
-					width="10%" rendered="#{filtroChamadoBean.verificaExibicaoCampo(filtroChamadoBean.DATA_ABERTURA_CHAMADO)}">
+					width="10%"
+					rendered="#{filtroChamadoBean.verificaExistenciaExibicaoCampo(filtroChamadoBean.DATA_ABERTURA_CHAMADO)}">
 					<h:outputText value="#{cha.dataAbertura}">
 						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 					</h:outputText>
@@ -503,7 +612,8 @@
 				</p:column>
 
 
-				<p:column headerText="Título" styleClass="align-center" rendered="#{filtroChamadoBean.verificaExibicaoCampo(filtroChamadoBean.TITULO_CHAMADO)}">
+				<p:column headerText="Título" styleClass="align-center"
+					rendered="#{filtroChamadoBean.verificaExistenciaExibicaoCampo(filtroChamadoBean.TITULO_CHAMADO)}">
 						#{cha.titulo}
 					</p:column>
 

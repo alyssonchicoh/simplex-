@@ -1,5 +1,6 @@
 package br.com.cogerh.template.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,85 +15,120 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import br.com.cogerh.template.model.Categoria;
 import br.com.cogerh.template.model.Chamado;
+import br.com.cogerh.template.service.CategoriaService;
 import br.com.cogerh.template.service.ChamadoService;
 import br.com.cogerh.template.util.FiltroChamadoDadosGerais;
 
 /**
- * Classe responsavel pelo gerenciamento de filtros da tela de consulta de chamado
+ * Classe responsavel pelo gerenciamento de filtros da tela de consulta de
+ * chamado
+ * 
  * @since 10/04/2019
  * @author alyssonnascimento
  */
 @Controller
 @Scope("view")
-public class FiltroChamadoBean extends AbstractBean{
-	
-	
+public class FiltroChamadoBean extends AbstractBean {
+
 	private String tituloFiltro;
-	
+
 	private String descricaoFiltro;
-	
+
 	private Integer prioridadeFiltro;
-	
+
 	private Integer idCategoriaFiltro;
-	
+
 	private Boolean jaInformadoFiltro;
-	
+
 	private Boolean recorrenteFiltro;
-	
+
 	private Boolean trabalhosParadosFiltro;
-	
+
 	private Date dataAberturaInicioFiltro;
-	private Date dataAberturaFinalFiltro;
 	
+	private Date dataAberturaFinalFiltro;
+
 	private Date dataEncerramentoInicioFiltro;
+	
 	private Date dataEncerramentoFinalFiltro;
 
 	private Date dataUltimaAtualizacaoInicioFiltro;
+	
 	private Date dataUltimaAtualizacaoFinalFiltro;
 
-	
 	private Date dataSolucaoInicioFiltro;
+	
 	private Date dataSolucaoFinalFiltro;
-	
+
 	private FiltroChamadoDadosGerais filtroChamadoDadosGerais;
-	
+
 	private List<Chamado> chamadoList;
+	
+	private List<Categoria> categoriaList;
+	
+	private List<String> prioridadeList;
+
+	private List<String> camposAll;
+	
+	private List<String> camposSelecionados;
+	
+	private Categoria categoriaSelecionada;
 	
 	@Autowired
 	private ChamadoService chamadoService;
-	
+
 	@Autowired
 	private UsuarioWeb usuarioWeb;
 	
-	private List<ExibicaoCampo> exibicaoCampos;
-	private List<String> inicias = new ArrayList<String>();
-
+	@Autowired
+	private CategoriaService categoriaService;
 	
+	private String prioridadeSelecionada;
+
+	private String queryCategoriaFiltro;
+	
+	private String labelDataAbertura;
+	
+	//LABEL DAS COLUNAS DO DATATABLE
 	private final String NUMERO_CHAMADO = "Número";
+	
 	private final String TITULO_CHAMADO = "Título";
-	private final String DESCRICAO_CHAMADO = "Descrição";
+	
+	private final String DESCRICAO_CHAMADO = "Descriçãoo";
+	
 	private final String DATA_ABERTURA_CHAMADO = "Data Abertura";
+	
 	private final String DATA_ENCERRAMENTO_CHAMADO = "Data Encerramento";
+	
 	private final String SOLICITANTE_CHAMADO = "Solicitante";
+	
 	private final String PRIORIDADE_CHAMADO = "Prioridade";
+	
 	private final String POSICAO_FILA_CHAMADO = "Posição na Fila";
+	
 	private final String SCORE_FILA_CHAMADO = "Score da Fila";
+	
 	private final String TECNICO_INFORMADO_CHAMADO = "Tecnico Já Informado?";
+	
 	private final String RECORRENTE_CHAMADO = "Chamado Recorrente?";
+	
 	private final String CATEGORIA_CHAMADO = "Categoria";
+	
 	private final String TECNICOS_CHAMADO = "Técnicos Alocados ";
+	
 	private final String STATUS_CHAMADO = "Status do Chamado ";
 
-	
 	@PostConstruct
-	public void init(){
+	public void init() {
 		try {
+			initCamposAll();
+			initCamposSelecionados();
+			initListPrioridade();
+			initListCategoria();
 			chamadoList = chamadoService.listarChamadosSolicitadoByUsuario(usuarioWeb.getUsuario().getId());
-			initCamposIniciais();
 
-			initCampos();
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,58 +136,74 @@ public class FiltroChamadoBean extends AbstractBean{
 		initValores();
 	}
 
-	public void initValores(){
+	private void initCamposAll() {
+		camposAll = new ArrayList<String>();
+
+		this.camposAll.add(NUMERO_CHAMADO);
+		this.camposAll.add(TITULO_CHAMADO);
+		this.camposAll.add(DESCRICAO_CHAMADO);
+		this.camposAll.add(DATA_ABERTURA_CHAMADO);
+		this.camposAll.add(DATA_ENCERRAMENTO_CHAMADO);
+		this.camposAll.add(SOLICITANTE_CHAMADO);
+		this.camposAll.add(PRIORIDADE_CHAMADO);
+		this.camposAll.add(POSICAO_FILA_CHAMADO);
+		this.camposAll.add(SCORE_FILA_CHAMADO);
+		this.camposAll.add(TECNICO_INFORMADO_CHAMADO);
+		this.camposAll.add(RECORRENTE_CHAMADO);
+		this.camposAll.add(CATEGORIA_CHAMADO);
+		this.camposAll.add(TECNICOS_CHAMADO);
+		this.camposAll.add(STATUS_CHAMADO);
+	}
+
+	private void initCamposSelecionados() {
+		camposSelecionados = new ArrayList<String>();
+		this.camposSelecionados.add(NUMERO_CHAMADO);
+		this.camposSelecionados.add(STATUS_CHAMADO);
+		this.camposSelecionados.add(DATA_ABERTURA_CHAMADO);
+		this.camposSelecionados.add(TITULO_CHAMADO);
+	}
+
+	public void initValores() {
 		tituloFiltro = null;
 		descricaoFiltro = null;
-		prioridadeFiltro = null; 
+		prioridadeFiltro = null;
 		idCategoriaFiltro = null;
-		jaInformadoFiltro = null; 
+		jaInformadoFiltro = null;
 		recorrenteFiltro = null;
-		trabalhosParadosFiltro = null; 
-		dataAberturaInicioFiltro = null;
-		dataAberturaFinalFiltro = null;
-		dataEncerramentoInicioFiltro = null; 
-		dataEncerramentoFinalFiltro = null;
-		dataUltimaAtualizacaoInicioFiltro = null; 
-		dataUltimaAtualizacaoFinalFiltro = null; 
-		dataSolucaoInicioFiltro = null; 
-		dataSolucaoFinalFiltro =  null;
-	}
-	
-	private void initFiltroChamadoDadosGerais(){
-		this.filtroChamadoDadosGerais = new FiltroChamadoDadosGerais(tituloFiltro, descricaoFiltro, prioridadeFiltro, 
-				idCategoriaFiltro, jaInformadoFiltro, recorrenteFiltro, 
-				trabalhosParadosFiltro, dataAberturaInicioFiltro, dataAberturaFinalFiltro,
-				dataEncerramentoInicioFiltro, dataEncerramentoFinalFiltro, dataUltimaAtualizacaoInicioFiltro, 
-				dataUltimaAtualizacaoFinalFiltro, dataSolucaoInicioFiltro, dataSolucaoFinalFiltro);
-	}
-	
-	private void initCampos(){
-		exibicaoCampos = new ArrayList<FiltroChamadoBean.ExibicaoCampo>();
-		List<String> campos = getAll();
+		trabalhosParadosFiltro = null;
 		
-		for (String campo : campos) {
-			ExibicaoCampo exbicao = new ExibicaoCampo();
-			exbicao.setNome(campo);
-			if(inicias.contains(campo)){
-				exbicao.setValor(true);
-			}else{
-				exbicao.setValor(false);
-			}
-			exibicaoCampos.add(exbicao);
+		dataEncerramentoInicioFiltro = null;
+		dataEncerramentoFinalFiltro = null;
+		dataUltimaAtualizacaoInicioFiltro = null;
+		dataUltimaAtualizacaoFinalFiltro = null;
+		dataSolucaoInicioFiltro = null;
+		dataSolucaoFinalFiltro = null;
+	}
+	
+	public void initListPrioridade(){
+		prioridadeList = new ArrayList<String>();
+		prioridadeList.add("Baixa");
+		prioridadeList.add("Média");
+		prioridadeList.add("Alta");
+	}
+	
+	public void initListCategoria(){
+		try {
+			this.categoriaList = categoriaService.listar(queryCategoriaFiltro);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private void initCamposIniciais(){
-		inicias.add(this.NUMERO_CHAMADO);
-		inicias.add(this.STATUS_CHAMADO);
-		inicias.add(this.DATA_ABERTURA_CHAMADO);
-		inicias.add(this.TITULO_CHAMADO);
-
+	private void initFiltroChamadoDadosGerais() {
+		this.filtroChamadoDadosGerais = new FiltroChamadoDadosGerais(tituloFiltro, descricaoFiltro, prioridadeFiltro,
+				idCategoriaFiltro, jaInformadoFiltro, recorrenteFiltro, trabalhosParadosFiltro,
+				dataAberturaInicioFiltro, dataAberturaFinalFiltro, dataEncerramentoInicioFiltro,
+				dataEncerramentoFinalFiltro, dataUltimaAtualizacaoInicioFiltro, dataUltimaAtualizacaoFinalFiltro,
+				dataSolucaoInicioFiltro, dataSolucaoFinalFiltro);
 	}
-	
-	
-	public void consultar(){
+
+	public void consultar() {
 		try {
 			initFiltroChamadoDadosGerais();
 			chamadoList = chamadoService.listarByFiltros(filtroChamadoDadosGerais);
@@ -160,80 +212,56 @@ public class FiltroChamadoBean extends AbstractBean{
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean verificaExistenciaExibicaoCampo(String campo) {
+		if(camposSelecionados.contains(campo)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
-	public boolean verificaExibicaoCampo(String campo){
-		for (ExibicaoCampo c : exibicaoCampos) {
-			if(c.getNome().equals(campo)){
-				return c.isValor();
-			}
-		}
-		return false;
-	}
 	
-	public class ExibicaoCampo{
-		private String nome;
-		private boolean valor;
+	public void adicionaFiltroPrioridade(String prioridade){
+		if(prioridade.equals("Baixa")){
+			this.prioridadeFiltro = 1;
+		}
 		
-		public String getNome() {
-			return nome;
-		}
-		public void setNome(String nome) {
-			this.nome = nome;
-		}
-		public boolean isValor() {
-			return valor;
-		}
-		public void setValor(boolean valor) {
-			this.valor = valor;
-		}
-	}
-	
-		public List<String> getAll(){
-			List<String> all = new ArrayList<String>();
-			all.add(NUMERO_CHAMADO);
-			all.add(TITULO_CHAMADO);
-			all.add(DESCRICAO_CHAMADO);
-			all.add(DATA_ABERTURA_CHAMADO);
-			all.add(DATA_ENCERRAMENTO_CHAMADO);
-			all.add(SOLICITANTE_CHAMADO);
-			all.add(PRIORIDADE_CHAMADO);
-			all.add(POSICAO_FILA_CHAMADO);
-			all.add(SCORE_FILA_CHAMADO);
-			all.add(TECNICO_INFORMADO_CHAMADO);
-			all.add(RECORRENTE_CHAMADO);
-			all.add(CATEGORIA_CHAMADO);
-			all.add(TECNICOS_CHAMADO);
-			all.add(STATUS_CHAMADO);
+		if(prioridade.equals("Média")){
+			this.prioridadeFiltro = 2;
 
-			
-			
-			return all;
 		}
-	
 		
-	public void atualizaCampo(String campo){
-		for (ExibicaoCampo c : exibicaoCampos) {
-			if(c.getNome().equals(campo)){
-				if(c.isValor()){
-					c.setValor(false);
-				}else{
-					c.setValor(true);
-				}
-			}
+		if(prioridade.equals("Alta")){
+			this.prioridadeFiltro = 3;
+
+		}
+		
+		prioridadeSelecionada = prioridade;
+	}
+	
+	public void adicionaFiltroDataAbertura(){
+		SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
+		
+		if(this.dataAberturaInicioFiltro != null){
+			this.labelDataAbertura +=  " "  + dataFormatada.format(dataAberturaInicioFiltro);
+		}
+		
+		if(this.dataAberturaInicioFiltro != null && this.dataAberturaFinalFiltro != null){
+			this.labelDataAbertura = this.labelDataAbertura + " Até ";
+		}
+		
+		if(this.dataAberturaFinalFiltro != null){
+			this.labelDataAbertura +=  " "  + dataFormatada.format(dataAberturaFinalFiltro);
 		}
 	}
 	
-	public boolean verificaCampoMarcado(ActionEvent event){
-		
-	  String valor =  (String)event.getComponent().getAttributes().get("action");
-		
-		for (ExibicaoCampo c : exibicaoCampos) {
-			if(c.getNome().equals(valor)){
-				return c.isValor();
-			}
-		}
-		return false;
+	
+	public void adicionarFiltroCategoria(Categoria categoria){
+		this.idCategoriaFiltro = categoria.getId();
+		this.categoriaSelecionada = categoria;
 	}
+	
 	public String getTituloFiltro() {
 		return tituloFiltro;
 	}
@@ -295,6 +323,7 @@ public class FiltroChamadoBean extends AbstractBean{
 	}
 
 	public void setDataAberturaInicioFiltro(Date dataAberturaInicioFiltro) {
+		System.out.println("Chamou!");
 		this.dataAberturaInicioFiltro = dataAberturaInicioFiltro;
 	}
 
@@ -326,8 +355,7 @@ public class FiltroChamadoBean extends AbstractBean{
 		return dataUltimaAtualizacaoInicioFiltro;
 	}
 
-	public void setDataUltimaAtualizacaoInicioFiltro(
-			Date dataUltimaAtualizacaoInicioFiltro) {
+	public void setDataUltimaAtualizacaoInicioFiltro(Date dataUltimaAtualizacaoInicioFiltro) {
 		this.dataUltimaAtualizacaoInicioFiltro = dataUltimaAtualizacaoInicioFiltro;
 	}
 
@@ -335,8 +363,7 @@ public class FiltroChamadoBean extends AbstractBean{
 		return dataUltimaAtualizacaoFinalFiltro;
 	}
 
-	public void setDataUltimaAtualizacaoFinalFiltro(
-			Date dataUltimaAtualizacaoFinalFiltro) {
+	public void setDataUltimaAtualizacaoFinalFiltro(Date dataUltimaAtualizacaoFinalFiltro) {
 		this.dataUltimaAtualizacaoFinalFiltro = dataUltimaAtualizacaoFinalFiltro;
 	}
 
@@ -360,8 +387,7 @@ public class FiltroChamadoBean extends AbstractBean{
 		return filtroChamadoDadosGerais;
 	}
 
-	public void setFiltroChamadoDadosGerais(
-			FiltroChamadoDadosGerais filtroChamadoDadosGerais) {
+	public void setFiltroChamadoDadosGerais(FiltroChamadoDadosGerais filtroChamadoDadosGerais) {
 		this.filtroChamadoDadosGerais = filtroChamadoDadosGerais;
 	}
 
@@ -380,92 +406,146 @@ public class FiltroChamadoBean extends AbstractBean{
 	public void setChamadoService(ChamadoService chamadoService) {
 		this.chamadoService = chamadoService;
 	}
-	
-	public List<ExibicaoCampo> getExibicaoCampos() {
-		return exibicaoCampos;
+
+	public String getNUMERO_CHAMADO() {
+		return NUMERO_CHAMADO;
 	}
 
-	public void setExibicaoCampos(List<ExibicaoCampo> exibicaoCampos) {
-		this.exibicaoCampos = exibicaoCampos;
+	public String getTITULO_CHAMADO() {
+		return TITULO_CHAMADO;
+	}
+
+	public String getDESCRICAO_CHAMADO() {
+		return DESCRICAO_CHAMADO;
+	}
+
+	public String getDATA_ABERTURA_CHAMADO() {
+		return DATA_ABERTURA_CHAMADO;
+	}
+
+	public String getDATA_ENCERRAMENTO_CHAMADO() {
+		return DATA_ENCERRAMENTO_CHAMADO;
+	}
+
+	public String getSOLICITANTE_CHAMADO() {
+		return SOLICITANTE_CHAMADO;
+	}
+
+	public String getPRIORIDADE_CHAMADO() {
+		return PRIORIDADE_CHAMADO;
+	}
+
+	public String getPOSICAO_FILA_CHAMADO() {
+		return POSICAO_FILA_CHAMADO;
+	}
+
+	public String getSCORE_FILA_CHAMADO() {
+		return SCORE_FILA_CHAMADO;
+	}
+
+	public String getTECNICO_INFORMADO_CHAMADO() {
+		return TECNICO_INFORMADO_CHAMADO;
+	}
+
+	public String getRECORRENTE_CHAMADO() {
+		return RECORRENTE_CHAMADO;
+	}
+
+	public String getCATEGORIA_CHAMADO() {
+		return CATEGORIA_CHAMADO;
+	}
+
+	public String getTECNICOS_CHAMADO() {
+		return TECNICOS_CHAMADO;
+	}
+
+	public UsuarioWeb getUsuarioWeb() {
+		return usuarioWeb;
+	}
+
+	public void setUsuarioWeb(UsuarioWeb usuarioWeb) {
+		this.usuarioWeb = usuarioWeb;
 	}
 
 	
 
-		public String getNUMERO_CHAMADO() {
-			return NUMERO_CHAMADO;
-		}
+	public String getSTATUS_CHAMADO() {
+		return STATUS_CHAMADO;
+	}
 
-		public String getTITULO_CHAMADO() {
-			return TITULO_CHAMADO;
-		}
+	public List<String> getCamposAll() {
+		return camposAll;
+	}
 
-		public String getDESCRICAO_CHAMADO() {
-			return DESCRICAO_CHAMADO;
-		}
+	public void setCamposAll(List<String> camposAll) {
+		this.camposAll = camposAll;
+	}
 
-		public String getDATA_ABERTURA_CHAMADO() {
-			return DATA_ABERTURA_CHAMADO;
-		}
+	public List<String> getCamposSelecionados() {
+		return camposSelecionados;
+	}
 
-		public String getDATA_ENCERRAMENTO_CHAMADO() {
-			return DATA_ENCERRAMENTO_CHAMADO;
-		}
+	public void setCamposSelecionados(List<String> camposSelecionados) {
+		this.camposSelecionados = camposSelecionados;
+	}
 
-		public String getSOLICITANTE_CHAMADO() {
-			return SOLICITANTE_CHAMADO;
-		}
+	public List<String> getPrioridadeList() {
+		return prioridadeList;
+	}
 
-		public String getPRIORIDADE_CHAMADO() {
-			return PRIORIDADE_CHAMADO;
-		}
+	public void setPrioridadeList(List<String> prioridadeList) {
+		this.prioridadeList = prioridadeList;
+	}
 
-		public String getPOSICAO_FILA_CHAMADO() {
-			return POSICAO_FILA_CHAMADO;
-		}
+	public String getPrioridadeSelecionada() {
+		return prioridadeSelecionada;
+	}
 
-		public String getSCORE_FILA_CHAMADO() {
-			return SCORE_FILA_CHAMADO;
-		}
+	public void setPrioridadeSelecionada(String prioridadeSelecionada) {
+		this.prioridadeSelecionada = prioridadeSelecionada;
+	}
 
-		public String getTECNICO_INFORMADO_CHAMADO() {
-			return TECNICO_INFORMADO_CHAMADO;
-		}
+	public List<Categoria> getCategoriaList() {
+		return categoriaList;
+	}
 
-		public String getRECORRENTE_CHAMADO() {
-			return RECORRENTE_CHAMADO;
-		}
+	public void setCategoriaList(List<Categoria> categoriaList) {
+		this.categoriaList = categoriaList;
+	}
 
-		public String getCATEGORIA_CHAMADO() {
-			return CATEGORIA_CHAMADO;
-		}
+	public CategoriaService getCategoriaService() {
+		return categoriaService;
+	}
 
-		public String getTECNICOS_CHAMADO() {
-			return TECNICOS_CHAMADO;
-		}
+	public void setCategoriaService(CategoriaService categoriaService) {
+		this.categoriaService = categoriaService;
+	}
 
-		public UsuarioWeb getUsuarioWeb() {
-			return usuarioWeb;
-		}
+	public String getQueryCategoriaFiltro() {
+		return queryCategoriaFiltro;
+	}
 
-		public void setUsuarioWeb(UsuarioWeb usuarioWeb) {
-			this.usuarioWeb = usuarioWeb;
-		}
+	public void setQueryCategoriaFiltro(String queryCategoriaFiltro) {
+		this.queryCategoriaFiltro = queryCategoriaFiltro;
+	}
 
-		public List<String> getInicias() {
-			return inicias;
-		}
+	public Categoria getCategoriaSelecionada() {
+		return categoriaSelecionada;
+	}
 
-		public void setInicias(List<String> inicias) {
-			this.inicias = inicias;
-		}
+	public void setCategoriaSelecionada(Categoria categoriaSelecionada) {
+		this.categoriaSelecionada = categoriaSelecionada;
+	}
 
-		public String getSTATUS_CHAMADO() {
-			return STATUS_CHAMADO;
-		}
+	public String getLabelDataAbertura() {
+		return labelDataAbertura;
+	}
+
+	public void setLabelDataAbertura(String labelDataAbertura) {
+		this.labelDataAbertura = labelDataAbertura;
+	}
 	
 	
-	
 
-	
-	
 }
+
