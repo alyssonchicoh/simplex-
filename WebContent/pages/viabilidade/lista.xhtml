@@ -10,21 +10,17 @@
 
 	<ui:define name="nome_pagina">
 		<h1>
-			<STRONG>
-				Consulta de Solicitação de Viabilidades
-			</STRONG>
+			<STRONG> Consulta de Solicitação de Viabilidades </STRONG>
 		</h1>
 	</ui:define>
 
 	<ui:define name="botoes">
 		<div class="pull-right box-tools">
-			<p:commandButton class="btn btn-danger btn-md"
-				value="Voltar"
-				immediate="true"
-				/>
+			<p:commandButton class="btn btn-danger btn-md" value="Voltar"
+				immediate="true" />
 		</div>
 	</ui:define>
-	
+
 	<ui:define name="acessoNaoPermitido">
 		<ui:fragment rendered="#{!usuarioWeb.temPermissao('LISTAR_GRUPO')}">
 			<div>
@@ -38,89 +34,92 @@
 	</ui:define>
 
 	<ui:define name="corpo">
-	<div class="box box-widget collapsed-box">
+		<div class="box box-widget collapsed-box">
 
-				<div class="box-header with-border">
-					<div class="user-block">
-						<ul class="sidebar-menu">
-							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
-						</ul>
-					</div>
-
-					<!-- /.user-block -->
-					<div class="box-tools">
-						<button type="button" class="btn btn-box-tool"
-							data-widget="collapse">
-							<i class="fa fa-plus"></i>
-						</button>
-
-					</div>
-
-					<!-- /.box-tools -->
+			<div class="box-header with-border">
+				<div class="user-block">
+					<ul class="sidebar-menu">
+						<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+					</ul>
 				</div>
 
-				<!-- /.box-header -->
-				<div class="box-body">
-					<div class="pull-right">
-
-						<p:commandButton update="@form" value="#{msg['limpar']}"
-							class="btn btn-danger btn-xs" action="#{permissaoBean.listar}">
-							<f:setPropertyActionListener target="#{permissaoBean.pesquisa}"
-								value="" />
-						</p:commandButton>
-
-
-						<p:commandButton class="btn btn-primary btn-xs"
-							 value="#{msg['filtrar']}"
-							action="#{permissaoBean.listar}" />
-						<br />
-					</div>
-
-					<div class="row">
-
-						<!-- DIV DA Coluna -->
-						<div class="col-md-6">
-							<!-- DIV DO ELEMTNO -->
-							<div class="form-group">
-								<label><b>#{msg['pesquisa']}</b></label>
-								<p:inputText id="pesquisa" maxlength="100"
-									styleClass="form-control" label="#{msg['descricao']}"
-									value="#{permissaoBean.pesquisa}" />
-							</div>
-						</div>
-
-					</div>
+				<!-- /.user-block -->
+				<div class="box-tools">
+					<button type="button" class="btn btn-box-tool"
+						data-widget="collapse">
+						<i class="fa fa-plus"></i>
+					</button>
 
 				</div>
+
+				<!-- /.box-tools -->
 			</div>
-		
-			<p:dataTable id="tbGrupo" rows="10" var="viabilidade" paginator="true"
-				value="#{viabilidadeBean.viabilidadeList}" paginatorPosition="bottom"
-				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}" widgetVar="viabilidade" >
 
-			
-				<p:column headerText="Título" styleClass="align-center">
+			<!-- /.box-header -->
+			<div class="box-body">
+				<div class="pull-right">
+
+					<p:commandButton update="@form" value="#{msg['limpar']}"
+						class="btn btn-danger btn-xs" action="#{permissaoBean.listar}">
+						<f:setPropertyActionListener target="#{permissaoBean.pesquisa}"
+							value="" />
+					</p:commandButton>
+
+
+					<p:commandButton class="btn btn-primary btn-xs"
+						value="#{msg['filtrar']}" action="#{permissaoBean.listar}" />
+					<br />
+				</div>
+
+				<div class="row">
+
+					<!-- DIV DA Coluna -->
+					<div class="col-md-6">
+						<!-- DIV DO ELEMTNO -->
+						<div class="form-group">
+							<label><b>#{msg['pesquisa']}</b></label>
+							<p:inputText id="pesquisa" maxlength="100"
+								styleClass="form-control" label="#{msg['descricao']}"
+								value="#{permissaoBean.pesquisa}" />
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
+		<p:dataTable id="tbGrupo" rows="10" var="viabilidade" paginator="true"
+			value="#{viabilidadeBean.viabilidadeList}" paginatorPosition="bottom"
+			paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}"
+			widgetVar="viabilidade">
+
+
+			<p:column headerText="Título" styleClass="align-center">
 			              #{viabilidade.titulo}
 			          </p:column>
 
 
-				<p:column headerText="Categoria" styleClass="align-center">
+			<p:column headerText="Categoria" styleClass="align-center">
 			              #{viabilidade.categoria.nome}
 			          </p:column>
-			          
-				<p:column width="15%" headerText="#{msg['acao']}"
-					styleClass="align-center">
-					
 
-				</p:column>
+			<p:column width="15%" headerText="#{msg['acao']}"
+				styleClass="align-center">
+
+				<p:commandButton icon="ui-icon-search" title="Visualizar Detalhamento"
+					class="btn btn-primary btn-xs"
+					action="#{viabilidadeBean.showFormDetalhamento(viabilidade.id)}" />
+
+			</p:column>
 
 
-				<f:facet name="footer">
-					<h:outputText
-						value="#{msg['lista.totalRegistros']} #{gerenciaBean.gerenciaList.size()}" />
-				</f:facet>
+			<f:facet name="footer">
+				<h:outputText
+					value="#{msg['lista.totalRegistros']} #{gerenciaBean.gerenciaList.size()}" />
+			</f:facet>
 
-			</p:dataTable>
+		</p:dataTable>
 
 	</ui:define>
 

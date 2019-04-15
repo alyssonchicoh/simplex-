@@ -120,10 +120,11 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<label><b>Descrição</b></label>
+								<label><b>Justificativa</b></label>
 
 							</div>
 						</div>
+						
 					</div>
 
 
@@ -131,7 +132,28 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<p:textEditor id="editor" value="#{viabilidadeBean.viabilidade.descricao}" height="250" />
+								<p:inputTextarea  value="#{viabilidadeBean.viabilidade.descricao}"   height="250"  rows="10" cols="126" />
+
+							</div>
+						</div>
+					</div>
+					
+						<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label><b>O que impactará a aprovação desta viabilidade?</b></label>
+
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:inputTextarea  value="#{viabilidadeBean.viabilidade.impactoViabilidade}" height="250"  rows="10" cols="126" />
 
 							</div>
 						</div>

@@ -71,6 +71,14 @@ public class ViabilidadeBean extends AbstractBean{
 		consultarGerencias();
 
 	}
+	
+	public void initFormDetalhamento(Integer idViabilidade){
+		try {
+			this.viabilidade = viabilidadeService.buscarPorId(idViabilidade);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	private void showFormNovo(Integer idChamado){
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 	    try {
@@ -78,6 +86,10 @@ public class ViabilidadeBean extends AbstractBean{
 	    } catch (IOException e) {
 	          e.printStackTrace();
 	    }
+	}
+	
+	public String showFormDetalhamento(Integer idViabilidade){
+		return "detalhamento.xhtml?faces-redirect=true&idViabilidade = "+idViabilidade;
 	}
 	
 	public void salvar(){
@@ -94,6 +106,21 @@ public class ViabilidadeBean extends AbstractBean{
 		}
 	}
 	
+	public void salvarAprovacaoViabilidade(boolean param){
+		
+		try {
+			viabilidade.setUsuarioAprovador(usuarioWeb.getUsuario());
+			viabilidade.setDataAprovacao(new Date());
+			viabilidade.setAprovado(param);
+			viabilidadeService.alterar(viabilidade);
+			super.adicionaMensagemDeSucesso("Viabilidade Atualizada com sucesso!");
+
+		} catch (Exception e) {
+			super.adicionaMensagemDeErro(e.getMessage());
+			e.printStackTrace();
+		}
+		
+	}
 	
 	private void atualizarChamado(){
 		this.chamadoSelecionado.setStatus(StatusChamado.AGUARDANDO_VIABILIDADE);

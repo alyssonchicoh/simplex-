@@ -37,12 +37,19 @@ public class Viabilidade extends PersistentEntityImpl{
 	@Column(name = "via_descricao")
 	private String descricao;
 	
+	@Column(name = "via_impacto_viabilidade")
+	private String impactoViabilidade;
+	
 	@Column(name = "via_aprovado")
 	private boolean aprovado;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name = "via_data")
+	@Column(name = "via_data_requerimento")
 	private Date data;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "via_data_aprovacao")
+	private Date dataAprovacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "cat_cod_id_fk")
@@ -54,6 +61,10 @@ public class Viabilidade extends PersistentEntityImpl{
 	
 	@ManyToOne
 	@JoinColumn(name = "usu_aprovador_cod_id_fk")
+	private Usuario usuarioAprovador;
+	
+	@ManyToOne
+	@JoinColumn(name = "ger_aprovador_cod_id_fk")
 	private Gerencia gerencia;
 	
 
@@ -119,6 +130,30 @@ public class Viabilidade extends PersistentEntityImpl{
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+
+	public String getImpactoViabilidade() {
+		return impactoViabilidade;
+	}
+
+	public void setImpactoViabilidade(String impactoViabilidade) {
+		this.impactoViabilidade = impactoViabilidade;
+	}
+
+	public Usuario getUsuarioAprovador() {
+		return usuarioAprovador;
+	}
+
+	public void setUsuarioAprovador(Usuario usuarioAprovador) {
+		this.usuarioAprovador = usuarioAprovador;
+	}
+
+	public Date getDataAprovacao() {
+		return dataAprovacao;
+	}
+
+	public void setDataAprovacao(Date dataAprovacao) {
+		this.dataAprovacao = dataAprovacao;
 	}
 	
 	

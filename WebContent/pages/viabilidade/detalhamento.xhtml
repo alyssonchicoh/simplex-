@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG> Consulta Detalhada da Solicitação de Viabilidade </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-danger btn-md" value="Voltar"
+				immediate="true" />
+		</div>
+	</ui:define>
+
+	<ui:define name="corpo">
+
+
+		<f:metadata>
+			<f:viewAction
+				action="#{viabilidadeBean.initFormDetalhamento(param.idViabilidade)}" />
+		</f:metadata>
+
+
+
+
+
+
+		<section class="invoice">
+			<div class="row page-header">
+				<div class="col-xs-12">
+					<h3>
+						<i class="fa fa-info-circle"></i> <strong><span
+							style="color: #3C8DBC">#{viabilidadeBean.viabilidade.titulo}</span>
+						</strong>
+					</h3>
+
+							<p:commandButton class="btn btn-danger btn-md"
+								icon="fa fa-thumbs-o-down" immediate="true"
+								action="#{viabilidadeBean.salvarAprovacaoViabilidade(false)}" />
+
+							<p:commandButton class="btn btn-success btn-md"
+								icon="fa fa-thumbs-o-up" immediate="true"
+								action="#{viabilidadeBean.salvarAprovacaoViabilidade(true)}" />
+
+
+				</div>
+				<!-- /.col -->
+
+			</div>
+
+			<div class="row invoice-info">
+				<div class="col-md-12">
+					<h3>
+						<strong>Informações Gerais</strong>
+					</h3>
+				</div>
+
+				<div class="col-md-12">
+					<h5>Viabilidade vínculada ao chamado Nº</h5>
+				</div>
+
+				<div class="col-md-12">
+					<h5>Descrição do chamado</h5>
+				</div>
+
+				<div class="col-md-12">
+					<h5>Chamado Aberto por:</h5>
+				</div>
+
+				<div class="col-md-12">
+					<h5>Viabilidade Aberta por:</h5>
+				</div>
+			</div>
+
+		</section>
+
+
+	</ui:define>
+
+</ui:composition>
+
+</html>
