@@ -12,8 +12,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import br.com.cogerh.template.model.Chamado;
+import br.com.cogerh.template.model.DesaprovacaoSolucaoChamado;
 import br.com.cogerh.template.model.SolucaoChamado;
 import br.com.cogerh.template.service.ChamadoService;
+import br.com.cogerh.template.service.DesaprovacaoSolucaoChamadoService;
 import br.com.cogerh.template.service.EmailService;
 import br.com.cogerh.template.service.SolucaoChamadoService;
 import br.com.cogerh.template.util.StatusChamado;
@@ -30,12 +32,8 @@ public class SolucaoChamadoBean extends AbstractBean{
 	@Autowired
 	private ChamadoService chamadoService;
 	
-	private Chamado chamado;
-	
 	@Autowired
 	private SolucaoChamadoService solucaoChamadoService;
-	
-	private SolucaoChamado solucaoChamado;
 	
 	@Autowired
 	private UsuarioWeb usuarioWeb;
@@ -43,10 +41,22 @@ public class SolucaoChamadoBean extends AbstractBean{
 	@Autowired
 	private EmailService email;
 	
+	@Autowired
+	private DesaprovacaoSolucaoChamadoService desaprovacaoSolucaoChamadoService;
+	
+	private Chamado chamado;
+
+	
+	private SolucaoChamado solucaoChamado;
+
+	
 	private boolean exibeHistoricoSolucaoChamado = false;
 	
 	private boolean exibeSolucaoChamado = false;
+	
+	private boolean exibirBotao = true;
 
+	private String motivo;
 
 	public EmailService getEmail() {
 		return email;
@@ -123,6 +133,7 @@ public class SolucaoChamadoBean extends AbstractBean{
 		solucaoChamado.setDataSolucao(new Date());
 		solucaoChamado.setUsuario(usuarioWeb.getUsuario());
 		solucaoChamado.setChamado(chamado);
+		solucaoChamado.setAnaliseRealizada(false);
 		
 		try {
 			solucaoChamadoService.salvar(solucaoChamado);
@@ -147,6 +158,8 @@ public class SolucaoChamadoBean extends AbstractBean{
 	
 	public void aprovar(){
 		solucaoChamado.setConfirmacao(true);
+		solucaoChamado.setAnaliseRealizada(true);
+		exibirBotao = false;
 		try {
 			solucaoChamadoService.alterar(solucaoChamado);
 			super.adicionaMensagemDeSucesso("Chamado Aprovado com Sucesso!");
@@ -156,6 +169,26 @@ public class SolucaoChamadoBean extends AbstractBean{
 
 			e.printStackTrace();
 		}
+	}
+	
+	public void desaprovarChamado(){
+		DesaprovacaoSolucaoChamado desaprovacao = new DesaprovacaoSolucaoChamado();
+		desaprovacao.setData(new Date());
+		desaprovacao.setMotivo(motivo);
+		solucaoChamado.setConfirmacao(false);
+		solucaoChamado.setAnaliseRealizada(true);
+		exibirBotao = false;
+		solucaoChamado.setRejeicaoSolucaoChamado(desaprovacao);
+		try {
+			desaprovacao = desaprovacaoSolucaoChamadoService.salvar(desaprovacao);
+			solucaoChamadoService.alterar(solucaoChamado);
+			super.adicionaMensagemDeSucesso("Chamado Desaprovado com Sucesso!");
+
+		} catch (Exception e) {
+			super.adicionaMensagemDeErro("Erro ao Desaprovar Chamado!");
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void exibirHistorico(){
@@ -225,6 +258,22 @@ public class SolucaoChamadoBean extends AbstractBean{
 
 	public void setExibeHistoricoSolucaoChamado(boolean exibeHistoricoSolucaoChamado) {
 		this.exibeHistoricoSolucaoChamado = exibeHistoricoSolucaoChamado;
+	}
+
+	public boolean isExibirBotao() {
+		return exibirBotao;
+	}
+
+	public void setExibirBotao(boolean exibirBotao) {
+		this.exibirBotao = exibirBotao;
+	}
+
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
 	}
 	
 	

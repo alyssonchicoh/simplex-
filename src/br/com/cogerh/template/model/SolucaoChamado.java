@@ -57,6 +57,9 @@ public class SolucaoChamado extends PersistentEntityImpl{
 	@Column(name = "sol_confirmacao")
 	private boolean confirmacao;
 	
+	@Column(name = "sol_analise_realizada")
+	private boolean analiseRealizada;
+	
 	@ManyToOne
 	@JoinColumn(name = "rsc_cod_id_fk")
 	private DesaprovacaoSolucaoChamado rejeicaoSolucaoChamado;
@@ -143,6 +146,14 @@ public class SolucaoChamado extends PersistentEntityImpl{
 
 	public void setHashUrl(String hashUrl) {
 		this.hashUrl = hashUrl;
+	}
+
+	public boolean isAnaliseRealizada() {
+		return analiseRealizada;
+	}
+
+	public void setAnaliseRealizada(boolean analiseRealizada) {
+		this.analiseRealizada = analiseRealizada;
 	}
 
 	

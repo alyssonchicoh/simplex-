@@ -41,5 +41,11 @@ public interface EmailService {
 	 * MÉTODO UTILIZADO PARA ENVIAR UM EMAIL INFORMANDO QUE O CHAMADO ENCONTRA-SE EM ESPERA
 	 */
 	public void enviarEmailChamadoEmEspera(Chamado chamado);
+	
+	/**
+	 * ESSE MÉTODO ENVIA UM EMAIL QUANDO A VIABILIDADE SOLICITADA FOI RESPONDIDA
+	 * @param CHAMADO A QUAL SE DESEJA OBTER OS TECNICOS PARA ENVIO DO EMAIL
+	 */
+	public void enviarEmailViabilidadeRespondida(Chamado chamado);
 
 }

@@ -27,7 +27,7 @@ public class ViabilidadeServiceImpl implements ViabilidadeService{
 
 	@Override
 	public Viabilidade alterar(Viabilidade obj) throws Exception {
-		return dao.save(obj);
+		return dao.update(obj);
 	}
 
 	@Override

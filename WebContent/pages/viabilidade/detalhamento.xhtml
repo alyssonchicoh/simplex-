@@ -7,9 +7,19 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/index.xhtml">
+
+	<style type="text/css">
+	.button.ui-button.btn-lg{
+	padding: 8px 27px;
+	
+	}
+	
+	</style>
+
 	<ui:define name="nome_pagina">
 		<h1>
 			<STRONG> Consulta Detalhada da Solicitação de Viabilidade </STRONG>
+			
 		</h1>
 	</ui:define>
 
@@ -21,62 +31,203 @@
 	</ui:define>
 
 	<ui:define name="corpo">
-
-
 		<f:metadata>
-			<f:viewAction
-				action="#{viabilidadeBean.initFormDetalhamento(param.idViabilidade)}" />
+			<f:viewAction action="#{viabilidadeBean.initFormDetalhamento(param.idViabilidade)}" />
 		</f:metadata>
+		
+		
+		<p:dialog 
+			header="Informações do Chamado #{viabilidadeBean.viabilidade.chamado.numero}"
+			id="categoriaChamadoDialog" 
+			widgetVar="categoriaChamadoDialog" 
+			modal="true">
+				<div class="box-body">
+					
+
+					<section class="invoice">
+			<div class="row page-header">
+				<div class="col-md-12">
+					<h2 style="color: #3C8DBC">
+						
+						<strong>
+							<span > #{viabilidadeBean.viabilidade.chamado.titulo}</span>
+						</strong>
+					</h2>
+				</div>
+				
+				
+			</div>
+
+					<div class="row invoice-info">
+				<div class="col-md-2">
+					<div class="col-md-12">
+						<h4>
+							<strong>Informações Gerais</strong>
+						</h4>
+					</div>
+					
+			
+		
+					<div class="col-md-12">
+						<h5 style="color: #008D4C">
+							<strong>Data do Chamado</strong>
+						</h5>
+						
+						<h5> #{viabilidadeBean.viabilidade.chamado.dataAbertura}</h5>
+						
+					</div>
+
+					<div class="col-md-12">
+						<h5 style="color: #008D4C">
+							<strong>Usuário Solicitante do Chamado</strong>
+						</h5>
+						
+						<h5>#{viabilidadeBean.viabilidade.chamado.solicitante.nome}</h5>
+					</div>
+				</div>
+				
+				<div class="col-md-4">
+					<div class="col-md-12">
+						<h4>
+							<strong>Descrição do Chamado</strong>
+						</h4>
+						
+						<h5>#{viabilidadeBean.viabilidade.chamado.descricao}</h5>
+						
+					</div>
+					
+				</div>
+				
+			
+			</div>
+			</section>
 
 
 
+			</div>
+			<!-- /.box-body -->
 
+			<div class="box-footer">
+				<div class="pull-right box-tools">
 
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('categoriaChamadoDialog').hide();" />
+				</div>
+			</div>
 
+		</p:dialog>
+		
 		<section class="invoice">
 			<div class="row page-header">
-				<div class="col-xs-12">
-					<h3>
-						<i class="fa fa-info-circle"></i> <strong><span
-							style="color: #3C8DBC">#{viabilidadeBean.viabilidade.titulo}</span>
+				<div class="col-md-10">
+					<h2 style="color: #3C8DBC">
+						<i class="fa fa-info-circle"></i> 
+						
+						<strong>
+							<span >#{viabilidadeBean.viabilidade.titulo}</span>
 						</strong>
-					</h3>
-
-							<p:commandButton class="btn btn-danger btn-md"
-								icon="fa fa-thumbs-o-down" immediate="true"
-								action="#{viabilidadeBean.salvarAprovacaoViabilidade(false)}" />
-
-							<p:commandButton class="btn btn-success btn-md"
-								icon="fa fa-thumbs-o-up" immediate="true"
-								action="#{viabilidadeBean.salvarAprovacaoViabilidade(true)}" />
-
-
+					</h2>
 				</div>
-				<!-- /.col -->
-
+				
+				<div class="col-md-2">
+					<div class="pull-right box-tools">
+						<ui:fragment rendered = "#{viabilidadeBean.viabilidade.aprovado == 2}">
+							<span class="label label-success">Viabilidade Aprovada!</span>
+						</ui:fragment>
+						
+						<ui:fragment rendered = "#{viabilidadeBean.viabilidade.aprovado == 3}">
+							<span class="label label-danger">Viabilidade Recusada!</span>
+						</ui:fragment>
+           				
+           				<ui:fragment rendered = "#{viabilidadeBean.viabilidade.aprovado == 1}">
+							<p:commandButton 
+								class="btn btn-danger btn-md"
+								icon="fa fa-thumbs-o-down" 
+								immediate="true"
+								action="#{viabilidadeBean.salvarAprovacaoViabilidade(false)}" 
+								update="@form" 
+								oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" 
+								/>
+										 
+							<p:spacer width="10" />
+						
+							<p:commandButton 
+								class="btn btn-success btn-md"
+								icon="fa fa-thumbs-o-up" 
+								immediate="true"
+								action="#{viabilidadeBean.salvarAprovacaoViabilidade(true)}" 
+								update="@form" 
+								oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" 
+								/>						
+						</ui:fragment>
+           				
+           			</div>
+				</div>
 			</div>
 
 			<div class="row invoice-info">
-				<div class="col-md-12">
-					<h3>
-						<strong>Informações Gerais</strong>
-					</h3>
-				</div>
+				<div class="col-md-4">
+					<div class="col-md-12">
+						<h4>
+							<strong>Informações Gerais</strong>
+						</h4>
+					</div>
+					
+					<div class="col-md-12">
+						<h5 style="color: #008D4C">
+							<strong>Viabilidade vínculada ao chamado Nº:</strong>
+						</h5>
+						<h5>
+							#{viabilidadeBean.viabilidade.chamado.numero}
+							<p:spacer width="10" />
+							<p:commandButton 
+								icon="ui-icon-search" 
+								
+								class="btn btn-success btn-xs"
+								onclick="PF('categoriaChamadoDialog').show();" />
+						</h5>
+					</div>
+		
+					<div class="col-md-12">
+						<h5 style="color: #008D4C">
+							<strong>Data da Solicitação da Viabilidade</strong>
+						</h5>
+						
+						<h5> #{viabilidadeBean.viabilidade.data}</h5>
+						
+					</div>
 
-				<div class="col-md-12">
-					<h5>Viabilidade vínculada ao chamado Nº</h5>
+					<div class="col-md-12">
+						<h5 style="color: #008D4C">
+							<strong>Usuário Solicitante da Viabilidade</strong>
+						</h5>
+						
+						<h5>#{viabilidadeBean.viabilidade.usuario.nome}</h5>
+					</div>
 				</div>
-
-				<div class="col-md-12">
-					<h5>Descrição do chamado</h5>
+				
+				<div class="col-md-4">
+					<div class="col-md-12">
+						<h4>
+							<strong>Justificativa</strong>
+						</h4>
+						
+						<h5>#{viabilidadeBean.viabilidade.descricao}</h5>
+						
+					</div>
+					
 				</div>
-
-				<div class="col-md-12">
-					<h5>Chamado Aberto por:</h5>
-				</div>
-
-				<div class="col-md-12">
-					<h5>Viabilidade Aberta por:</h5>
+				
+				<div class="col-md-4">
+					<div class="col-md-12">
+						<h4>
+							<strong>Impacto da Aprovação </strong>
+						</h4>
+						
+						<h5>#{viabilidadeBean.viabilidade.impactoViabilidade}</h5>
+						
+					</div>
+					
 				</div>
 			</div>
 

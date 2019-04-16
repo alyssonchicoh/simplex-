@@ -19,6 +19,7 @@ import br.com.cogerh.template.model.Notificacao;
 import br.com.cogerh.template.model.UsuarioGerencia;
 import br.com.cogerh.template.model.Viabilidade;
 import br.com.cogerh.template.service.ChamadoService;
+import br.com.cogerh.template.service.EmailService;
 import br.com.cogerh.template.service.GerenciaService;
 import br.com.cogerh.template.service.NotificacaoService;
 import br.com.cogerh.template.service.ViabilidadeService;
@@ -43,6 +44,9 @@ public class ViabilidadeBean extends AbstractBean{
 	
 	@Autowired
 	private UsuarioWeb usuarioWeb;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	private List<Gerencia> gerenciaList;
 	
@@ -75,6 +79,8 @@ public class ViabilidadeBean extends AbstractBean{
 	public void initFormDetalhamento(Integer idViabilidade){
 		try {
 			this.viabilidade = viabilidadeService.buscarPorId(idViabilidade);
+			consultarChamado(viabilidade.getChamado().getId());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -96,8 +102,12 @@ public class ViabilidadeBean extends AbstractBean{
 		try {
 			viabilidade.setUsuario(usuarioWeb.getUsuario());
 			viabilidade.setCategoria(chamadoSelecionado.getCategoria());
+			viabilidade.setChamado(chamadoSelecionado);
+			viabilidade.setAprovado(1);
+			viabilidade.setData(new Date());
 			viabilidadeService.salvar(viabilidade);
-			atualizarChamado();
+			viabilidade = new Viabilidade();
+			atualizarChamado(StatusChamado.AGUARDANDO_VIABILIDADE);
 			super.adicionaMensagemDeSucesso("Viabilidade Cadastrada com sucesso!");
 			notificarUsuariosGerencia(viabilidade.getGerencia());
 		} catch (Exception e) {
@@ -111,9 +121,12 @@ public class ViabilidadeBean extends AbstractBean{
 		try {
 			viabilidade.setUsuarioAprovador(usuarioWeb.getUsuario());
 			viabilidade.setDataAprovacao(new Date());
-			viabilidade.setAprovado(param);
+			viabilidade.setAprovado(param ? 2 : 3);
+			atualizarChamado(StatusChamado.EM_ATENDIMENTO);
 			viabilidadeService.alterar(viabilidade);
-			super.adicionaMensagemDeSucesso("Viabilidade Atualizada com sucesso!");
+			super.adicionaMensagemDeSucesso("Viabilidade Analisada! Os técnicos do chamado foram notificados.");
+			emailService.enviarEmailViabilidadeRespondida(chamadoSelecionado);
+			
 
 		} catch (Exception e) {
 			super.adicionaMensagemDeErro(e.getMessage());
@@ -122,8 +135,8 @@ public class ViabilidadeBean extends AbstractBean{
 		
 	}
 	
-	private void atualizarChamado(){
-		this.chamadoSelecionado.setStatus(StatusChamado.AGUARDANDO_VIABILIDADE);
+	private void atualizarChamado(Integer status){
+		this.chamadoSelecionado.setStatus(status);
 		try {
 			chamadoService.alterar(chamadoSelecionado);
 		} catch (Exception e) {
@@ -132,21 +145,21 @@ public class ViabilidadeBean extends AbstractBean{
 		}
 	}
 	/**
-	 * MÉTODO RESPONSAVEL POR REALIZAR A NOTIFICAÇÃO DE TODOS OS USUÁRIOS QUE SERÃO OS RESPONSAVEIS POR APROVAR OU NÃO A VIABILIDADE CADASTRADA
+	 * Mï¿½TODO RESPONSAVEL POR REALIZAR A NOTIFICAï¿½ï¿½O DE TODOS OS USUï¿½RIOS QUE SERï¿½O OS RESPONSAVEIS POR APROVAR OU Nï¿½O A VIABILIDADE CADASTRADA
 	 * @param gerencia
 	 */
 	private void notificarUsuariosGerencia(Gerencia gerencia){
 		
 		for (UsuarioGerencia usu : gerencia.getResponsaveis()) {
 			Notificacao notificacao = new Notificacao();
-			notificacao.setTitulo("Solicitaçao de Viabilidade");
-			notificacao.setMensagem("Exite uma solicitação de viabilidade pendente para sua gerência");
+			notificacao.setTitulo("Solicitaï¿½ao de Viabilidade");
+			notificacao.setMensagem("Exite uma solicitaï¿½ï¿½o de viabilidade pendente para sua gerï¿½ncia");
 			notificacao.setDataNofificacao(new Date());
 			notificacao.setUsuarioDestinatario(usu.getUsuario());
 			try {
 				notificacaoService.salvar(notificacao);
-				System.out.println("Notificação Enviada");
-				super.adicionaMensagemDeSucesso("Notificação enviada para usuários responsáveis");
+				System.out.println("Notificaï¿½ï¿½o Enviada");
+				super.adicionaMensagemDeSucesso("Notificaï¿½ï¿½o enviada para usuï¿½rios responsï¿½veis");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				super.adicionaMensagemDeErro(e.getMessage());
@@ -156,7 +169,7 @@ public class ViabilidadeBean extends AbstractBean{
 	}
 	
 	/**
-	 * MÉTODO UTILIZADO PARA CONSULTAR UM CHAMADO COM BASE EM SEU ID
+	 * Mï¿½TODO UTILIZADO PARA CONSULTAR UM CHAMADO COM BASE EM SEU ID
 	 * @param idChamado
 	 */
 	private void consultarChamado(Integer idChamado){

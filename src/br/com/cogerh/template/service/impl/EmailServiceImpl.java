@@ -260,6 +260,28 @@ public class EmailServiceImpl implements EmailService{
 		}		
 	}
 
+	@Override
+	public void enviarEmailViabilidadeRespondida(Chamado chamado) {
+		try {
+			List<TecnicoChamado> tecnicos = chamado.getTecnicosChamados();
+			
+			for (TecnicoChamado tecnicoChamado : tecnicos) {
+				String titulo = "Viabilidade do Chamado Analisada";
+
+				String mensagemEmail = lerArquivoTemplateEmail("template_email_viabilidade_analisada.txt");
+				
+				String textoFinal = mensagemEmail.toString().replace("%NUMERO_CHAMADO%",chamado.getNumero());
+				textoFinal = textoFinal.toString().replace("%NOME_USUARIO%",tecnicoChamado.getTecnico().getUsuario().getNome());
+				enviarEmail(tecnicoChamado.getTecnico().getUsuario().getEmail(), null, titulo, textoFinal);
+			}
+			
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}				
+	}
+
 	
 
 	

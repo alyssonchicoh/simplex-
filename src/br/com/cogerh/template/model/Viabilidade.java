@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * Classe responsavel por representar uma Viabilidade nas mudanças
+ * Classe responsavel por representar uma Viabilidade nas mudanï¿½as
  * @author alyssonnascimento
  * @since  04/01/2019
  * @version 1.0
@@ -41,7 +41,7 @@ public class Viabilidade extends PersistentEntityImpl{
 	private String impactoViabilidade;
 	
 	@Column(name = "via_aprovado")
-	private boolean aprovado;
+	private Integer aprovado;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "via_data_requerimento")
@@ -67,6 +67,10 @@ public class Viabilidade extends PersistentEntityImpl{
 	@JoinColumn(name = "ger_aprovador_cod_id_fk")
 	private Gerencia gerencia;
 	
+	@ManyToOne
+	@JoinColumn(name = "cha_cod_id_fk")
+	private Chamado chamado;
+	
 
 	public Integer getId() {
 		return id;
@@ -84,11 +88,11 @@ public class Viabilidade extends PersistentEntityImpl{
 		this.descricao = descricao;
 	}
 
-	public boolean isAprovado() {
+	public Integer getAprovado() {
 		return aprovado;
 	}
 
-	public void setAprovado(boolean aprovado) {
+	public void setAprovado(Integer aprovado) {
 		this.aprovado = aprovado;
 	}
 
@@ -154,6 +158,14 @@ public class Viabilidade extends PersistentEntityImpl{
 
 	public void setDataAprovacao(Date dataAprovacao) {
 		this.dataAprovacao = dataAprovacao;
+	}
+
+	public Chamado getChamado() {
+		return chamado;
+	}
+
+	public void setChamado(Chamado chamado) {
+		this.chamado = chamado;
 	}
 	
 	
