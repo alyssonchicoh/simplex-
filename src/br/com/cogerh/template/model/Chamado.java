@@ -48,10 +48,10 @@ public class Chamado extends PersistentEntityImpl {
 	@Column(name = "cha_numero")
 	private String numero;
 
-	@Column(name = "cha_titulo")
+	@Column(name = "cha_titulo", length = 100)
 	private String titulo;
 
-	@Column(name = "cha_descricao")
+	@Column(name = "cha_descricao",length = 5000)
 	private String descricao;
 
 	@Temporal(TemporalType.TIMESTAMP)

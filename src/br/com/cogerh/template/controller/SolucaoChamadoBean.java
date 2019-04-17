@@ -138,7 +138,7 @@ public class SolucaoChamadoBean extends AbstractBean{
 		try {
 			solucaoChamadoService.salvar(solucaoChamado);
 			System.out.println("SALVA");
-			atualizarStatusChamado();
+			atualizarStatusChamado(StatusChamado.SOLUCIONADO);
 			enviarEmail();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,9 +146,9 @@ public class SolucaoChamadoBean extends AbstractBean{
 		return "detalhamento.xhtml?faces-redirect=true&chamadoId="+chamado.getId() + "&newChamado=false&newChamadoFechado=true";
 	}
 
-	public void atualizarStatusChamado(){
+	public void atualizarStatusChamado(Integer status){
 		try {
-			chamado.setStatus(StatusChamado.SOLUCIONADO);
+			chamado.setStatus(status);
 			chamadoService.alterar(chamado);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -162,6 +162,8 @@ public class SolucaoChamadoBean extends AbstractBean{
 		exibirBotao = false;
 		try {
 			solucaoChamadoService.alterar(solucaoChamado);
+			chamado = consultarChamadoByID(solucaoChamado.getChamado().getId());
+			atualizarStatusChamado(StatusChamado.FINALIZADO);
 			super.adicionaMensagemDeSucesso("Chamado Aprovado com Sucesso!");
 			System.out.println("APROVADO!!!");
 		} catch (Exception e) {
@@ -183,6 +185,8 @@ public class SolucaoChamadoBean extends AbstractBean{
 			desaprovacao = desaprovacaoSolucaoChamadoService.salvar(desaprovacao);
 			solucaoChamadoService.alterar(solucaoChamado);
 			super.adicionaMensagemDeSucesso("Chamado Desaprovado com Sucesso!");
+			atualizarStatusChamado(StatusChamado.EM_ATENDIMENTO);
+
 
 		} catch (Exception e) {
 			super.adicionaMensagemDeErro("Erro ao Desaprovar Chamado!");
