@@ -24,6 +24,110 @@
 	
 	<ui:define name="corpo">
 		
+		<p:dialog 
+			header="Ordem de Serviço Padrao"
+			id="ordemServicoPadraoDialog" 
+			widgetVar="ordemServicoPadraoDialog" 
+			modal="true">
+			
+			<div class="box-body">
+				
+				<h:panelGroup id="idpanel">
+					<div class="col-md-12">
+					
+					<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-warning btn-md" value="Buscar" process="ordemServicoPadraoDialog" rendered = "#{categoriaBean.flagNovoOrdemServicoPadrao == false}"/>
+						
+						<p:spacer width="10" />
+						
+						<p:commandButton class="btn btn-primary btn-md" value="Novo"  action="#{categoriaBean.showNovo}" update="idpanel" rendered = "#{categoriaBean.flagNovoOrdemServicoPadrao == false}"/>
+						
+						<p:commandButton class="btn btn-success btn-md" value="Salvar"  action="#{categoriaBean.salvarOrdemServicePadrao}" update="idpanel" rendered = "#{categoriaBean.flagNovoOrdemServicoPadrao}" />
+						
+					</div>
+				</div>
+				
+					<ui:fragment rendered="#{categoriaBean.flagNovoOrdemServicoPadrao == false}" >
+					<div class="form-group">
+						<label for="exampleInputEmail1">Nome</label>
+						<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="nomeBusca" />
+					</div>
+				</ui:fragment>
+					<p:dataTable 
+						id="conteudo"
+						rendered="#{categoriaBean.flagNovoOrdemServicoPadrao == false}"
+						rows="5" 
+						var="categoria"
+						paginator="true" 
+						value="#{categoriaBean.ordemServicoPadraoList}"
+				 		paginatorAlwaysVisible="false"
+						emptyMessage="#{msg['lista.vazia']}"
+						style="max-width: 550px; min-width: 550px">
+
+						<p:column  headerText="Nome">
+	                        #{categoria.titulo}
+	                	</p:column>
+	                	
+	                	
+						<p:column  headerText="Descrição">
+	                        #{categoria.descricao}
+	                	</p:column>
+
+						<p:column 
+							width="20%" 
+							styleClass="align-center"
+							headerText="#{msg['acao']}">
+							
+							<p:commandButton icon="ui-icon-trash" title="#{msg['excluir']}"
+								class="btn btn-danger btn-xs"
+								actionListener="#{permissaoBean.remover(permissao)}" >
+								<p:confirm header="Excluir Permissão"
+									message="Deseja excluir o registro em definitivo?"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:column>
+
+
+
+
+				</p:dataTable>
+			
+				
+				<ui:fragment rendered = "#{categoriaBean.flagNovoOrdemServicoPadrao}">
+				<br/>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="exampleInputEmail1">Título</label>
+								<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="titulo" value="#{categoriaBean.ordemServicoPadrao.titulo}" />
+							</div>
+						</div>
+						
+						<div class="col-md-6">
+							<div class="form-group">	
+								<label for="exampleInputEmail1">Motivo</label>
+								<p:inputText maxlength="45" styleClass="form-control" label="#{msg['grupo.nome']}" id="motivo" value="#{categoriaBean.ordemServicoPadrao.motivo}" />
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="exampleInputEmail1">Descrição</label>
+								<p:inputTextarea  styleClass="form-control" label="#{msg['grupo.nome']}" id="descricao" value="#{categoriaBean.ordemServicoPadrao.descricao}" />
+							</div>
+						</div>
+					
+					</div>
+				
+				</ui:fragment>
+			</div>
+				</h:panelGroup>
+			</div>
+		</p:dialog>
+		
 		<ui:fragment>
 			<div class="box box-widget collapsed-box">
 
@@ -98,6 +202,18 @@
 
 				<p:column width="15%" styleClass="align-center"
 					headerText="#{msg['acao']}">
+					
+					<p:commandButton 
+						icon="ui-icon-plus" 
+						title="#{msg['editar']}"
+						class="btn btn-warning btn-xs"
+						action="#{categoriaBean.selecionaCategoria(categoria)}"
+						oncomplete="PF('ordemServicoPadraoDialog').show();"
+						 />
+
+
+					<p:spacer width="10" />
+					
 					<p:commandButton icon="ui-icon-pencil" title="#{msg['editar']}"
 						class="btn btn-primary btn-xs"
 						action="#{permissaoBean.showFormEditar(permissao.id)}"

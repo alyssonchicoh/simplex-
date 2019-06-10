@@ -2,7 +2,7 @@ package br.com.cogerh.template.enumeration;
 
 public enum EnumAtivo 
 {
-	N√O("0"), SIM("1");
+	N√ÉO("0"), SIM("1");
 
 	private String descricao;
 

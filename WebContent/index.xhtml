@@ -7,7 +7,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title>Sistema de Chamados</title>
+	<title>Simplex</title>
 	<link rel="stylesheet" type="text/css"
 		href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css"
@@ -26,65 +26,209 @@
 		
 	 <link rel="icon" type="image/x-icon" href="resources/img/logo-menor.png"/>
 		
+		
+		<style type="text/css">
+		.timeline {
+    list-style: none;
+    padding: 20px 0 20px;
+    position: relative;
+}
+
+    .timeline:before {
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 3px;
+        background-color: #eeeeee;
+        left: 50%;
+        margin-left: -1.5px;
+    }
+
+    .timeline > li {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+        .timeline > li:before,
+        .timeline > li:after {
+            content: " ";
+            display: table;
+        }
+
+        .timeline > li:after {
+            clear: both;
+        }
+
+        .timeline > li:before,
+        .timeline > li:after {
+            content: " ";
+            display: table;
+        }
+
+        .timeline > li:after {
+            clear: both;
+        }
+
+        .timeline > li > .timeline-panel {
+            width: 46%;
+            float: left;
+            border: 1px solid #d4d4d4;
+            border-radius: 2px;
+            padding: 20px;
+            position: relative;
+            -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+        }
+
+            .timeline > li > .timeline-panel:before {
+                position: absolute;
+                top: 26px;
+                right: -15px;
+                display: inline-block;
+                border-top: 15px solid transparent;
+                border-left: 15px solid #ccc;
+                border-right: 0 solid #ccc;
+                border-bottom: 15px solid transparent;
+                content: " ";
+            }
+
+            .timeline > li > .timeline-panel:after {
+                position: absolute;
+                top: 27px;
+                right: -14px;
+                display: inline-block;
+                border-top: 14px solid transparent;
+                border-left: 14px solid #fff;
+                border-right: 0 solid #fff;
+                border-bottom: 14px solid transparent;
+                content: " ";
+            }
+
+        .timeline > li > .timeline-badge {
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 1.4em;
+            text-align: center;
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            margin-left: -25px;
+            background-color: #999999;
+            z-index: 100;
+            border-top-right-radius: 50%;
+            border-top-left-radius: 50%;
+            border-bottom-right-radius: 50%;
+            border-bottom-left-radius: 50%;
+        }
+
+        .timeline > li.timeline-inverted > .timeline-panel {
+            float: right;
+        }
+
+            .timeline > li.timeline-inverted > .timeline-panel:before {
+                border-left-width: 0;
+                border-right-width: 15px;
+                left: -15px;
+                right: auto;
+            }
+
+            .timeline > li.timeline-inverted > .timeline-panel:after {
+                border-left-width: 0;
+                border-right-width: 14px;
+                left: -14px;
+                right: auto;
+            }
+
+.timeline-badge.primary {
+    background-color: #2e6da4 !important;
+}
+
+.timeline-badge.success {
+    background-color: #3f903f !important;
+}
+
+.timeline-badge.warning {
+    background-color: #f0ad4e !important;
+}
+
+.timeline-badge.danger {
+    background-color: #d9534f !important;
+}
+
+.timeline-badge.info {
+    background-color: #5bc0de !important;
+}
+
+.timeline-title {
+    margin-top: 0;
+    color: inherit;
+}
+
+.timeline-body > p,
+.timeline-body > ul {
+    margin-bottom: 0;
+}
+
+    .timeline-body > p + p {
+        margin-top: 5px;
+    }
+
+@media (max-width: 767px) {
+    ul.timeline:before {
+        left: 40px;
+    }
+
+    ul.timeline > li > .timeline-panel {
+        width: calc(100% - 90px);
+        width: -moz-calc(100% - 90px);
+        width: -webkit-calc(100% - 90px);
+    }
+
+    ul.timeline > li > .timeline-badge {
+        left: 15px;
+        margin-left: 0;
+        top: 16px;
+    }
+
+    ul.timeline > li > .timeline-panel {
+        float: right;
+    }
+
+        ul.timeline > li > .timeline-panel:before {
+            border-left-width: 0;
+            border-right-width: 15px;
+            left: -15px;
+            right: auto;
+        }
+
+        ul.timeline > li > .timeline-panel:after {
+            border-left-width: 0;
+            border-right-width: 14px;
+            left: -14px;
+            right: auto;
+        }
+}
+		
+		</style>
 
 </h:head>
-<h:body class="hold-transition skin-blue sidebar-mini">
 
-<style>
-		.ui-growl-image { 
-    width: 300px;
-    height: 95px;
-    float: left;
+<h:body class="hold-transition skin-purple layout-top-nav">
+<div class="wrapper">
+  <header class="main-header">
+
+<nav class="navbar navbar-static-top">
     
-    .modal-dialog-center {
-    margin-top: 25%;
-}
-}
-		}
-		
-		
-body{text-align:center;}
-.iconok{
-transform: rotate(0deg);
-width:150px;
-height:auto;
-/* Safari 4.0 - 8.0 */
-  -webkit-animation-name: seta-up;
-  -webkit-animation-duration: 0.2s;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation-delay: 0s;
-  -webkit-animation-iteration-count: 1;
-  -webkit-animation-direction: alternate;
-/* Standard syntax */
-  animation-name: seta-up;
-  animation-duration: 0.3s;
-  animation-timing-function: linear;
-  animation-delay: 0s;
-  animation-iteration-count: 1;
-  animation-direction: alternate;
-}
-
-
-/* Safari 4.0 - 8.0 */
-@-webkit-keyframes seta-up {
-  0%   { transform: rotate(0deg);}
-  50%   { transform: rotate(180deg);}
-  
-  100% { transform: rotate(360deg);}
-  
-}
-
-/* Standard syntax */
-@keyframes seta-up {
-  0%   { transform: rotate(0deg);}
-    50%   {transform: rotate(180deg);}
-  
-  100% { transform: rotate(360deg);}
-}
-
-	</style>
-	
-	
+ <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+          <div class="container">
+          <H2 style="color: white;" class="text-center"><STRONG>SIMPLEX</STRONG></H2>
+          </div>
+          </div>
+    </nav>
+</header>	
 		<script type="text/javascript">
 			//<![CDATA[
 			function start() {
@@ -170,82 +314,17 @@ height:auto;
 
 
 			<nav class="navbar navbar-static-top" role="navigation">
-				<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
-					role="button"> <span class="sr-only">Toggle navigation</span>
-				</a>
-
+				
 
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
 
 						  <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">#{notificacaoBean.notificacoes.size()}</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">Você tem Novas Notificações</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-             <ui:repeat var="noti" value="#{notificacaoBean.notificacoes}">
-                  <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                  		 <h5>
-                          	<small><i class="fa fa-clock-o"></i>   <i> 29/12/2018 22:45</i> </small>
-                   		</h5>
-                   		
-                   		<h4>
-							<b>#{noti.titulo}</b>
-                      	</h4>
-                      	
-                      	#{noti.mensagem}
-                       
-                       
-                      </div>
-                    </a>
-                  </li>
-                  </ui:repeat>
-                
-                </ul>
-              </li>
-            </ul>
+            
+           
           </li>
 
-						<!-- User Account Menu -->
-						<li class="dropdown user user-menu">
-							<!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle"
-							data-toggle="dropdown"> <!-- The user image in the navbar-->
-								<h:graphicImage library="img" name="user2-160x160.png"
-									class="user-image" alt="User Image" /> <!-- hidden-xs hides the username on small devices so only the image appears. -->
-								<span class="hidden-xs">#{usuarioWeb.usuario.nome}</span>
-						</a>
 
-							<ul class="dropdown-menu">
-								<!-- The user image in the menu -->
-								<li class="user-header"><h:graphicImage library="img"
-										name="user2-160x160.png" class="img-circle" alt="User Image" />
-									<p>
-										#{usuarioWeb.usuario.nome} <small>#{usuarioWeb.usuario.grupo.nome}</small>
-									</p></li>
-								<!-- Menu Body -->
-
-								<!-- Menu Footer-->
-								<li class="user-footer">
-									<div class="pull-left">
-										<p:commandButton class="btn btn-default btn-flat"
-											value="Editar Conta" action="#{usuarioBean.editarConta}"
-											immediate="true" />
-									</div>
-									<div class="pull-right">
-										<p:commandButton class="btn btn-danger btn-md" value="Sair"
-											action="#{usuarioWeb.sair}" immediate="true" />
-									</div>
-								</li>
-							</ul>
-						</li>
 
 						<!-- Control Sidebar Toggle Button -->
 						<li></li>
@@ -256,193 +335,7 @@ height:auto;
 			</nav>
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
-		<aside class="main-sidebar">
-
-			<!-- sidebar: style can be found in sidebar.less -->
-			<section class="sidebar">
-
-				<!-- Sidebar user panel (optional) -->
-				<div class="user-panel">
-					<div class="pull-left image">
-						<h:graphicImage library="img" name="user2-160x160.png"
-							class="img-circle" alt="User Image" />
-					</div>
-					<div class="pull-left info">
-						<p>#{usuarioWeb.usuario.nome}</p>
-						<!-- Status -->
-
-					</div>
-				</div>
-
-
-
-
-				<!-- /.search form -->
-
-				<!-- Sidebar Menu -->
-
-
-
-
-
-
-				<ul class="sidebar-menu" data-widget="tree">
-
-					<li class="treeview"><a href="#"> <i class="fa fa-child"></i>
-							<span>ÁREA DE USUÁRIOS</span> <span class="pull-right-container">
-								<i class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-						<ul class="treeview-menu">
-							<li><p:link outcome="/pages/chamado/lista.xhtml">
-									<i class="fa fa-keyboard-o"></i>
-									<span>CHAMADOS</span>
-								</p:link></li>
-								
-								<li><p:link outcome="/pages/viabilidade/lista.xhtml">
-									<i class="fa fa fa-gavel"></i>
-									<span>SOLICITAÇÃO DE VIABILIDADE</span>
-								</p:link></li>
-						</ul></li>
-
-					<li class="treeview"><a href="#"> <i class="fa fa-eye"></i>
-							<span>ÁREA DE OBSERVADOR</span> <span
-							class="pull-right-container"> <i
-								class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-						<ul class="treeview-menu">
-							<li><p:link
-									outcome="/pages/observador/chamados_nao_atribuidos.xhtml">
-									<i class="fa fa fa-coffee"></i>
-									<span>GERENCIAMENTO</span>
-								</p:link></li>
-
-							<li><p:link outcome="/pages/observador/fila_chamado.xhtml">
-									<i class="fa fa-sort-numeric-asc"></i>
-									<span>FILA DE CHAMADOS</span>
-								</p:link></li>
-
-							<li><p:link outcome="/pages/observador/lista.xhtml">
-									<i class="fa fa-balance-scale"></i>
-									<span>PAINEIS</span>
-								</p:link></li>
-						</ul></li>
-					<ui:fragment id="sub_menu_area_tecnico">
-						<li class="treeview">
-							<!-- NOME DO SUB MENU --> <a href="#"> <i
-								class="fa fa-street-view"></i> <span>ÁREA DE TECNICOS</span> <span
-								class="pull-right-container"> <i
-									class="fa fa-angle-left pull-right"></i>
-							</span>
-						</a>
-
-							<ul class="treeview-menu">
-
-								<li><p:link outcome="/pages/chamado/listaByTecnico.xhtml">
-										<i class="fa fa-sort-numeric-asc"></i>
-										<span>CHAMADOS</span>
-									</p:link></li>
-									
-										<li><p:link outcome="/pages/ordemservico/lista.xhtml">
-										<i class="fa fa-check-circle-o"></i>
-										<span>ORDEM DE SERVIÇOS</span>
-									</p:link></li>
-									
-											<li><p:link outcome="/pages/ordemservico/lista.xhtml">
-										<i class="fa fa-university"></i>
-										<span>BASE DE CONHECIMENTO</span>
-									</p:link></li>
-									
-										
-											<li><p:link outcome="/pages/ordemservico/lista.xhtml">
-										<i class="fa fa-comments-o"></i>
-										<span>CHAT GETIN</span>
-									</p:link></li>
-
-
-
-							</ul>
-						</li>
-					</ui:fragment>
-
-					<li class="treeview"><a href="#"> <i class="fa fa-line-chart"></i>
-							<span>ÁREA DE GESTOR</span> <span class="pull-right-container">
-								<i class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-						<ul class="treeview-menu">
-							<li><p:link outcome="/pages/observador/lista.xhtml">
-									<i class="fa fa-balance-scale"></i>
-									<span>GERENCIAMENTO</span>
-								</p:link></li>
-
-							<li><p:link outcome="/pages/observador/lista.xhtml">
-									<i class="fa fa-balance-scale"></i>
-									<span>FILA DE CHAMADOS</span>
-								</p:link></li>
-
-							<li><p:link outcome="/pages/observador/lista.xhtml">
-									<i class="fa fa-balance-scale"></i>
-									<span>PAINEIS</span>
-								</p:link></li>
-						</ul></li>
-
-
-
-					<li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
-							<span>ÁREA DE ADMINISTRADOR</span> <span
-							class="pull-right-container"> <i
-								class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-						<ul class="treeview-menu">
-							<li><p:link outcome="/pages/categoria/lista.xhtml">
-									<i class="fa fa-cc"></i>
-									<span>CATEGORIA DE CHAMADOS</span>
-								</p:link></li>
-
-							<li><p:link outcome="/pages/tecnico/lista.xhtml">
-									<i class="fa fa-street-view"></i>
-									<span>TÉCNICOS</span>
-								</p:link></li>
-							<li><p:link outcome="/pages/observador/lista.xhtml">
-									<i class="fa fa-eye"></i>
-									<span>OBSERVADORES</span>
-								</p:link></li>
-							<li><p:link outcome="/pages/gerencia/lista.xhtml">
-									<i class="fa fa-university"></i>
-									<span>GERÊNCIAS</span>
-								</p:link></li>
-
-								<li><p:link outcome="/pages/grupo/lista.xhtml">
-									<i class="fa fa-users"></i>
-									<span>GRUPOS DE USUÁRIOS</span>
-								</p:link></li>
-								
-								<li><p:link outcome="/pages/aviso/lista.xhtml">
-									<i class="fa fa-podcast"></i>
-									<span>AVISOS</span>
-								</p:link></li>
-
-
-						</ul></li>
-
-
-
-
-
-
-
-
-				</ul>
-				<!-- /.sidebar-menu -->
-
-				<!-- /.sidebar-menu -->
-			</section>
-			<!-- /.sidebar -->
-		</aside>
-
+		
 		<!-- Content Wrapper. Contains page content -->
 
 
@@ -504,11 +397,10 @@ height:auto;
 		<footer class="main-footer">
 
 			<!-- To the right -->
-			<div class="pull-right hidden-xs">GETIN - Gerência de
-				Tecnologia da Informação</div>
+			<div class="pull-right hidden-xs">UNIFOR </div>
 			<!-- Default to the left -->
 			<div class="pull-right hidden-xs"></div>
-			<strong>Cogerh - Companhia de Gestão dos Recursos Hídricos</strong>
+			<strong>Trabalho da disciplina de Pesquisa Operacional</strong>
 
 		</footer>
 
@@ -554,7 +446,7 @@ height:auto;
   <script type="text/javascript"
 		src="#{request.contextPath}/resources/timeline/js/jquery.timelify.js"></script>
   
-  
+  </div>
 
 </h:body>
 

@@ -8,7 +8,20 @@
 
 <ui:composition template="/index.xhtml">
 
-<head>
+	<head>
+	
+	<script type="text/javascript">
+    //<![CDATA[
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+    //]]>
+</script>   
+	
 <style>
 html, body {
   margin: 0;
@@ -202,6 +215,7 @@ section#timeline article:nth-child(5) div.inner h2:after {
 
 </style>
 
+
 	<ui:define name="nome_pagina">
 		<h1>
 			<STRONG> Consulta Detalhada de Chamado - Nº
@@ -219,913 +233,1233 @@ section#timeline article:nth-child(5) div.inner h2:after {
 
 
 	<ui:define name="corpo">
-	 <body>
-		<f:metadata>
-			<f:viewAction
-				action="#{chamadoBean.initFormDetalhamento(param.chamadoId,param.newChamado,param.newChamadoFechado)}" />
-			<f:viewAction action="#{acaoSegurancaBean.init(param.chamadoId)}" />
-		</f:metadata>
+		<body>
+			<f:metadata>
+				<f:viewAction
+					action="#{chamadoBean.initFormDetalhamento(param.chamadoId,param.newChamado,param.newChamadoFechado)}" />
+				<f:viewAction action="#{acaoSegurancaBean.init(param.chamadoId)}" />
+			</f:metadata>
 
-		<div class="modal fade" id="myModal">
-			<div class="vertical-alignment-helper">
-				<div class="modal-dialog vertical-align-center">
+			<div class="modal fade" id="myModal">
+				<div class="vertical-alignment-helper">
+					<div class="modal-dialog vertical-align-center">
+						<div class="modal-content">
+							<div class="modal-header">
+
+								<button type="button" class="close" aria-label="Close">
+									<span aria-hidden="true" />
+								</button>
+
+								<h4 class="modal-title" id="myModalLabel">
+									<STRONG>Solicitação Aberta com Sucesso!</STRONG>
+								</h4>
+							</div>
+
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-2 col-md-offset-4">
+										<h:graphicImage library="img" name="legal.png"
+											alt="User Image" class="iconok" />
+									</div>
+								</div>
+
+								<BR />
+
+								<div class="row">
+									<div class="col-md-12 col-md-offset-1">
+										<h4 class="modal-title" id="myModalLabel">
+											<strong>Em breve um técnico da GETIN será alocado ao
+												seu chamado</strong>
+										</h4>
+									</div>
+								</div>
+							</div>
+
+							<div class="modal-footer">
+								<p:commandButton class="btn btn-success"
+									onclick="fecharDialog()" value="Ok, Entendi" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="dialogChamadoFechado">
+				<div class="modal-dialog modal-dialog-center">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" aria-label="Close">
 								<span aria-hidden="true"></span>
 							</button>
-							<h4 class="modal-title" id="myModalLabel">
-								<STRONG>Solicitação Aberta com Sucesso!</STRONG>
-							</h4>
 						</div>
 
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-md-2 col-md-offset-4">
-									<h:graphicImage library="img" name="legal.png" alt="User Image"
-										class="iconok" />
+									<h:graphicImage library="img" name="carimboFechado.png"
+										alt="User Image" class="iconok" />
 								</div>
 							</div>
 
 							<BR />
 
 							<div class="row">
-								<div class="col-md-12 col-md-offset-1">
-									<h4 class="modal-title" id="myModalLabel">Em breve um
-										técnico da GETIN será alocado ao seu chamado</h4>
+								<div class="col-md-12 col-md-offset-2">
+									<h4 class="modal-title">
+										<strong>Parabéns! O Chamado foi fechado com sucesso!</strong>
+									</h4>
 								</div>
 							</div>
 						</div>
 
 						<div class="modal-footer">
-							<p:commandButton class="btn btn-success" onclick="fecharDialog()"
-								value="Ok, Entendi"></p:commandButton>
+							<p:commandButton class="btn btn-success"
+								onclick="fecharDialogChamadoFechado()" value="Ok, Entendi" />
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="modal fade" id="dialogChamadoFechado">
-			<div class="modal-dialog modal-dialog-center">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" aria-label="Close">
-							<span aria-hidden="true"></span>
-						</button>
-					</div>
+			<div class="modal fade" id="dialogChamadoSolucionado">
+				<div class="modal-dialog modal-dialog-center">
+					<div class="modal-content">
 
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-2 col-md-offset-4">
-								<h:graphicImage library="img" name="carimboFechado.png"
-									alt="User Image" class="iconok" />
+						<div class="modal-header">
+							<button type="button" class="close" aria-label="Close">
+								<span aria-hidden="true" />
+							</button>
+						</div>
+
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-2 col-md-offset-4">
+									<h:graphicImage library="img" name="carimboSolucionado.png"
+										alt="User Image" class="iconok" />
+								</div>
+							</div>
+
+							<BR />
+
+							<div class="row">
+								<div class="col-md-12 col-md-offset-3">
+									<h4 class="modal-title">
+										<strong>A GETIN agradece sua atenção!</strong>
+									</h4>
+								</div>
 							</div>
 						</div>
 
-						<BR />
+						<div class="modal-footer">
+							<p:commandButton class="btn btn-success"
+								onclick="fecharDialogChamadoSolucionado()" value="Ok, Entendi" />
+						</div>
+					</div>
+				</div>
+			</div>
 
-						<div class="row">
-							<div class="col-md-12 col-md-offset-2">
-								<h4 class="modal-title">
-									<strong>Parabéns! O Chamado foi fechado com sucesso!</strong>
-								</h4>
-							</div>
+			<ui:fragment rendered="#{chamadoBean.newChamado == true}">
+				<body onload="abrirDialog();"></body>
+			</ui:fragment>
+
+			<ui:fragment rendered="#{chamadoBean.newChamadoFechado == true}">
+				<body onload="abrirDialogChamadoFechado();"></body>
+			</ui:fragment>
+
+			<p:dialog modal="true" widgetVar="rejeitarChamado" draggable="false"
+				closable="false" width="550px" resizable="false"
+				header="Rejeitar Solução">
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputLabel value="Motivo(s):"></p:outputLabel>
+						<p:inputTextarea style="width: 500px;"
+					/>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<div class="row">
+						<p:commandButton class="btn  btn-md" value="Voltar"
+							onclick="PF('rejeitarChamado').hide();" immediate="true" />
+
+						<p:commandButton class="btn btn-danger btn-md" value="Rejeitar"
+							imediate="false" action="#{chamadoBean.rejeitarSolucaoChamado()}"
+							onclick="PF('rejeitarChamado').hide();" update="@form" />
+					</div>
+				</div>
+			</p:dialog>
+
+			<p:dialog modal="true" widgetVar="fechamentoChamado"
+				draggable="false" closable="false" width="300px" resizable="false">
+				<div class="text-center">
+					<div class="row">
+						<h4>
+							<strong>Avaliação do Atendimento</strong>
+						</h4>
+					</div>
+
+					<div class="row">
+						<h:graphicImage library="img" name="user2-160x160.png"
+							alt="User Image" />
+					</div>
+
+					<div class="row">
+						<strong>Alysson Nascimento</strong>
+					</div>
+
+					<div class="row">
+						<br />
+						<h1>
+							<p:rating value="#{chamadoBean.votoUsuario}" />
+						</h1>
+						<br />
+					</div>
+
+					<div class="row">
+						<p:commandButton class="btn btn-danger btn-md" value="Voltar"
+							onclick="PF('fechamentoChamado').hide();" immediate="true" />
+
+						<p:commandButton class="btn btn-success btn-md" value="Avaliar"
+							imediate="true" action="#{chamadoBean.solucionarChamado()}"
+							onclick="abrirDialogChamadoSolucionado(),PF('fechamentoChamado').hide()" />
+					</div>
+				</div>
+			</p:dialog>
+
+			<p:dialog modal="true" widgetVar="statusDialog" header="Baixando"
+				draggable="false" closable="false" resizable="false">
+				<p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+			</p:dialog>
+
+			<p:dialog header="Filtro de Técnicos" id="categoriaChamadoDialog"
+				widgetVar="dlg1" modal="true">
+				<div class="box-body">
+					<div class="form-group">
+						<div class="pull-right box-tools">
+							<p:commandButton class="btn btn-primary btn-md" value="Buscar"
+								process="categoriaChamadoDialog" />
 						</div>
 					</div>
 
-					<div class="modal-footer">
-						<p:commandButton class="btn btn-success"
-							onclick="fecharDialogChamadoFechado()" value="Ok, Entendi"></p:commandButton>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- DIALOG COM A INFORMAÇÃO DE CHAMADO SOLUCIONADO -->
-		<div class="modal fade" id="dialogChamadoSolucionado">
-			<div class="modal-dialog modal-dialog-center">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<button type="button" class="close" aria-label="Close">
-							<span aria-hidden="true"></span>
-						</button>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Nome</label>
+						<p:inputText maxlength="45" styleClass="form-control"
+							label="#{msg['grupo.nome']}" id="nomeBusca" />
 					</div>
 
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-2 col-md-offset-4">
-								<h:graphicImage library="img" name="carimboSolucionado.png"
-									alt="User Image" class="iconok" />
-							</div>
-						</div>
+					<p:dataTable id="tbTecnico" rows="5" var="tecnico" paginator="true"
+						value="#{chamadoBean.tecnicoList}" paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						emptyMessage="#{msg['lista.vazia']}"
+						style="max-width: 550px; min-width: 550px">
 
-						<BR />
+						<p:column width="80%" headerText="Nome"
+							style="background-color: #00a65a"
+							rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id)}">
+							<b>#{tecnico.usuario.nome}</b>
+						</p:column>
 
-						<div class="row">
-							<div class="col-md-12 col-md-offset-3">
-								<h4 class="modal-title">
-									<strong>A GETIN agradece sua atenção!</strong>
-								</h4>
-							</div>
-						</div>
-					</div>
-
-					<div class="modal-footer">
-						<p:commandButton class="btn btn-success"
-							onclick="fecharDialogChamadoSolucionado()" value="Ok, Entendi"></p:commandButton>
-					</div>
-				</div>
-			</div>
-		</div>
-		<ui:fragment rendered="#{chamadoBean.newChamado == true}">
-			<body onload="abrirDialog();"></body>
-		</ui:fragment>
-
-		<ui:fragment rendered="#{chamadoBean.newChamadoFechado == true}">
-			<body onload="abrirDialogChamadoFechado();"></body>
-		</ui:fragment>
-
-		<p:dialog modal="true" widgetVar="rejeitarChamado" draggable="false"
-			closable="false" width="550px" resizable="false"
-			header="Rejeitar Solução">
-			<div class="row">
-				<div class="col-md-12">
-					<p:outputLabel value="Motivo(s):"></p:outputLabel>
-					<p:inputTextarea style="width: 500px;"
-						value="#{chamadoBean.desaprovacaoSolucaoChamado.motivo}"></p:inputTextarea>
-				</div>
-			</div>
-
-			<div class="modal-footer">
-				<div class="row">
-					<p:commandButton class="btn  btn-md" value="Voltar"
-						onclick="PF('rejeitarChamado').hide();" immediate="true" />
-
-					<p:commandButton class="btn btn-danger btn-md" value="Rejeitar"
-						imediate="false" action="#{chamadoBean.rejeitarSolucaoChamado()}"
-						onclick="PF('rejeitarChamado').hide();" update="@form" />
-				</div>
-			</div>
-		</p:dialog>
-
-		<p:dialog modal="true" widgetVar="fechamentoChamado" draggable="false"
-			closable="false" width="300px" resizable="false">
-			<div class="text-center">
-				<div class="row">
-					<h4>
-						<strong>Avaliação do Atendimento</strong>
-					</h4>
-				</div>
-
-				<div class="row">
-					<h:graphicImage library="img" name="user2-160x160.png"
-						alt="User Image" />
-				</div>
-
-				<div class="row">
-					<strong>Alysson Nascimento</strong>
-				</div>
-
-				<div class="row">
-					<br />
-					<h1>
-					<p:rating value="#{chamadoBean.votoUsuario}" />
-					</h1>
-					<br />
-				</div>
-
-				<div class="row">
-					<p:commandButton class="btn btn-danger btn-md" value="Voltar"
-						onclick="PF('fechamentoChamado').hide();" immediate="true" />
-
-					<p:commandButton class="btn btn-success btn-md" value="Avaliar"
-						imediate="true" action="#{chamadoBean.solucionarChamado()}"
-						onclick="abrirDialogChamadoSolucionado(),PF('fechamentoChamado').hide()" />
-				</div>
-			</div>
-		</p:dialog>
-
-		<p:dialog modal="true" widgetVar="statusDialog" header="Baixando"
-			draggable="false" closable="false" resizable="false">
-			<p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
-		</p:dialog>
-
-		<p:dialog header="Filtro de Técnicos" id="categoriaChamadoDialog"
-			widgetVar="dlg1" modal="true">
-			<div class="box-body">
-
-				<div class="form-group">
-					<div class="pull-right box-tools">
-						<p:commandButton class="btn btn-primary btn-md" value="Buscar"
-							process="categoriaChamadoDialog" />
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label for="exampleInputEmail1">Nome</label>
-					<p:inputText maxlength="45" styleClass="form-control"
-						label="#{msg['grupo.nome']}" id="nomeBusca" />
-				</div>
-
-				<p:dataTable id="tbTecnico" rows="5" var="tecnico" paginator="true"
-					value="#{chamadoBean.tecnicoList}" paginatorPosition="bottom"
-					paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}"
-					style="max-width: 550px; min-width: 550px">
-
-					<p:column width="80%" headerText="Nome"
-						style="background-color: #00a65a"
-						rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id)}">
-						<b>#{tecnico.usuario.nome}</b>
-					</p:column>
-
-					<p:column width="80%" headerText="Nome"
-						rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id) eq false}">
+						<p:column width="80%" headerText="Nome"
+							rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id) eq false}">
 	                       		#{tecnico.usuario.nome}
 	                	</p:column>
 
-					<p:column width="20%" styleClass="align-center"
-						headerText="#{msg['acao']}"
-						rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id)}"
-						style="background-color: #00a65a">
-						<p:commandButton title="Remover" class="btn btn-danger btn-xs"
-							value="Remover">
-							<p:ajax event="click"
-								listener="#{chamadoBean.removerTecnico(tecnico)}"
-								update="tbTecnico" immediate="true" />
-						</p:commandButton>
-					</p:column>
+						<p:column width="20%" styleClass="align-center"
+							headerText="#{msg['acao']}"
+							rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id)}"
+							style="background-color: #00a65a">
+							<p:commandButton title="Remover" class="btn btn-danger btn-xs"
+								value="Remover">
+								<p:ajax event="click"
+									listener="#{chamadoBean.removerTecnico(tecnico)}"
+									update="tbTecnico" immediate="true" />
+							</p:commandButton>
+						</p:column>
 
-					<p:column width="20%" styleClass="align-center"
-						headerText="#{msg['acao']}"
-						rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id) eq false}">
-						<p:commandButton title="Remover" class="btn btn-success btn-xs"
-							value="Selecionar">
-							<p:ajax event="click"
-								listener="#{chamadoBean.adicionarTecnicos(tecnico)}"
-								update="tbTecnico" immediate="true" />
-						</p:commandButton>
-					</p:column>
-				</p:dataTable>
-			</div>
-
-			<div class="box-footer">
-				<div class="pull-right box-tools">
-					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
-						onclick="PF('dlg1').hide();" />
-
-					<p:commandButton class="btn btn-success btn-md" value="Salvar"
-						onclick="PF('dlg1').hide();"
-						action="#{chamadoBean.salvarTecnicos}" update="@form" />
+						<p:column width="20%" styleClass="align-center"
+							headerText="#{msg['acao']}"
+							rendered="#{chamadoBean.verificaExistenciaTecnicoByList(tecnico.id) eq false}">
+							<p:commandButton title="Remover" class="btn btn-success btn-xs"
+								value="Selecionar">
+								<p:ajax event="click"
+									listener="#{chamadoBean.adicionarTecnicos(tecnico)}"
+									update="tbTecnico" immediate="true" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
 				</div>
-			</div>
 
-		</p:dialog>
+				<div class="box-footer">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+							onclick="PF('dlg1').hide();" />
 
-
-
-		<p:dialog header="Solicitação de Viabilidade" id="dlgViabilidade"
-			widgetVar="dlgViabilidade" modal="true">
-			<div class="box-body">
-				<h1>Deseja abrir uma solicitação de Viabilidade para essse
-					sistema?</h1>
-			</div>
-
-			<div class="box-footer">
-				<div class="pull-right box-tools">
-
-					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
-						onclick="PF('dlg1').hide();" />
-
-					<p:commandButton class="btn btn-success btn-md" value="Salvar"
-						oncomplete="PF('dlg1').hide();"
-						action="#{chamadoBean.salvarTecnicos}" update="@form" />
+						<p:commandButton class="btn btn-success btn-md" value="Salvar"
+							onclick="PF('dlg1').hide();"
+							action="#{chamadoBean.salvarTecnicos}" update="@form" />
+					</div>
 				</div>
-			</div>
 
-		</p:dialog>
+			</p:dialog>
 
-		<h:form id="form" prependId="true">
-			<section class="content">
-				<div class="row">
-				
-				
-					<div class="col-md-3">
-						<div class="box box-primary">
-						<div class="box-body box-profile">
-								<h4 class="box-title text-center">
-									<strong style="color: #3C8DBC">Informações Gerais do Chamado</strong>
-								</h4>
-							</div>
+
+
+			<p:dialog header="Solicitação de Viabilidade" id="dlgViabilidade"
+				widgetVar="dlgViabilidade" modal="true">
+				<div class="box-body">
+					<h1>Deseja abrir uma solicitação de Viabilidade para essse
+						sistema?</h1>
+				</div>
+
+				<div class="box-footer">
+					<div class="pull-right box-tools">
+
+						<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+							onclick="PF('dlg1').hide();" />
+
+						<p:commandButton class="btn btn-success btn-md" value="Salvar"
+							oncomplete="PF('dlg1').hide();"
+							action="#{chamadoBean.salvarTecnicos}" update="@form" />
+					</div>
+				</div>
+
+			</p:dialog>
+			
+			<p:dialog 
+				header="Status da Ordem de Serviço"
+				id="filtroOrdemServico" 
+				widgetVar="filtroOrdemServico"
+				modal="true">
+					
+					<div class="box-body">
+						<p:selectOneRadio id="console" value="#{chamadoBean.statusSelecionado}" unselectable="true">
+            				<f:selectItem itemLabel="Em Andamento" itemValue="1" />
+            				<f:selectItem itemLabel="Concluído" itemValue="2" />
+            				<f:selectItem itemLabel="Cancelada" itemValue="3" />
+            				<f:selectItem itemLabel="Aguardando" itemValue="4" />
+            				<f:selectItem itemLabel="Pausada" itemValue="5" />
+            			</p:selectOneRadio>
+					</div>
+					
+					<div class="box-footer">
+						<div class="pull-right box-tools">
+							<p:commandButton 
+								class="btn btn-danger btn-md" 
+								value="Fechar"
+								onclick="PF('filtroOrdemServico').hide();" />
 						
-							<ui:fragment rendered="#{chamadoBean.chamado.status eq 1}">
-								<div class="col-lg-12 text-center">
-									<h:graphicImage library="img"
-										name="CARIMBO_AGUARDANDO_ALOCACAO_TECNICO.png"
-										alt="Aguardando a Alocação de Técnico"
-										style="width:150px; height:auto;" class="img-fluid" />
-								</div>
+							<p:commandButton 
+								title="Selecionar" 
+								class="btn btn-success btn-md"
+								value="Salvar"
+								immediate="false" 
+								update="form:osList"
+								oncomplete="PF('filtroOrdemServico').hide();" 
+								action="#{chamadoBean.atualizarStatus}" />
+						</div>
+					</div>
+			</p:dialog>
 
-								<h3 class="profile-username text-center" style="color: #28A6C0">
-									<strong>Chamado Aguardando Alocação de Técnico!</strong>
-								</h3>
-							</ui:fragment>
-
-							<ui:fragment rendered="#{chamadoBean.chamado.status eq 2}">
-								<div class="col-lg-12 text-center">
-									<h:graphicImage library="img" name="CARIMBO_NA_FILA.png"
-										alt="Aguardando a Alocação de Técnico"
-										style="width:150px; height:auto;" class="img-fluid" />
-								</div>
-
-								<h3 class="profile-username text-center" style="color: #376087">
-									<strong>Chamado Na Fila de Atendimento!</strong>
-								</h3>
-
-							</ui:fragment>
-
-
-							<ui:fragment rendered="#{chamadoBean.chamado.status eq 3}">
-								<div class="col-lg-12 text-center">
-									<h:graphicImage library="img" name="CARIMBO_EM_ATENDIMENTO.png"
-										alt="Aguardando a Alocação de Técnico"
-										style="width:150px; height:auto;" class="img-fluid" />
-								</div>
-
-								<h3 class="profile-username text-center" style="color: #49872A">
-									<strong>Chamado Em Atendimento!</strong>
-								</h3>
-
-							</ui:fragment>
-
-
-
-							<ui:fragment rendered="#{chamadoBean.chamado.status eq 9}">
-								<div class="col-lg-12 text-center">
-									<h:graphicImage library="img" name="CARIMBO_FEEDBACK.png"
-										alt="Aguardando a Alocação de Técnico"
-										style="width:150px; height:auto;" class="img-fluid" />
-								</div>
-
-								<h3 class="profile-username text-center" style="color: #942300">
-									<strong>Aguardando Feedback do Usuário</strong>
-								</h3>
-
-							</ui:fragment>
-
-
-
-
-
-								
-
+			<p:dialog 
+				header="Detalhamento de Ordem de Serviço"
+				id="detalhamentoOrdemServico" 
+				widgetVar="detalhamentoOrdemServico"
+				modal="true">
+				<h:panelGrid id="titulo" >  
+					<div class="container">
+						<div class="row">
+							<div class="text-left">
+								<ui:fragment rendered="#{chamadoBean.os.status == 1}">
+									<h4>
+										<span class="label" style="background-color: #3C8DBC; color: #fff">
+											Em Andamento
+										</span>
+									</h4>
+								</ui:fragment>
+			        	
+			        			<ui:fragment rendered="#{chamadoBean.os.status == 2}">
+									<h4>
+										<span class="label" style="background-color: #00A65A; color: #fff">
+											Concluído
+										</span>
+									</h4>
+								</ui:fragment>
+			    
+			        			<ui:fragment rendered="#{chamadoBean.os.status == 3}">
+									<h4>
+										<span class="label" style="background-color: #D73925; color: #fff">
+											Cancelada
+										</span>
+									</h4>
+								</ui:fragment>
+				
+								<ui:fragment rendered="#{chamadoBean.os.status == 4}">
+									<h4>
+										<span class="label" style="background-color: #BEBEBE; color: #000">
+											AGUARDANDO
+										</span>
+									</h4>
+								</ui:fragment>
 						
-
-							<div class="box-header with-border">
-								
-								<div class="box-tools">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus" />
-									</button>
-								</div>
+								<ui:fragment rendered="#{chamadoBean.os.status == 5}">
+									<h4>
+										<span class="label" style="background-color: #000; color: #fff">
+											PAUSADA
+										</span>
+									</h4>
+								</ui:fragment>							
 							</div>
-							<div class="box-body no-padding" id="informacoes">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href="mailbox.html"> <i class="fa fa-desktop"></i>
-											<Strong>Categoria</Strong> <span
-											class="label label-danger pull-right">#{chamadoBean.chamado.categoria.nome}</span>
+							
+						
+						</div>
+				
+						<div class="row">
+							<div class="text-center">
+								<h1  id="titulo"><strong>#{chamadoBean.os.titulo}</strong></h1>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="text-center">
+								<h3  id="titulo">#{chamadoBean.os.descricao}</h3>
+							</div>
+						</div>
+					</div>
+				</h:panelGrid>
+			</p:dialog>
+			
+			<p:dialog 
+				header="Descrição do Motivo Para Desaprovação da Solução do Chamado"
+				id="detalhamentoDesaprovacao" 
+				widgetVar="detalhamentoDesaprovacao"
+				modal="true">
+				<h:panelGrid id="motivo" >  
+					<div class="container">
+						
+						<div class="row">
+							<div class="text-center">
+								<h3  id="titulo">#{chamadoBean.solucaoSelecionada.rejeicaoSolucaoChamado.motivo}</h3>
+							</div>
+						</div>
+					</div>
+				</h:panelGrid>
+			</p:dialog>
+
+
+			<h:form id="form" prependId="true">
+				<section class="content">
+					<div class="row">
+
+
+						<div class="col-md-3">
+							<div class="box box-primary">
+								<div class="box-body box-profile">
+									<h4 class="box-title text-center">
+										<strong style="color: #3C8DBC">Informações Gerais do
+											Chamado</strong>
+									</h4>
+								</div>
+
+								<ui:fragment rendered="#{chamadoBean.chamado.status eq 1}">
+									<div class="col-lg-12 text-center">
+										<h:graphicImage library="img"
+											name="CARIMBO_AGUARDANDO_ALOCACAO_TECNICO.png"
+											alt="Aguardando a Alocação de Técnico"
+											style="width:150px; height:auto;" class="img-fluid" />
+									</div>
+
+									<h3 class="profile-username text-center" style="color: #28A6C0">
+										<strong>Chamado Aguardando Alocação de Técnico!</strong>
+									</h3>
+								</ui:fragment>
+
+								<ui:fragment rendered="#{chamadoBean.chamado.status eq 2}">
+									<div class="col-lg-12 text-center">
+										<h:graphicImage library="img" name="CARIMBO_NA_FILA.png"
+											alt="Aguardando a Alocação de Técnico"
+											style="width:150px; height:auto;" class="img-fluid" />
+									</div>
+
+									<h3 class="profile-username text-center" style="color: #376087">
+										<strong>Chamado Na Fila de Atendimento!</strong>
+									</h3>
+
+								</ui:fragment>
+
+
+								<ui:fragment rendered="#{chamadoBean.chamado.status eq 3}">
+									<div class="col-lg-12 text-center">
+										<h:graphicImage library="img"
+											name="CARIMBO_EM_ATENDIMENTO.png"
+											alt="Aguardando a Alocação de Técnico"
+											style="width:150px; height:auto;" class="img-fluid" />
+									</div>
+
+									<h3 class="profile-username text-center" style="color: #49872A">
+										<strong>Chamado Em Atendimento!</strong>
+									</h3>
+
+								</ui:fragment>
+
+
+
+								<ui:fragment rendered="#{chamadoBean.chamado.status eq 9}">
+									<div class="col-lg-12 text-center">
+										<h:graphicImage library="img" name="CARIMBO_FEEDBACK.png"
+											alt="Aguardando a Alocação de Técnico"
+											style="width:150px; height:auto;" class="img-fluid" />
+									</div>
+
+									<h3 class="profile-username text-center" style="color: #942300">
+										<strong>Aguardando Feedback do Usuário</strong>
+									</h3>
+
+								</ui:fragment>
+
+
+
+
+
+
+
+
+
+								<div class="box-header with-border">
+
+									<div class="box-tools">
+										<button type="button" class="btn btn-box-tool"
+											data-widget="collapse">
+											<i class="fa fa-minus" />
+										</button>
+									</div>
+								</div>
+								<div class="box-body no-padding" id="informacoes">
+									<ul class="nav nav-pills nav-stacked">
+										<li><a href="mailbox.html"> <i class="fa fa-desktop"></i>
+												<Strong>Categoria</Strong> <span
+												class="label label-danger pull-right">#{chamadoBean.chamado.categoria.nome}</span>
+										</a></li>
+
+
+
+										<li><a href="#"><i class="fa fa-child"></i> <strong>Técnico</strong>
+												<ui:repeat var="tec"
+													value="#{chamadoBean.tecnicoByChamadoList}">
+													<span class="label bg-purple pull-right" id="nomeUsuario">#{tec.usuario.nome}</span>
+
+												</ui:repeat> </a></li>
+
+										<li><a href="#"><i class="fa fa-sort-numeric-asc"></i>
+												<strong>Posição na Fila</strong><span
+												class="label bg-yellow pull-right">10</span></a></li>
+										<li><a href="#"> <i class="fa fa-user-circle-o"></i>
+												<strong>Solicitante</strong> <span
+												class="label bg-purple pull-right">#{chamadoBean.chamado.solicitante.nome}</span>
+										</a></li>
+										<li><a href="#"> <i class="fa fa-cubes"></i> <strong>Prioridade</strong>
+												<ui:fragment
+													rendered="#{chamadoBean.chamado.prioridade == 1}">
+													<span class="label label-danger pull-right">Alta</span>
+												</ui:fragment> <ui:fragment
+													rendered="#{chamadoBean.chamado.prioridade == 2}">
+													<span class="label label-warning pull-right">Média</span>
+												</ui:fragment> <ui:fragment
+													rendered="#{chamadoBean.chamado.prioridade == 3}">
+													<span class="label label-success pull-right">Baixa</span>
+												</ui:fragment>
+										</a></li>
+										<li><a href="#"> <i class="fa fa-retweet"></i> <strong>Recorrente?</strong>
+												<ui:fragment
+													rendered="#{chamadoBean.chamado.recorrente eq false}">
+													<span class="label label-success pull-right">Não</span>
+												</ui:fragment> <ui:fragment
+													rendered="#{chamadoBean.chamado.recorrente eq true}">
+													<span class="label label-danger pull-right">Sim</span>
+												</ui:fragment>
+										</a></li>
+										<li><a href="#"> <i class="fa fa-times-circle"></i> <strong>Trabalhos
+													Parados?</strong> <ui:fragment
+													rendered="#{chamadoBean.chamado.trabalhosParados eq true}">
+													<span class="label label-danger pull-right">Sim</span>
+												</ui:fragment> <ui:fragment
+													rendered="#{chamadoBean.chamado.trabalhosParados eq false}">
+													<span class="label label-success pull-right">Não</span>
+												</ui:fragment>
+										</a></li>
+
+
+
+
+									</ul>
+
+									<!-- /.box-body -->
+								</div>
+
+							</div>
+							<ui:fragment
+								rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.VIEW_BOX_ACOES_TECNICAS)}">
+								<div class="box box-primary">
+									<div class="box-body box-profile">
+										<h4 class="box-title text-center">
+											<strong style="color: #3C8DBC">Ações Técnicas</strong>
+										</h4>
+									</div>
+
+									<div class="mailbox-controls  text-center">
+										<span> <p:commandButton icon="fa fa-check"
+												class="btn-primary btn-md" data-target="#modal-default"
+												action="#{chamadoBean.finalizarChamado}" ajax="false"
+												id="finalizarChamado"
+												rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_FINALIZAR_CHAMADO)}" />
+										</span>
+
+										<p:tooltip id="finalizarChamadoTooltip" for="finalizarChamado"
+											value="Finalizar Chamado" position="top" />
+
+										<div class="btn-group">
+											<span> <p:commandButton icon="fa fa-flag-o"
+													class="btn-primary btn-md" data-target="#modal-default"
+													action="#{chamadoBean.trabalharChamado}" ajax="false"
+													id="trabalharChamado"
+													rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_TRABALHAR_CHAMADO)}" />
+											</span>
+
+											<p:tooltip id="trabalharChamadoTooltip"
+												for="trabalharChamado" value="Trabalhar no Chamado"
+												position="top" />
+										</div>
+
+
+										<div class="btn-group">
+											<span> <p:commandButton icon="fa fa-users"
+													class="btn-primary btn-md" type="button"
+													onclick="PF('dlg1').show()" ajax="true" id="alocarTecnico"
+													rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_ALOCAR_TECNICO)}" />
+											</span>
+
+											<p:tooltip id="alocarTecnicoTooltip" for="alocarTecnico"
+												value="Alocar Técnico(s) ao Chamado" position="top" />
+										</div>
+
+										<div class="btn-group">
+											<span> <p:commandButton icon="fa fa-gavel"
+													class="btn-primary btn-md"
+													title="Solicitar Mudança no Sistema"
+													actionListener="#{chamadoBean.showFormViabilidade()}"
+													id="viabilidade"
+													rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_SOLICITACAO_VIABILIDADE)}">
+
+													<p:confirm header="Solicitação de Viabilidade"
+														message="Deseja realizar uma solicitação de viabilidade?"
+														icon="ui-icon-alert" />
+
+												</p:commandButton>
+											</span>
+
+											<p:tooltip id="viabilidadeTooltip" for="viabilidade"
+												value="Solicitar Viabilidade Para o Chamado" position="top" />
+										</div>
+
+										<div class="btn-group">
+											<span> <p:commandButton icon="fa fa-edit"
+													class="btn-primary btn-md" data-toggle="modal"
+													onclick="PF('dlg1').show();" title="Editar Chamado"
+													id="editarChamado"
+													rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_EDITAR_CHAMADO)}" />
+											</span>
+											<p:tooltip id="editarChamadoTooltip" for="editarChamado"
+												value="Editar  Chamado" position="top" />
+										</div>
+									</div>
+
+								</div>
+							</ui:fragment>
+
+
+							<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
+								<div class="box box-primary">
+
+
+									<div class="box-body box-profile">
+										<h4 class="box-title text-center">
+											<strong style="color: #3C8DBC">Estatísticas do
+												Chamado</strong>
+										</h4>
+										<ul class="list-group list-group-unbordered">
+											<li class="list-group-item"><b>Data da Solução</b> <span
+												class="pull-right">18/02/2019</span></li>
+
+											<li class="list-group-item"><b>Tempo de Atendimento</b>
+												<span class="pull-right">1,322</span></li>
+											<li class="list-group-item"><b>Tipo de Solução</b> <span
+												class="pull-right">543</span></li>
+											<li class="list-group-item"><b>Quantidade de
+													reaberturas</b> <span class="pull-right">13,287</span></li>
+
+											<li class="list-group-item"><b>Técnico da Solução</b> <span
+												class="pull-right">13,287</span></li>
+										</ul>
+
+									</div>
+									<!-- /.box-body -->
+								</div>
+							</ui:fragment>
+							<!-- /.box -->
+
+							<!-- /.box -->
+						</div>
+						<!-- /.col -->
+						<div class="col-md-9">
+
+							<div class="nav-tabs-custom" id="tabela">
+								<ul class="nav nav-tabs">
+									<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
+										<li class="active"><a href="#activity" data-toggle="tab">Informações
+												da Solução</a></li>
+
+										<li><a href="#activity2" data-toggle="tab">Informações
+												do Chamado</a></li>
+									</ui:fragment>
+									<ui:fragment rendered="#{!chamadoBean.chamadoComSolucao}">
+										<li class="active"><a href="#activity2" data-toggle="tab">Informações
+												do Chamado</a></li>
+									</ui:fragment>
+
+									<li><a href="#activity3" data-toggle="tab">Acompanhamentos
+											<span class="label label-primary"
+											style="position: absolute; top: 9px; right: 3px; text-align: center; font-size: 11px; padding: 2px 3px; line-height: 0.9;">#{chamadoBean.qtdAcompanhamentos}</span>
+
+
+									</a></li>
+									<li><a href="#activity4" data-toggle="tab"
+										class="dropdown-toggle"> Anexos <span
+											class="label label-primary"
+											style="position: absolute; top: 9px; right: 3px; text-align: center; font-size: 11px; padding: 2px 3px; line-height: 0.9;">#{chamadoBean.qtdAnexos}</span>
 									</a></li>
 
+									<li><a href="#activity5" data-toggle="tab">Ordem de
+											Serviço</a></li>
 
-
-									<li><a href="#"><i class="fa fa-child"></i> <strong>Técnico</strong>
-											<ui:repeat var="tec"
-												value="#{chamadoBean.tecnicoByChamadoList}">
-												<span class="label bg-purple pull-right" id="nomeUsuario">#{tec.usuario.nome}</span>
-
-											</ui:repeat> </a></li>
-
-									<li><a href="#"><i class="fa fa-sort-numeric-asc"></i>
-											<strong>Posição na Fila</strong><span
-											class="label bg-yellow pull-right">10</span></a></li>
-									<li><a href="#"> <i class="fa fa-user-circle-o"></i> <strong>Solicitante</strong>
-											<span class="label bg-purple pull-right">#{chamadoBean.chamado.solicitante.nome}</span>
-									</a></li>
-									<li><a href="#"> <i class="fa fa-cubes"></i> <strong>Prioridade</strong>
-											<ui:fragment
-												rendered="#{chamadoBean.chamado.prioridade == 1}">
-												<span class="label label-danger pull-right">Alta</span>
-											</ui:fragment> <ui:fragment
-												rendered="#{chamadoBean.chamado.prioridade == 2}">
-												<span class="label label-warning pull-right">Média</span>
-											</ui:fragment> <ui:fragment
-												rendered="#{chamadoBean.chamado.prioridade == 3}">
-												<span class="label label-success pull-right">Baixa</span>
-											</ui:fragment>
-									</a></li>
-									<li><a href="#"> <i class="fa fa-retweet"></i> <strong>Recorrente?</strong>
-											<ui:fragment
-												rendered="#{chamadoBean.chamado.recorrente eq false}">
-												<span class="label label-success pull-right">Não</span>
-											</ui:fragment> <ui:fragment
-												rendered="#{chamadoBean.chamado.recorrente eq true}">
-												<span class="label label-danger pull-right">Sim</span>
-											</ui:fragment>
-									</a></li>
-									<li><a href="#"> <i class="fa fa-times-circle"></i> <strong>Trabalhos
-												Parados?</strong> <ui:fragment
-												rendered="#{chamadoBean.chamado.trabalhosParados eq true}">
-												<span class="label label-danger pull-right">Sim</span>
-											</ui:fragment> <ui:fragment
-												rendered="#{chamadoBean.chamado.trabalhosParados eq false}">
-												<span class="label label-success pull-right">Não</span>
-											</ui:fragment>
-									</a></li>
-
-
+									<li><a href="#activity6" data-toggle="tab">Timeline</a></li>
 
 
 								</ul>
 
-								<!-- /.box-body -->
-							</div>
+								<div class="tab-content">
 
-						</div>
-						<ui:fragment rendered = "#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.VIEW_BOX_ACOES_TECNICAS)}">
-						<div class="box box-primary">
-							<div class="box-body box-profile">
-								<h4 class="box-title text-center">
-									<strong style="color: #3C8DBC">Ações Técnicas</strong>
-								</h4>
-							</div>
-							
-								<div class="mailbox-controls  text-center">
-								<span> <p:commandButton icon="fa fa-check"
-										class="btn-primary btn-md" data-target="#modal-default"
-										action="#{chamadoBean.finalizarChamado}" ajax="false"
-										id="finalizarChamado"
-										rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_FINALIZAR_CHAMADO)}" />
-								</span>
+									<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
+										<div class="active tab-pane" id="activity">
+											<div class="pull-right box-tools">
+												<p:commandButton class="btn btn-danger btn-md"
+													immediate="true" onclick="PF('rejeitarChamado').show();"
+													rendered="#{chamadoBean.chamado.status == 4}"
+													icon="fa fa-thumbs-o-down" style="font-size: 16px" />
 
-								<p:tooltip id="finalizarChamadoTooltip" for="finalizarChamado"
-									value="Finalizar Chamado" position="top" />
+												<p:commandButton class="btn btn-success btn-md"
+													onclick="PF('fechamentoChamado').show();" immediate="true"
+													rendered="#{chamadoBean.chamado.status == 4}"
+													icon="fa fa-thumbs-o-up" style="font-size: 16px" />
+											</div>
+											<div class="row">
 
-								<div class="btn-group">
-									<span> <p:commandButton icon="fa fa-flag-o"
-											class="btn-primary btn-md" data-target="#modal-default"
-											action="#{chamadoBean.trabalharChamado}" ajax="false"
-											id="trabalharChamado"
-											rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_TRABALHAR_CHAMADO)}" />
-									</span>
+												<ui:fragment rendered = "#{chamadoBean.solucaoChamadoList.get(0).analiseRealizada == true}">
 
-									<p:tooltip id="trabalharChamadoTooltip" for="trabalharChamado"
-										value="Trabalhar no Chamado" position="top" />
-								</div>
+												<ui:fragment rendered = "#{chamadoBean.solucaoChamadoList.get(0).confirmacao == false}">
+													<div class="col-md-12">
 
+														<H4 class="text-left">
+															<span class="label label-danger"> <strong>Solução Rejeitada!</strong>
+															</span>
 
-								<div class="btn-group">
-									<span> <p:commandButton icon="fa fa-users"
-											class="btn-primary btn-md" type="button"
-											onclick="PF('dlg1').show()" ajax="true" id="alocarTecnico"
-											rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_ALOCAR_TECNICO)}" />
-									</span>
+														</H4>
+													</div>
 
-									<p:tooltip id="alocarTecnicoTooltip" for="alocarTecnico"
-										value="Alocar Técnico(s) ao Chamado" position="top" />
-								</div>
+												</ui:fragment>
 
-								<div class="btn-group">
-									<span> <p:commandButton icon="fa fa-gavel"
-											class="btn-primary btn-md"
-											title="Solicitar Mudança no Sistema"
-											actionListener="#{chamadoBean.showFormViabilidade()}"
-											id="viabilidade"
-											rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_SOLICITACAO_VIABILIDADE)}">
+												<ui:fragment rendered = "#{chamadoBean.solucaoChamadoList.get(0).confirmacao == true}">
+													<div class="col-md-12">
 
-											<p:confirm header="Solicitação de Viabilidade"
-												message="Deseja realizar uma solicitação de viabilidade?"
-												icon="ui-icon-alert" />
+														<H4 class="text-left">
+															<span class="label label-success"> <strong>Solução Aprovada!</strong>
+															</span>
 
-										</p:commandButton>
-									</span>
+														</H4>
+													</div>
 
-									<p:tooltip id="viabilidadeTooltip" for="viabilidade"
-										value="Solicitar Viabilidade Para o Chamado" position="top" />
-								</div>
-
-								<div class="btn-group">
-									<span> <p:commandButton icon="fa fa-edit"
-											class="btn-primary btn-md" data-toggle="modal"
-											onclick="PF('dlg1').show();" title="Editar Chamado"
-											id="editarChamado"
-											rendered="#{acaoSegurancaBean.isPermissao(acaoSegurancaBean.ACAO_DETALHAMENTO_EDITAR_CHAMADO)}" />
-									</span>
-									<p:tooltip id="editarChamadoTooltip" for="editarChamado"
-										value="Editar  Chamado" position="top" />
-								</div>
-							</div>
-							
-						</div>
-					</ui:fragment>
-
-
-						<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
-							<div class="box box-primary">
-							
-							
-								<div class="box-body box-profile">
-								<h4 class="box-title text-center">
-									<strong style="color: #3C8DBC">Estatísticas do Chamado</strong>
-								</h4>
-									<ul class="list-group list-group-unbordered">
-										<li class="list-group-item"><b>Data da Solução</b> <span
-											class="pull-right">18/02/2019</span></li>
-
-										<li class="list-group-item"><b>Tempo de Atendimento</b> <span
-											class="pull-right">1,322</span></li>
-										<li class="list-group-item"><b>Tipo de Solução</b> <span
-											class="pull-right">543</span></li>
-										<li class="list-group-item"><b>Quantidade de
-												reaberturas</b> <span class="pull-right">13,287</span></li>
-
-										<li class="list-group-item"><b>Técnico da Solução</b> <span
-											class="pull-right">13,287</span></li>
-									</ul>
-
-								</div>
-								<!-- /.box-body -->
-							</div>
-						</ui:fragment>
-						<!-- /.box -->
-
-						<!-- /.box -->
-					</div>
-					<!-- /.col -->
-					<div class="col-md-9">
-
-						<div class="nav-tabs-custom" id="tabela">
-							<ul class="nav nav-tabs">
-								<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
-									<li class="active"><a href="#activity" data-toggle="tab">Informações
-											da Solução</a></li>
-									<li><a href="#activity2" data-toggle="tab">Informações
-											do Chamado</a></li>
-								</ui:fragment>
-								<ui:fragment rendered="#{!chamadoBean.chamadoComSolucao}">
-									<li class="active"><a href="#activity2" data-toggle="tab">Informações
-											do Chamado</a></li>
-								</ui:fragment>
-
-								<li><a href="#activity3" data-toggle="tab">Acompanhamentos
-										<span class="label label-primary"
-										style="position: absolute; top: 9px; right: 3px; text-align: center; font-size: 11px; padding: 2px 3px; line-height: 0.9;">#{chamadoBean.qtdAcompanhamentos}</span>
-
-
-								</a></li>
-								<li><a href="#activity4" data-toggle="tab"
-									class="dropdown-toggle"> Anexos <span
-										class="label label-primary"
-										style="position: absolute; top: 9px; right: 3px; text-align: center; font-size: 11px; padding: 2px 3px; line-height: 0.9;">#{chamadoBean.qtdAnexos}</span>
-								</a></li>
-								<li>
-									<a href="#activity5" data-toggle="tab">Timeline</a></li>
-
-
-							</ul>
-
-							<div class="tab-content">
-
-								<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
-									<div class="active tab-pane" id="activity">
-										<div class="pull-right box-tools">
-											<p:commandButton class="btn btn-danger btn-md"
-												immediate="true" onclick="PF('rejeitarChamado').show();"
-												rendered="#{chamadoBean.chamado.status == 4}"
-												icon="fa fa-thumbs-o-down" style="font-size: 16px" />
-
-											<p:commandButton class="btn btn-success btn-md"
-												onclick="PF('fechamentoChamado').show();" immediate="true"
-												rendered="#{chamadoBean.chamado.status == 4}"
-												icon="fa fa-thumbs-o-up" style="font-size: 16px" />
-										</div>
-										<div class="row">
-
-											<ui:fragment>
-																						<div class="col-md-12">
-											
-												<H4 class="text-center">
-													<span class="label label-danger"> <strong>Solução Rejeitada!</strong>
-													</span>
-
-												</H4>
-												</div>
+												</ui:fragment>
+												</ui:fragment>
+												<ui:fragment rendered = "#{chamadoBean.solucaoChamadoList.get(0).analiseRealizada == false}">
+																									<div class="col-md-12">
 												
-											</ui:fragment>
-										</div>
-										
+													<H4 class="text-left">
+															<span class="label label-warning"> <strong>Aguardando Usuário!</strong>
+															</span>
 
-										<div class="row">
-											<div class="col-md-12">
-												<H1 class="text-center">
-													<strong>SOLUÇÃO DO CHAMADO</strong>
-												</H1>
+														</H4>
+														</div>
+												</ui:fragment>
+												
 											</div>
-										</div>
+											
 
-										<div class="row">
-											<div class="col-md-12">
-												<H2 class="text-center" style="color: green">
-													<strong>#{chamadoBean.solucaoChamadoList.get(0).solucaoUsuario}</strong>
-												</H2>
-											</div>
-										</div>
-										<br />
-
-
-										<div class="box box-default collapsed-box">
-											<div class="box-header with-border">
-												<h3 class="box-title">
-													<Strong>Histórico de Soluções</Strong>
-												</h3>
-
-												<div class="box-tools pull-right">
-													<button type="button" class="btn btn-box-tool"
-														data-widget="collapse">
-														<i class="fa fa-plus"></i>
-													</button>
+											<div class="row">
+												<div class="col-md-12">
+													<H1 class="text-center">
+														<strong>SOLUÇÃO DO CHAMADO</strong>
+													</H1>
 												</div>
-												<!-- /.box-tools -->
 											</div>
-											<!-- /.box-header -->
-											<div class="box-body">
 
-												<p:dataTable rows="7" var="solucao" paginator="true"
-													value="#{chamadoBean.solucaoChamadoList}"
-													paginatorPosition="bottom" paginatorAlwaysVisible="false"
-													emptyMessage="#{msg['lista.vazia']}" id="historico">
+											<div class="row">
+												<div class="col-md-12">
+													<H2 class="text-center" style="color: green">
+														<strong>#{chamadoBean.solucaoChamadoList.get(0).solucaoUsuario}</strong>
+													</H2>
+												</div>
+											</div>
+											<br />
 
-													<p:column style="width:30px">
-														<p:rowToggler />
+
+											<div class="box box-default collapsed-box">
+												<div class="box-header with-border">
+													<h3 class="box-title">
+														<Strong>Histórico de Soluções</Strong>
+													</h3>
+
+													<div class="box-tools pull-right">
+														<button type="button" class="btn btn-box-tool"
+															data-widget="collapse">
+															<i class="fa fa-plus"></i>
+														</button>
+													</div>
+													<!-- /.box-tools -->
+												</div>
+												<!-- /.box-header -->
+												<div class="box-body">
+													<p:dataTable 
+														rows="7" 
+														var="solucao" 
+														paginator="true"
+														value="#{chamadoBean.solucaoChamadoList}"
+														paginatorPosition="bottom" 
+														paginatorAlwaysVisible="false"
+														emptyMessage="#{msg['lista.vazia']}" 
+														id="historico">
+
+													
+														<p:column headerText="Descrição" styleClass="align-center">
+	                      								  #{solucao.solucaoUsuario}
+	                    								</p:column>
+
+														<p:column headerText="Tipo" styleClass="align-center">
+	                      								  #{solucao.solucaoUsuario}
+	                    								</p:column>
+
+														<p:column headerText="Data" styleClass="align-center">
+	                      								  #{solucao.dataSolucao}
+	                    								</p:column>
+
+														<p:column headerText="Autor" styleClass="align-center">
+	                      								  #{solucao.usuario.nome}
+	                    								</p:column>
+	                    								
+	                    								<p:column headerText="Situação" styleClass="align-center">
+	                    									<ui:fragment rendered = "#{solucao.analiseRealizada == true}">
+	                    									
+	                    										<ui:fragment rendered = "#{solucao.confirmacao == true}">
+	                    											<H5 class="text-center">
+																		<span class="label label-success"> <strong>Solução Aprovada</strong> </span>
+																	</H5>
+	                    										</ui:fragment>
+	                    								
+	                    										<ui:fragment rendered = "#{solucao.confirmacao == false}">
+	                    											<H5 class="text-center">
+																		<span class="label label-danger"> <strong>Solução Rejeitada</strong> </span>
+																	</H5>
+	                    										</ui:fragment>
+	                    								</ui:fragment>
+	                    								
+	                    								<ui:fragment rendered = "#{solucao.analiseRealizada == false}">
+	                    									<H5 class="text-center">
+																		<span class="label label-warning"> <strong>Aguardando Usuário</strong> </span>
+															</H5>
+	                    								</ui:fragment>
+	                    								
+														</p:column>
+
+														<p:column width="5%" styleClass="align-center" headerText="#{msg['acao']}">
+															<ui:fragment rendered = "#{solucao.analiseRealizada == true}">
+																<ui:fragment rendered = "#{solucao.confirmacao == false}">
+																	<p:commandButton 
+																		icon="ui-icon-search"
+																		class="btn btn-warning btn-xs"
+																		action="#{chamadoBean.selecionarSolucaoChamado(solucao)}"
+			                											oncomplete="PF('detalhamentoDesaprovacao').show();"
+																		id="visualizarSolucaoChamado"
+																		update="motivo"
+																		 />
+																</ui:fragment>
+															</ui:fragment>
+														</p:column>
+				
+													</p:dataTable>
+												</div>
+												<!-- /.box-body -->
+											</div>
+										</div>
+									</ui:fragment>
+
+
+									<ui:fragment rendered="#{!chamadoBean.chamadoComSolucao}">
+										<div class="active tab-pane" id="activity2">
+
+											<div class="row">
+												<div class="col-md-12">
+													<H1 class="text-center">
+														<strong> <span style="color: red">#{chamadoBean.chamado.titulo}</span></strong>
+													</H1>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-12">
+													<H4 class="text-center">
+														<strong> <span style="color: black">#{chamadoBean.chamado.descricao}</span></strong>
+													</H4>
+												</div>
+											</div>
+
+										</div>
+									</ui:fragment>
+
+									<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
+										<div class="tab-pane" id="activity2">
+
+											<div class="row">
+												<div class="col-md-12">
+													<H1 class="text-center">
+														<strong> <span style="color: red">#{chamadoBean.chamado.titulo}</span></strong>
+													</H1>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-12">
+													<H4 class="text-center">
+														<strong> <span style="color: black">#{chamadoBean.chamado.descricao}</span></strong>
+													</H4>
+												</div>
+											</div>
+
+										</div>
+									</ui:fragment>
+
+									<div class="tab-pane" id="activity3">
+										<div class="box-body">
+											<p:commandButton class="btn btn-danger btn-md"
+												rendered="#{chamadoBean.chamado.status != 9}"
+												immediate="false" value="Aguadar" id="aguardarresposta"
+												action="#{chamadoBean.bloquearChamado}"
+												onclick="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"
+												update="messages,@form" />
+
+											<p:tooltip id="aguardarrespostaTooltip"
+												for="aguardarresposta"
+												value="Bloquear o chamado até que o usuário responda ao acompanhamento"
+												position="top" />
+												
+											<p:commandButton class="btn btn-success btn-md"
+												rendered="#{chamadoBean.chamado.status == 9}"
+												immediate="false" value="Liberar" id="liberarChamado"
+												action="#{chamadoBean.liberarChamado}"
+												onclick="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"
+												update="messages,@form" />
+
+											<p:tooltip id="liberarChamadoTooltip"
+												for="liberarChamado"
+												value="Liberar o chamado até que o usuário responda ao acompanhamento"
+												position="top" />
+												
+
+											<div class="direct-chat-messages">
+												<h:panelGroup id="alvs">
+													<ui:repeat var="acompanhamento"
+														value="#{chamadoBean.acompanhamentoList}">
+														<ui:fragment
+															rendered="#{acompanhamento.mensagemBySistema == false}">
+															<ui:fragment
+																rendered="#{chamadoBean.verificarTipoUsuarioAcompanhamento(acompanhamento.usuario) eq true}">
+																<div class="direct-chat-msg right">
+
+																	<div class="direct-chat-info clearfix">
+																		<span class="direct-chat-name pull-right">#{acompanhamento.usuario.nome}</span>
+																		<span class="direct-chat-timestamp pull-left">#{chamadoBean.transformarDataEmString(acompanhamento.data)}</span>
+																	</div>
+																	<h:graphicImage library="img" name="user2-160x160.png"
+																		class="direct-chat-img" alt="User Image" />
+																	<div class="direct-chat-text">
+																		#{acompanhamento.texto}</div>
+																</div>
+															</ui:fragment>
+
+															<ui:fragment
+																rendered="#{chamadoBean.verificarTipoUsuarioAcompanhamento(acompanhamento.usuario) eq false}" />
+														</ui:fragment>
+													</ui:repeat>
+												</h:panelGroup>
+											</div>
+										</div>
+										<div class="box-footer">
+											<div class="input-group">
+												<p:inputText type="text" name="message"
+													placeholder="Seu Texto ..." class="form-control"
+													value="#{chamadoBean.acompanhamento.texto}"
+													id="campoMensagem" />
+
+												<span class="input-group-btn"> <p:commandButton
+														class="btn btn-primary" value="Enviar" >
+														<p:ajax event="click"
+															listener="#{chamadoBean.salvarAcompanhamento}"
+															process="@form,alvs" update="alvs,campoMensagem" />
+													</p:commandButton>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="activity4">
+										<p:fragment id="arquivos">
+											<ul class="mailbox-attachments clearfix">
+												<ui:repeat var="arquivo" value="#{chamadoBean.arquivoAnexado}">
+													<li>
+														<span class="mailbox-attachment-icon"> 
+															<ui:fragment rendered="#{arquivo.formato eq '.PDF'}">
+																<i class="fa fa-file-pdf-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.TXT'}">
+																<i class="fa fa-file-text-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.XLS'}">
+																<i class="fa fa-file-excel-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.PNG'}">
+																<i class="fa fa-file-image-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.JPGE'}">
+																<i class="fa fa-file-image-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.JPG'}">
+																<i class="fa fa-file-image-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.ZIP'}">
+																<i class="fa fa-file-zip-o"></i>
+															</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.PPT'}">
+																<i class="fa fa-file-powerpoint-o"></i>
+															</ui:fragment> <ui:fragment
+																rendered="(arquivo.formato ne '.PDF') and (arquivo.formato ne '.TXT') and (arquivo.formato ne '.XLS') and (arquivo.formato ne '.PNG') and (arquivo.formato ne '.JPGE') and (arquivo.formato ne '.JPG') and (arquivo.formato ne '.ZIP') and (arquivo.formato ne '.PPT') }">
+																<i class="fa fa-file-o"></i>
+															</ui:fragment>
+														</span>
+
+														<div class="mailbox-attachment-info">
+															<a href="#" class="mailbox-attachment-name"> 
+																<i class="fa fa-paperclip"></i>
+																	#{arquivo.nome}
+															</a> 
+															
+															<span class="mailbox-attachment-size">
+																#{arquivo.tamanho} KB 
+															
+																
+																	
+															<p:commandButton 
+																id="botaoVisualizar" 
+																alt="Visualizar anexo" 
+																class="btn btn-primary btn-xs pull-right" 
+																 value="download" ajax="false"
+																actionListener="#{chamadoBean.downloadDocumento(arquivo.caminho)}">
+																	<p:fileDownload value="#{chamadoBean.fileContent}" />
+															</p:commandButton>																	
+																									
+																
+															
+															</span>
+														</div>
+												</li>
+												</ui:repeat>
+											</ul>
+										</p:fragment>
+
+									</div>
+									<div class="tab-pane" id="activity5">
+										<div class="box-body">
+							<div class="col-md-12">
+	
+												<div class="pull-left box-tools">
+													<p:commandButton class="btn btn-success btn-md"
+														value="Adicionar" action="#{chamadoBean.showFormNovaOrdemServico}"
+														immediate="true" />
+												</div>
+												</div>
+											<br/>
+																						<br/>
+																								<br/>
+																							
+											
+							<div class="col-md-12">
+
+												<p:dataTable id="osList"  var="os"
+													paginator="true" value="#{chamadoBean.ordemServiceList}"
+													paginatorAlwaysVisible="false"
+													emptyMessage="#{msg['lista.vazia']}">
+
+													<p:column headerText="Número">
+	                       	 							#{os.numero}
+	                								</p:column>
+
+													<p:column headerText="Descrição">
+	                        							#{os.titulo}
+	                								</p:column>
+
+													<p:column width="20%" styleClass="align-center" headerText="Status">
+													<h:panelGroup id="status">
+			        									<ui:fragment rendered="#{os.status == 1}">
+															<h4>
+																<span class="label" style="background-color: #3C8DBC; color: #fff">
+																	Em Andamento
+																</span>
+															</h4>
+														</ui:fragment>
+			        	
+			        									<ui:fragment rendered="#{os.status == 2}">
+															<h4>
+																<span class="label" style="background-color: #00A65A; color: #fff">
+																	Concluído
+																</span>
+															</h4>
+														</ui:fragment>
+			    
+			        									<ui:fragment rendered="#{os.status == 3}">
+															<h4>
+																<span class="label" style="background-color: #D73925; color: #fff">
+																	Cancelada
+																</span>
+															</h4>
+														</ui:fragment>
+				
+														<ui:fragment rendered="#{os.status == 4}">
+															<h4>
+																<span class="label" style="background-color: #BEBEBE; color: #000">
+																	AGUARDANDO
+																</span>
+															</h4>
+														</ui:fragment>
+						
+														<ui:fragment rendered="#{os.status == 5}">
+															<h4>
+																<span class="label" style="background-color: #000; color: #fff">
+																	PAUSADA
+																</span>
+															</h4>
+														</ui:fragment>
+														</h:panelGroup>
+			        								</p:column>
+			        								
+													<p:column width="20%" styleClass="align-center"
+														headerText="#{msg['acao']}">
+														
+														<p:commandButton 
+			        										icon="fa fa-exchange" 
+			        										title="Alterar Status"  
+			                								class="btn btn-warning btn-xs" 
+			                								action="#{chamadoBean.selecionaOrdemServico(os)}"
+			                								oncomplete="PF('filtroOrdemServico').show();"
+			                								update="@form"
+			               									/>
+			               									
+			               								<p:spacer width="10"/>
+			               
+
+														<p:commandButton icon="ui-icon-search"
+															title="#{msg['excluir']}" class="btn btn-primary btn-xs"
+															action="#{chamadoBean.selecionaOrdemServico(os)}"
+															oncomplete="PF('detalhamentoOrdemServico').show();"
+															update="titulo"
+															 />
+															
+														<p:spacer width="10"/>
+
+														<p:commandButton icon="ui-icon-trash"
+															title="#{msg['excluir']}" class="btn btn-danger btn-xs"
+															actionListener="#{permissaoBean.remover(permissao)}">
+															<p:confirm header="Excluir Permissão"
+																message="Deseja excluir o registro em definitivo?"
+																icon="ui-icon-alert" />
+														</p:commandButton>
 													</p:column>
 
-													<p:column headerText="Descrição" styleClass="align-center">
-	                      								  #{solucao.solucaoUsuario}
-	                    							</p:column>
-
-													<p:column headerText="Tipo" styleClass="align-center">
-	                      								  #{solucao.solucaoUsuario}
-	                    							</p:column>
-
-													<p:column headerText="Data" styleClass="align-center">
-	                      								  #{solucao.dataSolucao}
-	                    							</p:column>
 
 
-													<p:column headerText="Autor" styleClass="align-center">
-	                      								  #{solucao.usuario.nome}
-	                    							</p:column>
-
-													<p:rowExpansion>
-														<div class="row"
-															style="background-color: #A52A2A; color: white;">
-															<div class="col-md-3">
-																<Strong>SOLUÇÃO REJEITADO EM
-																	#{solucao.rejeicaoSolucaoChamado.data}</Strong>
-															</div>
-
-															<div class="col-md-6">
-																#{solucao.rejeicaoSolucaoChamado.motivo}</div>
-
-															<div class="col-md-6"></div>
-														</div>
-													</p:rowExpansion>
 
 												</p:dataTable>
-											</div>
-											<!-- /.box-body -->
-										</div>
-									</div>
-								</ui:fragment>
-
-
-								<ui:fragment rendered="#{!chamadoBean.chamadoComSolucao}">
-									<div class="active tab-pane" id="activity2">
-
-										<div class="row">
-											<div class="col-md-12">
-												<H1 class="text-center">
-													<strong> <span style="color: red">#{chamadoBean.chamado.titulo}</span></strong>
-												</H1>
+												</div>
 											</div>
 										</div>
 
-										<div class="row">
-											<div class="col-md-12">
-												<H4 class="text-center">
-													<strong> <span style="color: black">#{chamadoBean.chamado.descricao}</span></strong>
-												</H4>
-											</div>
-										</div>
-
-									</div>
-								</ui:fragment>
-
-								<ui:fragment rendered="#{chamadoBean.chamadoComSolucao}">
-									<div class="tab-pane" id="activity2">
-
-										<div class="row">
-											<div class="col-md-12">
-												<H1 class="text-center">
-													<strong> <span style="color: red">#{chamadoBean.chamado.titulo}</span></strong>
-												</H1>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-md-12">
-												<H4 class="text-center">
-													<strong> <span style="color: black">#{chamadoBean.chamado.descricao}</span></strong>
-												</H4>
-											</div>
-										</div>
-
-									</div>
-								</ui:fragment>
-
-								<div class="tab-pane" id="activity3">
-									<div class="box-body">
-										<p:commandButton class="btn btn-danger btn-md"
-											immediate="false" value="Aguadar" id="aguardarresposta"
-											action="#{chamadoBean.bloquearChamado}"
-											onclick="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"
-											update="messages,@form" />
-
-										<p:tooltip id="aguardarrespostaTooltip" for="aguardarresposta"
-											value="Bloquear o chamado até que o usuário responda ao acompanhamento"
-											position="top" />
-
-										<div class="direct-chat-messages">
-											<h:panelGroup id="alvs">
-												<ui:repeat var="acompanhamento"
-													value="#{chamadoBean.acompanhamentoList}">
-													<ui:fragment
-														rendered="#{acompanhamento.mensagemBySistema == false}">
-														<ui:fragment
-															rendered="#{chamadoBean.verificarTipoUsuarioAcompanhamento(acompanhamento.usuario) eq true}">
-															<div class="direct-chat-msg right">
-
-																<div class="direct-chat-info clearfix">
-																	<span class="direct-chat-name pull-right">#{acompanhamento.usuario.nome}</span>
-																	<span class="direct-chat-timestamp pull-left">#{chamadoBean.transformarDataEmString(acompanhamento.data)}</span>
-																</div>
-																<h:graphicImage library="img" name="user2-160x160.png"
-																	class="direct-chat-img" alt="User Image" />
-																<div class="direct-chat-text">
-																	#{acompanhamento.texto}</div>
-															</div>
-														</ui:fragment>
-
-														<ui:fragment
-															rendered="#{chamadoBean.verificarTipoUsuarioAcompanhamento(acompanhamento.usuario) eq false}" />
-													</ui:fragment>
-												</ui:repeat>
-											</h:panelGroup>
+										<div class="tab-pane" id="activity6">
+											<div class="container">
+    											<ul class="timeline">
+    											<ui:repeat var="timeline" value="#{chamadoBean.timeLineList}">
+    												<ui:fragment rendered = "#{timeline.tipo == 1}">
+    													<li>
+          													<div class="timeline-badge primary"><i class="glyphicon glyphicon-wrench"></i></div>
+          													
+          													<div class="timeline-panel">
+            													<div class="timeline-heading">
+              														<h4 class="timeline-title"><strong>#{timeline.acao}</strong></h4>
+              															<p>
+              																<small class="text-muted"><i class="glyphicon glyphicon-time"></i> #{timeline.data}</small>
+              															</p>
+            													</div>
+            													
+            													<div class="timeline-body">
+																	<p>#{timeline.comentario}</p>
+            													</div>
+          													</div>
+        											</li>
+        											</ui:fragment>
+        											
+        											 <ui:fragment rendered = "#{timeline.tipo == 2}">
+        											
+        											<li class="timeline-inverted">
+          													<div class="timeline-badge primary"><i class="glyphicon glyphicon-user"></i></div>
+          													<div class="timeline-panel">
+            													<div class="timeline-heading">
+              														<h4 class="timeline-title"><strong>#{timeline.acao}</strong></h4>
+                            											<p>
+              																<small class="text-muted"><i class="glyphicon glyphicon-time"></i> #{timeline.data}</small>
+                            											</p>
+              													</div>
+            													
+            													<div class="timeline-body">
+																	<p>#{timeline.comentario}</p>
+            													</div>
+          												</div>
+        											</li>
+        											        											</ui:fragment>
+        											
+    											</ui:repeat>
+        											
+        
+         										
+       											</ul>
+											</div>							
+										
 										</div>
 									</div>
-									<div class="box-footer">
-										<div class="input-group">
-											<p:inputText type="text" name="message"
-												placeholder="Seu Texto ..." class="form-control"
-												value="#{chamadoBean.acompanhamento.texto}"
-												id="campoMensagem" />
 
-											<span class="input-group-btn"> <p:commandButton
-													class="btn btn-primary" value="Enviar">
-													<p:ajax event="click"
-														listener="#{chamadoBean.salvarAcompanhamento}"
-														process="@form,alvs" update="alvs,campoMensagem" />
-												</p:commandButton>
-											</span>
-										</div>
-									</div>
-								</div>
-								<div class="tab-pane" id="activity4">
-									<p:fragment id="arquivos">
-										<ul class="mailbox-attachments clearfix">
-											<ui:repeat var="arquivo"
-												value="#{chamadoBean.arquivoAnexado}">
-												<li><span class="mailbox-attachment-icon"> <ui:fragment
-															rendered="#{arquivo.formato eq '.PDF'}">
-															<i class="fa fa-file-pdf-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.TXT'}">
-															<i class="fa fa-file-text-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.XLS'}">
-															<i class="fa fa-file-excel-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.PNG'}">
-															<i class="fa fa-file-image-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.JPGE'}">
-															<i class="fa fa-file-image-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.JPG'}">
-															<i class="fa fa-file-image-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.ZIP'}">
-															<i class="fa fa-file-zip-o"></i>
-														</ui:fragment> <ui:fragment rendered="#{arquivo.formato eq '.PPT'}">
-															<i class="fa fa-file-powerpoint-o"></i>
-														</ui:fragment> <ui:fragment
-															rendered="(arquivo.formato ne '.PDF') and (arquivo.formato ne '.TXT') and (arquivo.formato ne '.XLS') and (arquivo.formato ne '.PNG') and (arquivo.formato ne '.JPGE') and (arquivo.formato ne '.JPG') and (arquivo.formato ne '.ZIP') and (arquivo.formato ne '.PPT') }">
-															<i class="fa fa-file-o"></i>
-														</ui:fragment>
-												</span>
-
-													<div class="mailbox-attachment-info">
-														<a href="#" class="mailbox-attachment-name"> <i
-															class="fa fa-paperclip"></i>#{arquivo.nome}
-														</a> <span class="mailbox-attachment-size">
-															#{arquivo.tamanho} KB <a href="#"
-															class="btn btn-default btn-xs pull-right"> <i
-																class="fa fa-cloud-download"></i>
-														</a>
-														</span>
-													</div></li>
-											</ui:repeat>
-										</ul>
-									</p:fragment>
-
-								</div>
-								<div class="tab-pane" id="activity5">
-								
-								<section id="timeline">
-  <article>
-    <div class="inner">
-      <span class="date">
-        <span class="day">30<sup>th</sup></span>
-        <span class="month">Jan</span>
-        <span class="year">2014</span>
-      </span>
-      <h2>The Title</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis rutrum nunc, eget dictum massa. Nam faucibus felis nec augue adipiscing, eget commodo libero mattis.</p>
-    </div>
-  </article>
-  <article>
-    <div class="inner">
-      <span class="date">
-        <span class="day">26<sup>th</sup></span>
-        <span class="month">Jan</span>
-        <span class="year">2014</span>
-      </span>
-      <h2>The Title</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis rutrum nunc, eget dictum massa. Nam faucibus felis nec augue adipiscing, eget commodo libero mattis.</p>
-    </div>
-  </article>
-  <article>
-    <div class="inner">
-      <span class="date">
-        <span class="day">26<sup>th</sup></span>
-        <span class="month">Jan</span>
-        <span class="year">2014</span>
-      </span>
-      <h2>The Title</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis rutrum nunc, eget dictum massa. Nam faucibus felis nec augue adipiscing, eget commodo libero mattis.</p>
-    </div>
-  </article>
-  <article>
-    <div class="inner">
-      <span class="date">
-        <span class="day">26<sup>th</sup></span>
-        <span class="month">Jan</span>
-        <span class="year">2014</span>
-      </span>
-      <h2>The Title</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis rutrum nunc, eget dictum massa. Nam faucibus felis nec augue adipiscing, eget commodo libero mattis.</p>
-    </div>
-  </article>
-  <article>
-    <div class="inner">
-      <span class="date">
-        <span class="day">26<sup>th</sup></span>
-        <span class="month">Jan</span>
-        <span class="year">2014</span>
-      </span>
-      <h2>The Title</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis rutrum nunc, eget dictum massa. Nam faucibus felis nec augue adipiscing, eget commodo libero mattis.</p>
-    </div>
-  </article>
-</section>
-					</div>
 							</div>
 
 						</div>
-
 					</div>
-				</div>
 
 
-			</section>
-			<!-- /.content -->
-		</h:form>
-</body>
+				</section>
+				<!-- /.content -->
+			</h:form>
+		</body>
 
 	</ui:define>
 

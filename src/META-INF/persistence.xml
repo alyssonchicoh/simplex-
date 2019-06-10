@@ -9,12 +9,14 @@
 		<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/chamadoOnline"></property>
 		<property name="javax.persistence.jdbc.user" value="postgres" />
-		<property name="javax.persistence.jdbc.password" value="admin" />
-			
-			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
-   			<!--  <property name="hibernate.hbm2ddl.auto" value="create" />  -->
-			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.enable_lazy_load_no_trans" value="true" />
+		<property name="javax.persistence.jdbc.password" value="postgres" />
+		<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+ 		<property name="hibernate.hbm2ddl.auto" value="create" />  	<!-- 	   -->
+		<property name="hibernate.format_sql" value="true" />
+		
+		<property name="show_sql" value="true"/>
+		
+		<property name="hibernate.enable_lazy_load_no_trans" value="true" />
 		</properties>
 	</persistence-unit>
 </persistence>

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.cogerh.template.dao.PermissaoDAO;
 import br.com.cogerh.template.model.Permissao;
 import br.com.cogerh.template.service.PermissaoService;
-import br.com.cogerh.template.util.GeradorPermissao;
 
 @Service
 public class PermissaoServiceImpl implements PermissaoService

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Relatório do Indicador Setorial</STRONG>
+		</h1>
+	</ui:define>
+	<ui:define name="corpo">
+		<p:chart type="pie" model="#{indicadorSetorialRelatorioBean.graficoPizza}" style="width:700px;height:700px" />
+	</ui:define>
+
+</ui:composition>
+
+</html>

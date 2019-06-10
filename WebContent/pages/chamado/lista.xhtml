@@ -20,6 +20,22 @@
 	background-image: none !important;
 	color: #000000 !important;
 }
+
+.progresso{
+        #{ordemServicoBean.styles}
+
+}
+
+.customProgress .ui-progressbar .ui-progressbar-label {
+    color: yellow;
+}
+
+.customProgress .ui-progressbar .ui-progressbar-value {
+    background: red;
+}
+
+
+
 </style>
 
 	<script type="text/javascript">
@@ -618,6 +634,12 @@
 					</p:column>
 
 
+				<p:column headerText="Progresso" width="15%">
+   					
+   					    <p:progressBar value="#{chamadoBean.obterPercentualConcluido(cha.id)}" labelTemplate="{value}%" displayOnly="false" styleClass="customProgress"/>
+   					       	
+   								</p:column>
+
 
 				<p:column width="5%" styleClass="align-center"
 					headerText="#{msg['acao']}">
@@ -627,9 +649,13 @@
 						action="#{chamadoBean.visualizarDetalhado(cha.id)}"
 						id="visualizarChamado" />
 					<p:tooltip id="visualizarChamadoTooltip" for="visualizarChamado"
+					
 						value="Visualizar Detalhamento do Chamado" position="top" />
 
 				</p:column>
+				
+
+
 
 
 				<f:facet name="footer">
