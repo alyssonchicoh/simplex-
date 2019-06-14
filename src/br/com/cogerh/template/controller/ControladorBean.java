@@ -26,6 +26,7 @@ public class ControladorBean  extends AbstractBean{
 	private List<String> linhaZ;
 	private List<String> linhaZC;
 	private List<List<String>> content;
+	private List<List<String>> contentAnterior;
 	private boolean mostraPainel;
 	private boolean mostraPainelInservaoVariaveis;
 	private String valorMenorQue;
@@ -35,8 +36,13 @@ public class ControladorBean  extends AbstractBean{
 	private Variavel variavelEntra;
 	private Integer colunaPivo = 0;
 	private Integer linhaPivo = 0;
+	private Integer tipo;
+	private boolean solucaoOtima;
+	
 	@PostConstruct
 	public void init() {
+		tipo = 1;
+
 		variaveis = new ArrayList<Variavel>();
 		restricoes = new ArrayList<Restricao>();
 		head = new ArrayList<String>();
@@ -54,6 +60,14 @@ public class ControladorBean  extends AbstractBean{
 		mostraPainelInservaoVariaveis = true;
 		this.criarListaVariaveis();
 		this.criarListaRestricoes();
+	}
+	
+	public void definirMax() {
+		this.tipo = 1;
+	}
+	
+	public void definirMin() {
+		this.tipo = 0;
 	}
 	
 	private void criarListaVariaveis() {
@@ -115,7 +129,7 @@ public class ControladorBean  extends AbstractBean{
 			}
 			
 		}
-		Tablo tablo = new Tablo(variaveis,restricoes,baseList,qtdRestricoes,1);
+		Tablo tablo = new Tablo(variaveis,restricoes,baseList,qtdRestricoes,1,tipo,null,null);
 
 		this.head = tablo.getHead();
 		this.preHead = tablo.getPreHead();
@@ -123,28 +137,66 @@ public class ControladorBean  extends AbstractBean{
 		this.linhaZ = tablo.getLinhaZ();
 		this.linhaZC = tablo.getLinhaZC();
 		this.numero = tablo.getNumero();
+		this.variavelEntra = definirVariavelEntra();
+		this.variavelSai = definirVariavelSai();
+		this.solucaoOtima = tablo.isSolucaoOtima();
+
+	}
+	
+	public void proximoTablo() {
+		
+		realizarPivoteamento();
+		atualizarContentVariavelEntraAndSai(variavelEntra, variavelSai);
+		
+		
+		Tablo tablo = new Tablo(variaveis,restricoes,baseList,qtdRestricoes,numero +1,tipo,content,linhaZ);
+		
+		this.head = tablo.getHead();
+		this.preHead = tablo.getPreHead();
+		this.linhaZ = tablo.getLinhaZ();
+		this.linhaZC = tablo.getLinhaZC();
+		this.numero = tablo.getNumero();
+		
+		this.solucaoOtima = tablo.isSolucaoOtima();
 		this.variavelEntra = definirVariavelEntra();
 		this.variavelSai = definirVariavelSai();
 
 	}
 	
-	public void proximoTablo() {
-		realizarPivoteamento();
-
-		baseList.remove(variavelSai);
-		baseList.add(variavelEntra);
+	
+	
 		
+	
+	public void atualizarContentVariavelEntraAndSai(Variavel variavelEntra,Variavel variavelSai) {
+		List<List<String>> valores = content;
 		
-		Tablo tablo = new Tablo(variaveis,restricoes,baseList,qtdRestricoes,numero +1);
-
-		this.head = tablo.getHead();
-		this.preHead = tablo.getPreHead();
-		this.content = tablo.getLinhaContent();
-		this.linhaZ = tablo.getLinhaZ();
-		this.linhaZC = tablo.getLinhaZC();
-		this.numero = tablo.getNumero();
-		this.variavelEntra = definirVariavelEntra();
-		this.variavelSai = definirVariavelSai();
+		int y = 0;
+		for (int i = 0; i < valores.size(); i++) {
+			String nomeVariavel = valores.get(i).get(1);
+				if(nomeVariavel.equals(variavelSai.getNome())) {
+			
+					Integer casaEntra = obterPosicaoHead(variavelEntra.getNome());
+					String valorEntra = preHead.get(casaEntra);
+					valores.get(i).set(0, valorEntra);
+					valores.get(i).set(1, variavelEntra.getNome());
+					baseList.set(y, variavelEntra);
+			}
+				y++;
+		}
+		
+		content = valores;
+		
+	}
+	
+	public int obterPosicaoHead(String nomeVariavel) {
+		Integer tamanho = head.size();
+		
+		for (int i = 0; i < tamanho; i++) {
+			if(head.get(i).equals(nomeVariavel)) {
+				return i;
+			}
+		}
+		return 0;
 	}
 	
 	public void definirBaseProximoTablo() {
@@ -152,11 +204,12 @@ public class ControladorBean  extends AbstractBean{
 	}
 	
 	public Variavel definirVariavelEntra() {
-		Double valorComparacao = Double.valueOf(this.linhaZC.get(2));
+		
+		Double valorComparacao = Double.valueOf(linhaZC.get(2));
 		Variavel v = variaveis.get(0);
-		for (int i = 2; i < (linhaZC.size()-1); i++) {
+		for (int i = 2; i <= (linhaZC.size()-1); i++) {
 			Double valor = Double.valueOf(this.linhaZC.get(i));
-			if(valor != 0) {
+			if(valor > 0) {
 				if(valor > valorComparacao) {
 					v = variaveis.get(i-2);
 					valorComparacao = valor;
@@ -179,17 +232,19 @@ public class ControladorBean  extends AbstractBean{
 			Integer indiceB = content.get(i).size()-1;
 			String valorB = content.get(i).get(indiceB);
 			
-			if(!Double.valueOf(valorColuna).equals(0.0)) {
+			if(Double.valueOf(valorColuna)> 0.) {
 				Double total = Double.valueOf(valorB) / Double.valueOf(valorColuna);
 				
 				if(valorComparacao == null) {
 					v = baseList.get(i);
 					valorComparacao = total;
+					linhaPivo = i;
 
 				}else {
 					if(total < valorComparacao) {
 						v = baseList.get(i);
 						valorComparacao = total;
+						linhaPivo = i;
 					}
 				}
 			}
@@ -218,6 +273,7 @@ public class ControladorBean  extends AbstractBean{
 	
 	public void realizarPivoteamento() {
 		transformarEm1Pivoteamento();
+		transformarEm0Pivoteamento();
 	}
 	
 	private void transformarEm1Pivoteamento() {
@@ -238,19 +294,68 @@ public class ControladorBean  extends AbstractBean{
 			i++;
 		}
 		
-		int indice = 0;
-		for (int j = 0; j < content.size(); j++) {
-			if(j == linhaPivo) {
-				content.remove(j);
-				break;
+		List<List<String>> contNovo = new ArrayList<List<String>>();
+		Integer tamanho = content.size();
+		
+		for (int j = 0; j < tamanho; j++) {
+			if(linhaPivo.equals(j)) {
+				contNovo.add(novosValores);
 			}else {
-				j++;	
+				contNovo.add(content.get(j));
 			}
 			
 		}
-		content.add(indice, novosValores);
+		contentAnterior = content;
+		content = contNovo;
+		
 	}
 	
+	private void transformarEm0Pivoteamento() {
+		Integer tamanhoBase = content.size();
+
+		List<List<String>> novoContent = new ArrayList<List<String>>();
+		for (int i = 0; i < tamanhoBase; i++) {
+			if(!linhaPivo.equals(i)) {
+				List<String> valoresEscolha = contentAnterior.get(i);
+				List<String> valoresReferencia = content.get(linhaPivo);
+				if(! (Double.valueOf(valoresEscolha.get(colunaPivo+2)).equals(0.0))) {
+					
+				
+				Integer qtd = valoresEscolha.size();
+				int x = 0;
+				
+				List<String> var = new ArrayList<String>();
+				var.add(content.get(i).get(0));
+				var.add(content.get(i).get(1));
+				for (int j = 0; j < qtd; j++) {
+					if(x >1) {
+						Double novaLinha = Double.valueOf(valoresReferencia.get(j));
+						
+						Double valorQueQuerZerar = Double.valueOf(contentAnterior.get(i).get(colunaPivo+2));
+						valorQueQuerZerar = valorQueQuerZerar * (-1);
+						
+						Double res = novaLinha * valorQueQuerZerar;
+						Double soma = res + Double.valueOf(valoresEscolha.get(j));
+
+						
+						var.add(soma.toString());
+
+					}
+					x++;
+				}
+				novoContent.add(var);
+				}else {
+					novoContent.add(valoresEscolha);
+				}
+				
+			}else {
+				novoContent.add(content.get(i));
+			}
+		}
+		
+		
+		content = novoContent;
+	}
 	
 	
 	public Integer getQtdVariaveis() {
@@ -377,6 +482,47 @@ public class ControladorBean  extends AbstractBean{
 	public void setVariavelEntra(Variavel variavelEntra) {
 		this.variavelEntra = variavelEntra;
 	}
+
+	public Integer getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
+
+	public List<List<String>> getContentAnterior() {
+		return contentAnterior;
+	}
+
+	public void setContentAnterior(List<List<String>> contentAnterior) {
+		this.contentAnterior = contentAnterior;
+	}
+
+	public Integer getColunaPivo() {
+		return colunaPivo;
+	}
+
+	public void setColunaPivo(Integer colunaPivo) {
+		this.colunaPivo = colunaPivo;
+	}
+
+	public Integer getLinhaPivo() {
+		return linhaPivo;
+	}
+
+	public void setLinhaPivo(Integer linhaPivo) {
+		this.linhaPivo = linhaPivo;
+	}
+
+	public boolean isSolucaoOtima() {
+		return solucaoOtima;
+	}
+
+	public void setSolucaoOtima(boolean solucaoOtima) {
+		this.solucaoOtima = solucaoOtima;
+	}
+	
 	
 	
 

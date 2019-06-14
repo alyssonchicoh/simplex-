@@ -93,9 +93,17 @@
 						</div>
 						
 						<div class="row text-center">
-							<p:commandButton id="min" class="btn-success btn-xs" immediate="true" value="Min"/>
-								
-							<p:commandButton id="max" class="btn-success btn-xs" immediate="true" value="Max" />
+							<ui:fragment rendered = "#{controladorBean.tipo == 0}">
+								<p:commandButton id="min" update="@form" class="btn-success btn-xs" immediate="true" value="Min" action="#{controladorBean.definirMin}"/>
+									
+								<p:commandButton id="max" update="@form" class="btn-default btn-xs" immediate="true" value="Max" action="#{controladorBean.definirMax}" />
+							</ui:fragment>
+							<ui:fragment rendered = "#{controladorBean.tipo == 1}">
+							
+								<p:commandButton id="min2" update="@form" class="btn-default btn-xs" immediate="true" value="Min" action="#{controladorBean.definirMin}"/>
+									
+								<p:commandButton id="max3" update="@form" class="btn-success btn-xs" immediate="true" value="Max" action="#{controladorBean.definirMax}"/>
+							</ui:fragment>
 						</div>
 						
 						<div class="row text-center">
@@ -106,7 +114,6 @@
 						<div class="row text-center">
 								<ui:repeat var="vari" value="#{controladorBean.variaveis}">
 												 
-													<p:commandButton id="operacao" class="btn-success btn-xs" immediate="true" value="+" rendered="#{vari.visivel == true}" />
 													<p:inputText style="widh: 30px" size="1" value="#{vari.valor}" rendered="#{vari.visivel == true}"></p:inputText>
 													<p:outputLabel value="#{vari.nome}" rendered="#{vari.visivel == true}"/>
 											
@@ -121,7 +128,6 @@
 								<br/>
 								<ui:repeat var="vari" value="#{res.variaveis}">
 									<p:spacer width="10px"  />
-									<p:commandButton id="operacao" class="btn-success btn-xs" immediate="true" value="+" />
 									<p:spacer width="6px"  /> 
 									<p:inputText style="widh: 30px" size="1" value="#{vari.valor}"></p:inputText>
 									<p:outputLabel value="#{vari.nome}"/>
@@ -155,18 +161,23 @@
 							            <div class="box-header">
 							            	<div class="row">
 							            		<div class="col-xs-2 text-left">
-							            			<p:commandButton class="btn btn-danger btn-md text-left" value="Anterior"/>
 							              		</div>
 							              		
 							              		<div class="col-xs-8 text-center">
-							              			<h3 class="box-title">Tablô Nº: #{controladorBean.numero}</h3>
-							              			<H4 style="color: red">Variável que Sai: <strong> #{controladorBean.variavelSai.nome} </strong></H4>
-							              			<H4 style="color: green">Variável que Entra: <strong> #{controladorBean.variavelEntra.nome} </strong></H4>
 							              			
+							              			<ui:fragment rendered = "#{controladorBean.solucaoOtima}">
+								              			<H1 style="color: green"><strong>Solução Ótima! </strong></H1>
+								              		</ui:fragment>
+							              			
+							              			<ui:fragment rendered = "#{controladorBean.solucaoOtima eq false}">
+								              			<h3 class="box-title">Tablô Nº: #{controladorBean.numero}</h3>
+								              			<H4 style="color: red">Variável que Sai: <strong> #{controladorBean.variavelSai.nome} </strong></H4>
+								              			<H4 style="color: green">Variável que Entra: <strong> #{controladorBean.variavelEntra.nome} </strong></H4>
+								              		</ui:fragment>
 							              		</div>
 							              		
 							              		<div class="col-xs-2 text-right">
-							              			<p:commandButton class="btn btn-primary btn-md" value="Próximo" action="#{controladorBean.proximoTablo}" update="@form" />
+							              			<p:commandButton class="btn btn-primary btn-md" value="Próximo" action="#{controladorBean.proximoTablo}" update="@form" rendered = "#{controladorBean.solucaoOtima eq false}"/>
 							            		</div>
 							            	</div>  
 							              
@@ -192,7 +203,11 @@
 								                <ui:repeat var="linha" value="#{controladorBean.content}">
 									                <tr>
 									                  <ui:repeat var="coluna" value="#{linha}">
-									                 	<th>#{coluna}</th>	
+									                  	<th>
+									                  	<h:outputLabel value="#{coluna}">
+									                  	<f:convertNumber maxFractionDigits="2" />
+									                  	</h:outputLabel>
+									                 	</th>	
 									                  </ui:repeat>
 									                  
 									                </tr>
@@ -200,7 +215,11 @@
 								                
 								                <tr>
 							                		<ui:repeat var="variavel" value="#{controladorBean.linhaZ}">
-							                			 <th>#{variavel}</th>	
+							                			<th>
+									                  	<h:outputLabel value="#{variavel}">
+									                  	<f:convertNumber maxFractionDigits="2" />
+									                  	</h:outputLabel>
+									                 	</th>	
 							                		</ui:repeat>
 							                	</tr>
 							                	     <tr>

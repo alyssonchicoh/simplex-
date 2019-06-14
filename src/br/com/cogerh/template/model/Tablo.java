@@ -34,8 +34,15 @@ public class Tablo {
 	private List<Variavel> base;
 	
 	private Integer qdtFolga;
+	
+	private Integer tipo;
+	
+	private boolean solucaoOtima;
 
-	public Tablo(List<Variavel> variaveis,List<Restricao> restricaos,List<Variavel> base,Integer qtdFolga,Integer numero) {
+	public Tablo(List<Variavel> variaveis,List<Restricao> restricaos,
+				List<Variavel> base,Integer qtdFolga,Integer numero,Integer tipo,List<List<String>> content,List<String> lz) {
+		this.tipo = tipo;
+
 		init();
 		this.numero = numero;
 		this.variaveis = variaveis;
@@ -46,9 +53,18 @@ public class Tablo {
 		
 		initHead();
 		initPreHead();
-		initContent();
-		initLinhaZ();
+		if(content == null) {
+			initContent();	
+		}else {
+			this.linhaContent = content;
+		}
+		
+		
+			initLinhaZ();
+
+		
 		initLinhaZC();
+		solucaoOtima = verificaSolucaoOtima();
 	}
 	
 	
@@ -93,6 +109,41 @@ public class Tablo {
 	}
 	
 	private void initContent() {
+		linhaContent = new ArrayList<List<String>>();
+		int i = 0;
+		for (Restricao r : restricoes) {
+			List<String> content = new ArrayList<String>();
+			content.add(obterValorFOByVariavel(base.get(i).getNome()).toString());
+			content.add(base.get(i).getNome());
+			for (Variavel v : r.getVariaveis()) {
+				if(v.getValor() != null) {
+					content.add(v.getValor().toString());
+
+				}
+				
+			}
+			
+			for (String f : folgas) {
+				if(r.getFolga().equals(f)) {
+					content.add("1");
+				}else {
+					content.add("0");
+				}
+			}
+			
+			if(r.getValorDireto() != null) {
+				content.add(r.getValorDireto().toString());
+
+			}
+			
+			
+			linhaContent.add(content);
+			i++;
+			
+		}
+	}
+	
+	private void initContenteExecucao() {
 		linhaContent = new ArrayList<List<String>>();
 		int i = 0;
 		for (Restricao r : restricoes) {
@@ -190,13 +241,28 @@ public class Tablo {
 	
 	private void initLinhaZC() {
 		this.linhaZC.add("");
-		this.linhaZC.add("Z-C");
+		if(tipo.equals(0)) {
+			this.linhaZC.add("Z-C");
+		}
+		
+		if(tipo.equals(1)) {
+			this.linhaZC.add("C-Z");
+		}
 		
 		for (int i = 2; i < (linhaZ.size()-1); i++) {
 			Double valorZ = Double.valueOf(linhaZ.get(i));
 			Double valorC = Double.valueOf(preHead.get(i));
-			Double total = valorZ - valorC;
-			this.linhaZC.add(total.toString());
+			if(tipo.equals(0)) {
+				Double total = valorZ - valorC;
+				this.linhaZC.add(total.toString());	
+			}
+			
+			if(tipo.equals(1)) {
+				Double total = valorC - valorZ ;
+				this.linhaZC.add(total.toString());
+			}
+			
+			
 		}
 		
 	}
@@ -212,6 +278,26 @@ public class Tablo {
 		}
 		return 0.0;
 	}
+
+	private boolean verificaSolucaoOtima() {
+		boolean verificacao = true;
+		int i = 0;
+		for (String valor : linhaZC) {
+			if(i >1) {
+				
+			
+			Double vd = Double.valueOf(valor);
+			if(vd > 0) {
+				return false;
+			}
+			}
+			i++;
+		}
+		
+		return verificacao;
+	}
+	
+	
 	
 	
 	public Integer getNumero() {
@@ -324,6 +410,26 @@ public class Tablo {
 
 	public void setQdtFolga(Integer qdtFolga) {
 		this.qdtFolga = qdtFolga;
+	}
+
+
+
+
+
+
+
+	public boolean isSolucaoOtima() {
+		return solucaoOtima;
+	}
+
+
+
+
+
+
+
+	public void setSolucaoOtima(boolean solucaoOtima) {
+		this.solucaoOtima = solucaoOtima;
 	}
 
 	
